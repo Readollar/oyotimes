@@ -1,0 +1,133 @@
+:root{
+  /* -----------------------
+     BASE (raw) color tokens
+     ----------------------- */
+  --color-base-red-942414: #942414;
+  --color-base-gold-e59d25: #E59D25;
+  --color-base-brown-b65c15: #B65C15;
+  --color-base-deepbrown-37140e: #37140E;
+  --color-base-cream-f5ecdd: #F5ECDD;
+  --color-base-gray-666666: #666666;
+  --color-base-black-000000: #000000;
+  --color-base-white-ffffff: #FFFFFF;
+  --color-base-pastel-d1dce5: #D1DCE5;
+  --color-base-fadeblack-23242a: #23242A;
+
+  /* -----------------------
+     SEMANTIC color tokens
+     ----------------------- */
+  --color-bg-primary: var(--color-base-white-ffffff);
+  --color-bg-secondary: var(--color-base-cream-f5ecdd);
+  --color-bg-alt: #F2F2F2; /* subtle alt background */
+  --color-surface-default: var(--color-base-white-ffffff);
+  --color-surface-subtle: var(--color-bg-alt);
+  --color-surface-hover: var(--color-bg-alt);
+  --color-surface-pressed: #E5E5E5;
+
+  --color-text-primary: var(--color-base-black-000000);
+  --color-text-secondary: var(--color-base-deepbrown-37140e);
+  --color-text-muted: var(--color-base-gray-666666);
+  --color-text-inverse: var(--color-base-white-ffffff);
+  --color-text-link: var(--color-base-red-942414);
+
+  --color-border-default: var(--color-base-pastel-d1dce5);
+  --color-border-strong: var(--color-base-deepbrown-37140e);
+  --color-border-subtle: rgba(0,0,0,0.04);
+
+  --color-button-primary-bg: var(--color-base-red-942414);
+  --color-button-primary-text: var(--color-base-white-ffffff);
+  --color-button-primary-hover: #7A1D11; /* darker */
+  --color-button-primary-pressed: rgba(0,0,0,0.1);
+
+  --color-button-secondary-bg: var(--color-base-gold-e59d25);
+  --color-button-secondary-text: var(--color-base-white-ffffff);
+
+  /* -----------------------
+     Spacing tokens (numeric)
+     ----------------------- */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-56: 56px;
+  --space-64: 64px;
+
+  /* -----------------------
+     Radii & shadows
+     ----------------------- */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-full: 9999px;
+
+  --shadow-soft: 0 2px 4px rgba(0,0,0,0.10);
+  --shadow-lift: 0 6px 18px rgba(0,0,0,0.12);
+  --shadow-inset: inset 0 2px 6px rgba(0,0,0,0.08);
+
+  /* -----------------------
+     Divider / border (BBC choice)
+     ----------------------- */
+  --color-divider: var(--color-base-pastel-d1dce5);
+
+  /* -----------------------
+     Typography (fluid clamp() tokens)
+     scaling window: 360px -> 1440px
+     formula used: clamp(MINpx, calc(MINpx + (MAX - MIN) * ((100vw - 360px) / 1080)), MAXpx)
+     ----------------------- */
+
+  /* Headings */
+  --font-heading-xl: clamp(32px, calc(32px + (40 - 32) * ((100vw - 360px) / 1080)), 40px) "Merriweather", serif;
+  --font-heading-xl-line: 1.2; /* 120% */
+
+  --font-heading-lg: clamp(26px, calc(26px + (32 - 26) * ((100vw - 360px) / 1080)), 32px) "Merriweather", serif;
+  --font-heading-lg-line: 1.2;
+
+  --font-heading-md: clamp(20px, calc(20px + (24 - 20) * ((100vw - 360px) / 1080)), 24px) "Merriweather", serif;
+  --font-heading-md-line: 1.3;
+
+  --font-heading-sm: clamp(14px, calc(14px + (16 - 14) * ((100vw - 360px) / 1080)), 16px) "Merriweather", serif;
+  --font-heading-sm-line: 1.5;
+  --font-heading-sm-tracking: 0.01em; /* 1% */
+
+  /* Body */
+  --font-body-lg: clamp(18px, calc(18px + (20 - 18) * ((100vw - 360px) / 1080)), 20px) "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-body-lg-line: 1.4;
+
+  --font-body-md: clamp(16px, calc(16px + (18 - 16) * ((100vw - 360px) / 1080)), 18px) "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-body-md-line: 1.4;
+
+  --font-body-sm: clamp(14px, calc(14px + (16 - 14) * ((100vw - 360px) / 1080)), 16px) "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-body-sm-line: 1.5;
+
+  --font-paragraph: clamp(13px, calc(13px + (14 - 13) * ((100vw - 360px) / 1080)), 14px) "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-paragraph-line: 1.5;
+
+  --font-meta: clamp(11px, calc(11px + (12 - 11) * ((100vw - 360px) / 1080)), 12px) "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-meta-line: 1.2;
+  --font-meta-tracking: 0.05em; /* 5% */
+
+  --font-card-small: clamp(8px, calc(8px + (8 - 8) * ((100vw - 360px) / 1080)), 8px) "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+
+  /* utility text tokens (explicit) */
+  --text-color-default: var(--color-text-primary);
+  --text-color-muted: var(--color-text-muted);
+  --link-color: var(--color-text-link);
+
+  /* Buttons: size tokens */
+  --button-padding-vertical: 12px;
+  --button-padding-horizontal: 24px;
+  --button-border-radius: var(--radius-sm);
+}
+
+/* Dark theme placeholder (later) */
+[data-theme="dark"]{
+  /* will be filled when you want dark mode */
+  /* Example:
+  --color-bg-primary: #121212;
+  --color-text-primary: #FFFFFF;
+  */
+}

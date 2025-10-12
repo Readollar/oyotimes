@@ -4,6 +4,24 @@
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap');
+html {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+}
+
+/* Optional: Headings default to Merriweather */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Merriweather', serif;
+}
+/* global.css */
+@import './tokens.css'; /* or if relative path differs */
+@import url('https://fonts.googleapis.com/css2?family=Inter...'); /* fonts */
+
+html { ... }
+
+
 :root {
 	--accent: #2337ff;
 	--accent-dark: #000d8a;
