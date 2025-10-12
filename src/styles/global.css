@@ -1,77 +1,106 @@
+/* -----------------------
+   GLOBAL BASE STYLES
+----------------------- */
+
+/* 1. Import Fonts and Tokens */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;600;700&display=swap');
 @import './tokens.css';
 @import './typography.css';
 @import './components.css';
 
-/* minimal reset below... */
-* { box-sizing: border-box; }
-body { font-family: var(--font-body); color: var(--color-text-primary); background: var(--color-bg-primary); margin:0; }
+/* -----------------------
+   2. CSS RESET
+----------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-
-/* Remove default margin */
-body, h1, h2, h3, h4, p, figure, blockquote {
+body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd {
   margin: 0;
   padding: 0;
 }
 
-/* Remove list styles */
-ul[role='list'], ol[role='list'] {
+ul[role='list'],
+ol[role='list'] {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-/* Smooth scroll */
 html:focus-within {
   scroll-behavior: smooth;
 }
 
-/* Set core defaults */
 html, body {
   height: 100%;
 }
 
-/* -------------------------------------------------------
-   6. TYPOGRAPHY BASELINE
-------------------------------------------------------- */
-
+/* -----------------------
+   3. BASE BODY STYLES
+----------------------- */
 body {
-  font-family: var(--font-body, 'Inter'), sans-serif;
-  font-size: var(--fs-body-md, 16px);
-  line-height: 1.6;
-  background-color: var(--color-surface, #ffffff);
-  color: var(--color-text, #000000);
+  font-family: var(--font-body);
+  font-size: var(--font-body-md-size);
+  line-height: var(--font-body-md-line);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Headings use Merriweather by default */
+/* -----------------------
+   4. HEADINGS
+----------------------- */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading, 'Merriweather'), serif;
+  font-family: var(--font-heading);
   font-weight: 700;
+  color: var(--color-text-primary);
   line-height: 1.2;
   margin-bottom: 0.5em;
 }
 
-/* Paragraphs */
+/* -----------------------
+   5. PARAGRAPHS
+----------------------- */
 p {
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
   margin-bottom: 1.2em;
+  line-height: var(--font-body-md-line);
 }
 
-/* Links */
+/* -----------------------
+   6. LINKS
+----------------------- */
 a {
-  color: var(--color-primary, #007BFF);
+  color: var(--color-text-link);
   text-decoration: none;
+  transition: color 0.2s ease;
 }
+
 a:hover {
+  color: var(--state-link-hover);
   text-decoration: underline;
 }
 
-/* -------------------------------------------------------
-   7. OPTIONAL: MEDIA TYPOGRAPHY ADJUSTMENTS
-------------------------------------------------------- */
+a:active {
+  color: var(--state-link-active);
+}
 
+a:focus-visible {
+  outline: 2px solid var(--state-link-focus-ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* -----------------------
+   7. RESPONSIVE TYPOGRAPHY
+----------------------- */
 @media (max-width: 768px) {
   body {
-    font-size: var(--fs-body-sm, 14px);
+    font-size: var(--font-body-sm-size);
+    line-height: var(--font-body-sm-line);
   }
 }

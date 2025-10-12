@@ -1,9 +1,13 @@
 :root {
+  /* -----------------------
+     FONTS
+  ----------------------- */
   --font-heading: "Merriweather", serif;
-  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
   /* -----------------------
      BASE COLORS
-     ----------------------- */
+  ----------------------- */
   --color-base-red-942414: #942414;
   --color-base-gold-e59d25: #E59D25;
   --color-base-brown-b65c15: #B65C15;
@@ -17,7 +21,7 @@
 
   /* -----------------------
      SEMANTIC COLORS
-     ----------------------- */
+  ----------------------- */
   --color-bg-primary: var(--color-base-white-ffffff);
   --color-bg-secondary: var(--color-base-cream-f5ecdd);
   --color-bg-alt: #F2F2F2;
@@ -38,6 +42,9 @@
   --color-border-subtle: rgba(0, 0, 0, 0.04);
   --color-divider: var(--color-base-pastel-d1dce5);
 
+  /* -----------------------
+     BUTTON COLORS
+  ----------------------- */
   --color-button-primary-bg: var(--color-base-red-942414);
   --color-button-primary-text: var(--color-base-white-ffffff);
   --color-button-primary-hover: #7A1D11;
@@ -47,8 +54,8 @@
   --color-button-secondary-text: var(--color-base-white-ffffff);
 
   /* -----------------------
-     SPACING
-     ----------------------- */
+     SPACING SCALE
+  ----------------------- */
   --space-4: 4px;
   --space-8: 8px;
   --space-12: 12px;
@@ -63,166 +70,105 @@
 
   /* -----------------------
      RADII & SHADOWS
-     ----------------------- */
+  ----------------------- */
   --radius-sm: 6px;
   --radius-md: 8px;
-  --radius-full: 9999px;
+  --radius-lg: 12px; /* Added for .card consistency */
+  --radius-pill: 9999px; /* Added for badges */
+  --radius-full: 50%;
 
   --shadow-soft: 0 2px 4px rgba(0, 0, 0, 0.10);
   --shadow-lift: 0 6px 18px rgba(0, 0, 0, 0.12);
   --shadow-inset: inset 0 2px 6px rgba(0, 0, 0, 0.08);
 
   /* -----------------------
-     TYPOGRAPHY – ATOMIC TOKENS
-     Scaling window: 360px → 1440px
-     ----------------------- */
+     TYPOGRAPHY TOKENS
+  ----------------------- */
 
   /* Headings (Merriweather) */
   --font-heading-xl-size: clamp(32px, calc(32px + (40 - 32) * ((100vw - 360px) / 1080)), 40px);
   --font-heading-xl-line: 1.2;
-  --font-heading-xl-family: "Merriweather", serif;
+  --font-heading-xl-family: var(--font-heading);
 
   --font-heading-lg-size: clamp(26px, calc(26px + (32 - 26) * ((100vw - 360px) / 1080)), 32px);
   --font-heading-lg-line: 1.2;
-  --font-heading-lg-family: "Merriweather", serif;
+  --font-heading-lg-family: var(--font-heading);
 
   --font-heading-md-size: clamp(20px, calc(20px + (24 - 20) * ((100vw - 360px) / 1080)), 24px);
   --font-heading-md-line: 1.3;
-  --font-heading-md-family: "Merriweather", serif;
+  --font-heading-md-family: var(--font-heading);
 
   --font-heading-sm-size: clamp(14px, calc(14px + (16 - 14) * ((100vw - 360px) / 1080)), 16px);
   --font-heading-sm-line: 1.5;
   --font-heading-sm-tracking: 0.01em;
-  --font-heading-sm-family: "Merriweather", serif;
+  --font-heading-sm-family: var(--font-heading);
 
-  /* Body text (Inter) */
+  /* Body (Inter) */
   --font-body-lg-size: clamp(18px, calc(18px + (20 - 18) * ((100vw - 360px) / 1080)), 20px);
   --font-body-lg-line: 1.4;
-  --font-body-lg-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-body-lg-family: var(--font-body);
 
   --font-body-md-size: clamp(16px, calc(16px + (18 - 16) * ((100vw - 360px) / 1080)), 18px);
   --font-body-md-line: 1.4;
-  --font-body-md-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-body-md-family: var(--font-body);
 
   --font-body-sm-size: clamp(14px, calc(14px + (16 - 14) * ((100vw - 360px) / 1080)), 16px);
   --font-body-sm-line: 1.5;
-  --font-body-sm-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-body-sm-family: var(--font-body);
 
   /* Paragraph */
   --font-paragraph-size: clamp(13px, calc(13px + (14 - 13) * ((100vw - 360px) / 1080)), 14px);
   --font-paragraph-line: 1.5;
-  --font-paragraph-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-paragraph-family: var(--font-body);
 
-  /* Meta (Medium & Bold variants) */
+  /* Meta */
   --font-meta-medium-size: clamp(11px, calc(11px + (12 - 11) * ((100vw - 360px) / 1080)), 12px);
   --font-meta-medium-line: 1.2;
   --font-meta-medium-tracking: 0.05em;
   --font-meta-medium-weight: 500;
-  --font-meta-medium-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-meta-medium-family: var(--font-body);
 
-  --font-meta-bold-size: clamp(11px, calc(11px + (12 - 11) * ((100vw - 360px) / 1080)), 12px);
-  --font-meta-bold-line: 1.2;
-  --font-meta-bold-tracking: 0.05em;
+  --font-meta-bold-size: var(--font-meta-medium-size);
+  --font-meta-bold-line: var(--font-meta-medium-line);
+  --font-meta-bold-tracking: var(--font-meta-medium-tracking);
   --font-meta-bold-weight: 700;
-  --font-meta-bold-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-meta-bold-family: var(--font-body);
 
   /* Caption */
   --font-caption-size: clamp(10px, calc(10px + (11 - 10) * ((100vw - 360px) / 1080)), 11px);
   --font-caption-line: 1.3;
   --font-caption-tracking: 0.05em;
-  --font-caption-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-caption-family: var(--font-body);
 
   /* Card Small */
   --font-card-small-size: 8px;
-  --font-card-small-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-card-small-family: var(--font-body);
 
-  /* Buttons (sizing layer) */
+  /* Button sizing */
   --button-padding-vertical: 12px;
   --button-padding-horizontal: 24px;
   --button-border-radius: var(--radius-sm);
 
   /* -----------------------
-     STATE tokens (interaction colors)
-     ----------------------- */
-
-  /* Button states */
-  --state-primary-hover: #7A1D11; /* darker version of red */
-  --state-primary-active: #61170D; /* pressed */
+     STATE TOKENS
+  ----------------------- */
+  --state-primary-hover: #7A1D11;
+  --state-primary-active: #61170D;
   --state-primary-focus-ring: rgba(148, 36, 20, 0.3);
 
-  --state-secondary-hover: #cf8c20; /* slightly darker gold */
+  --state-secondary-hover: #cf8c20;
   --state-secondary-active: #b87a1b;
   --state-secondary-focus-ring: rgba(229, 157, 37, 0.3);
 
-  /* Surface interactions */
   --state-surface-hover: rgba(0, 0, 0, 0.03);
   --state-surface-active: rgba(0, 0, 0, 0.06);
   --state-surface-focus-ring: rgba(0, 0, 0, 0.15);
 
-  /* Text links */
   --state-link-hover: #B72D1B;
   --state-link-active: #7A1D11;
   --state-link-focus-ring: rgba(148, 36, 20, 0.3);
 
-/* -----------------------
-   Links (inline text)
-   ----------------------- */
-a,
-.text-link {
-  color: var(--color-text-link);
-  text-decoration: underline;
-  transition: color 0.2s ease;
-}
-
-a:hover,
-.text-link:hover {
-  color: var(--state-link-hover);
-}
-
-a:active,
-.text-link:active {
-  color: var(--state-link-active);
-}
-
-a:focus-visible,
-.text-link:focus-visible {
-  outline: 2px solid var(--state-link-focus-ring);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
-
-/* -----------------------
-   Cards (containers)
-   ----------------------- */
-.card {
-  background: var(--color-surface-default);
-  border: 1px solid var(--color-border-default);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-soft);
-  transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
-  padding: var(--space-24);
-}
-
-.card:hover {
-  background: var(--state-surface-hover);
-  box-shadow: var(--shadow-lift);
-  transform: translateY(-2px);
-}
-
-.card:active {
-  background: var(--state-surface-active);
-  box-shadow: var(--shadow-inset);
-  transform: translateY(0);
-}
-
-.card:focus-visible {
-  outline: 3px solid var(--state-surface-focus-ring);
-  outline-offset: 3px;
-}
-
-/* -----------------------
-     Input & focus tokens
-     ----------------------- */
+  /* Input States */
   --state-input-border: var(--color-border-default);
   --state-input-bg: var(--color-surface-default);
   --state-input-hover-border: var(--color-border-strong);
@@ -230,11 +176,13 @@ a:focus-visible,
   --state-input-focus-ring: rgba(148, 36, 20, 0.4);
   --state-input-placeholder: var(--color-text-muted);
   --state-input-disabled-bg: var(--color-bg-alt);
-  --state-input-disabled-border: rgba(0,0,0,0.08);
-  --state-input-disabled-text: rgba(0,0,0,0.4);
+  --state-input-disabled-border: rgba(0, 0, 0, 0.08);
+  --state-input-disabled-text: rgba(0, 0, 0, 0.4);
 }
 
-/* Dark mode placeholder */
+/* -----------------------
+   DARK MODE (placeholder)
+----------------------- */
 [data-theme="dark"] {
-  /* will fill in later */
+  /* Add dark theme overrides later */
 }

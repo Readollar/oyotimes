@@ -1,33 +1,23 @@
 ---
-// src/pages/test.astro (Astro)
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>OyoTimes style test</title>
-    <link rel="stylesheet" href="/styles/global.css">
-  </head>
-  <body style="padding:32px">
-    <h1 class="text-heading-xl">H1 — OyoTimes Test</h1>
-    <h2 class="text-heading-lg">H2 — Breaking</h2>
-    <p class="text-paragraph">This is paragraph text — body sample.</p>
 
-    <div style="margin-top:16px">
-      <button class="btn btn-primary btn-md">Primary button</button>
-      <button class="btn btn-secondary btn-md">Secondary</button>
+<BaseLayout title="Style Test">
+  <main style="padding: 2rem;">
+    <h1 class="text-heading-xl">Heading XL Test</h1>
+    <h2 class="text-heading-lg">Heading LG Test</h2>
+    <p class="text-body-md">
+      This is a medium body paragraph using the base typography system.
+    </p>
+
+    <button class="btn btn-primary btn-md">Primary Button</button>
+    <button class="btn btn-secondary btn-md">Secondary Button</button>
+
+    <div class="card" style="margin-top: 2rem;">
+      <div class="card-header">Card Header</div>
+      <div class="card-body">This is a card body with base tokens.</div>
     </div>
 
-    <div style="margin-top:24px">
-      <div class="card" style="max-width:520px">
-        <h3 class="card-header text-heading-sm">Card title</h3>
-        <p class="card-body text-body-md">Card content to check spacing and tokens.</p>
-        <span class="badge badge-primary">Top Story</span>
-      </div>
-    </div>
-
-    <div style="margin-top:24px; max-width:520px;">
-      <label class="text-meta-medium" for="email">Email</label>
-      <input id="email" class="input" placeholder="test@oyotimes.com" />
-    </div>
-  </body>
-</html>
+    <input class="input" placeholder="Type something..." />
+  </main>
+</BaseLayout>

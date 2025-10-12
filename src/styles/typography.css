@@ -1,12 +1,11 @@
 /* typography.css */
-/* -----------------------
-   Imports base tokens first
-   ----------------------- */
-@import './tokens.css';
+/* -------------------------------------------------------
+   TYPOGRAPHY STYLES
+------------------------------------------------------- */
 
 /* -----------------------
-   Heading styles
-   ----------------------- */
+   1. HEADINGS
+----------------------- */
 
 .text-heading-xl {
   font-family: var(--font-heading-xl-family);
@@ -42,8 +41,8 @@
 }
 
 /* -----------------------
-   Body styles
-   ----------------------- */
+   2. BODY
+----------------------- */
 
 .text-body-lg {
   font-family: var(--font-body-lg-family);
@@ -70,8 +69,8 @@
 }
 
 /* -----------------------
-   Paragraph & Meta styles
-   ----------------------- */
+   3. PARAGRAPH & META
+----------------------- */
 
 .text-paragraph {
   font-family: var(--font-paragraph-family);
@@ -100,8 +99,8 @@
 }
 
 /* -----------------------
-   Caption & Card details
-   ----------------------- */
+   4. CAPTION & CARD TEXT
+----------------------- */
 
 .text-caption {
   font-family: var(--font-caption-family);
@@ -116,16 +115,32 @@
   font-family: var(--font-card-small-family);
   font-size: var(--font-card-small-size);
   font-weight: 400;
+  line-height: 1.3;
   color: var(--color-text-muted);
 }
 
 /* -----------------------
-   Link & inverse text
-   ----------------------- */
+   5. LINKS & INVERSE
+----------------------- */
 
 .text-link {
   color: var(--color-text-link);
   text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.text-link:hover {
+  color: var(--state-link-hover);
+}
+
+.text-link:active {
+  color: var(--state-link-active);
+}
+
+.text-link:focus-visible {
+  outline: 2px solid var(--state-link-focus-ring);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 .text-inverse {
