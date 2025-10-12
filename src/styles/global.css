@@ -1,21 +1,12 @@
-/* -------------------------------------------------------
-   1. FONT IMPORTS (Inter + Merriweather Only)
-------------------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:wght@300;400;700&display=swap');
-
-/* -------------------------------------------------------
-   2. DESIGN TOKENS (Already coming from tokens.css)
-------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;600;700&display=swap');
 @import './tokens.css';
+@import './typography.css';
+@import './components.css';
 
-/* -------------------------------------------------------
-   3. CSS RESET – Minimal and modern
-------------------------------------------------------- */
+/* minimal reset below... */
+* { box-sizing: border-box; }
+body { font-family: var(--font-body); color: var(--color-text-primary); background: var(--color-bg-primary); margin:0; }
 
-/* Box sizing rules */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
 
 /* Remove default margin */
 body, h1, h2, h3, h4, p, figure, blockquote {
@@ -41,7 +32,7 @@ html, body {
 }
 
 /* -------------------------------------------------------
-   4. TYPOGRAPHY BASELINE
+   6. TYPOGRAPHY BASELINE
 ------------------------------------------------------- */
 
 body {
@@ -76,7 +67,7 @@ a:hover {
 }
 
 /* -------------------------------------------------------
-   5. OPTIONAL: MEDIA TYPOGRAPHY ADJUSTMENTS
+   7. OPTIONAL: MEDIA TYPOGRAPHY ADJUSTMENTS
 ------------------------------------------------------- */
 
 @media (max-width: 768px) {

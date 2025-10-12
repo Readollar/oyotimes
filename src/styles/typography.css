@@ -1,0 +1,133 @@
+/* typography.css */
+/* -----------------------
+   Imports base tokens first
+   ----------------------- */
+@import './tokens.css';
+
+/* -----------------------
+   Heading styles
+   ----------------------- */
+
+.text-heading-xl {
+  font-family: var(--font-heading-xl-family);
+  font-size: var(--font-heading-xl-size);
+  line-height: var(--font-heading-xl-line);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.text-heading-lg {
+  font-family: var(--font-heading-lg-family);
+  font-size: var(--font-heading-lg-size);
+  line-height: var(--font-heading-lg-line);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.text-heading-md {
+  font-family: var(--font-heading-md-family);
+  font-size: var(--font-heading-md-size);
+  line-height: var(--font-heading-md-line);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.text-heading-sm {
+  font-family: var(--font-heading-sm-family);
+  font-size: var(--font-heading-sm-size);
+  line-height: var(--font-heading-sm-line);
+  letter-spacing: var(--font-heading-sm-tracking);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+/* -----------------------
+   Body styles
+   ----------------------- */
+
+.text-body-lg {
+  font-family: var(--font-body-lg-family);
+  font-size: var(--font-body-lg-size);
+  line-height: var(--font-body-lg-line);
+  font-weight: 400;
+  color: var(--color-text-primary);
+}
+
+.text-body-md {
+  font-family: var(--font-body-md-family);
+  font-size: var(--font-body-md-size);
+  line-height: var(--font-body-md-line);
+  font-weight: 400;
+  color: var(--color-text-primary);
+}
+
+.text-body-sm {
+  font-family: var(--font-body-sm-family);
+  font-size: var(--font-body-sm-size);
+  line-height: var(--font-body-sm-line);
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+/* -----------------------
+   Paragraph & Meta styles
+   ----------------------- */
+
+.text-paragraph {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line);
+  font-weight: 400;
+  color: var(--color-text-primary);
+}
+
+.text-meta-medium {
+  font-family: var(--font-meta-medium-family);
+  font-size: var(--font-meta-medium-size);
+  line-height: var(--font-meta-medium-line);
+  letter-spacing: var(--font-meta-medium-tracking);
+  font-weight: var(--font-meta-medium-weight);
+  color: var(--color-text-muted);
+}
+
+.text-meta-bold {
+  font-family: var(--font-meta-bold-family);
+  font-size: var(--font-meta-bold-size);
+  line-height: var(--font-meta-bold-line);
+  letter-spacing: var(--font-meta-bold-tracking);
+  font-weight: var(--font-meta-bold-weight);
+  color: var(--color-text-secondary);
+}
+
+/* -----------------------
+   Caption & Card details
+   ----------------------- */
+
+.text-caption {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line);
+  letter-spacing: var(--font-caption-tracking);
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.text-card-small {
+  font-family: var(--font-card-small-family);
+  font-size: var(--font-card-small-size);
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+/* -----------------------
+   Link & inverse text
+   ----------------------- */
+
+.text-link {
+  color: var(--color-text-link);
+  text-decoration: underline;
+}
+
+.text-inverse {
+  color: var(--color-text-inverse);
+}

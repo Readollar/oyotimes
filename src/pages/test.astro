@@ -1,0 +1,33 @@
+---
+// src/pages/test.astro (Astro)
+---
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>OyoTimes style test</title>
+    <link rel="stylesheet" href="/styles/global.css">
+  </head>
+  <body style="padding:32px">
+    <h1 class="text-heading-xl">H1 — OyoTimes Test</h1>
+    <h2 class="text-heading-lg">H2 — Breaking</h2>
+    <p class="text-paragraph">This is paragraph text — body sample.</p>
+
+    <div style="margin-top:16px">
+      <button class="btn btn-primary btn-md">Primary button</button>
+      <button class="btn btn-secondary btn-md">Secondary</button>
+    </div>
+
+    <div style="margin-top:24px">
+      <div class="card" style="max-width:520px">
+        <h3 class="card-header text-heading-sm">Card title</h3>
+        <p class="card-body text-body-md">Card content to check spacing and tokens.</p>
+        <span class="badge badge-primary">Top Story</span>
+      </div>
+    </div>
+
+    <div style="margin-top:24px; max-width:520px;">
+      <label class="text-meta-medium" for="email">Email</label>
+      <input id="email" class="input" placeholder="test@oyotimes.com" />
+    </div>
+  </body>
+</html>

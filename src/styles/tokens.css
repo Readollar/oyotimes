@@ -1,6 +1,8 @@
-:root{
+:root {
+  --font-heading: "Merriweather", serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   /* -----------------------
-     BASE (raw) color tokens
+     BASE COLORS
      ----------------------- */
   --color-base-red-942414: #942414;
   --color-base-gold-e59d25: #E59D25;
@@ -14,11 +16,12 @@
   --color-base-fadeblack-23242a: #23242A;
 
   /* -----------------------
-     SEMANTIC color tokens
+     SEMANTIC COLORS
      ----------------------- */
   --color-bg-primary: var(--color-base-white-ffffff);
   --color-bg-secondary: var(--color-base-cream-f5ecdd);
-  --color-bg-alt: #F2F2F2; /* subtle alt background */
+  --color-bg-alt: #F2F2F2;
+
   --color-surface-default: var(--color-base-white-ffffff);
   --color-surface-subtle: var(--color-bg-alt);
   --color-surface-hover: var(--color-bg-alt);
@@ -32,18 +35,19 @@
 
   --color-border-default: var(--color-base-pastel-d1dce5);
   --color-border-strong: var(--color-base-deepbrown-37140e);
-  --color-border-subtle: rgba(0,0,0,0.04);
+  --color-border-subtle: rgba(0, 0, 0, 0.04);
+  --color-divider: var(--color-base-pastel-d1dce5);
 
   --color-button-primary-bg: var(--color-base-red-942414);
   --color-button-primary-text: var(--color-base-white-ffffff);
-  --color-button-primary-hover: #7A1D11; /* darker */
-  --color-button-primary-pressed: rgba(0,0,0,0.1);
+  --color-button-primary-hover: #7A1D11;
+  --color-button-primary-pressed: rgba(0, 0, 0, 0.1);
 
   --color-button-secondary-bg: var(--color-base-gold-e59d25);
   --color-button-secondary-text: var(--color-base-white-ffffff);
 
   /* -----------------------
-     Spacing tokens (numeric)
+     SPACING
      ----------------------- */
   --space-4: 4px;
   --space-8: 8px;
@@ -58,76 +62,179 @@
   --space-64: 64px;
 
   /* -----------------------
-     Radii & shadows
+     RADII & SHADOWS
      ----------------------- */
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-full: 9999px;
 
-  --shadow-soft: 0 2px 4px rgba(0,0,0,0.10);
-  --shadow-lift: 0 6px 18px rgba(0,0,0,0.12);
-  --shadow-inset: inset 0 2px 6px rgba(0,0,0,0.08);
+  --shadow-soft: 0 2px 4px rgba(0, 0, 0, 0.10);
+  --shadow-lift: 0 6px 18px rgba(0, 0, 0, 0.12);
+  --shadow-inset: inset 0 2px 6px rgba(0, 0, 0, 0.08);
 
   /* -----------------------
-     Divider / border (BBC choice)
-     ----------------------- */
-  --color-divider: var(--color-base-pastel-d1dce5);
-
-  /* -----------------------
-     Typography (fluid clamp() tokens)
-     scaling window: 360px -> 1440px
-     formula used: clamp(MINpx, calc(MINpx + (MAX - MIN) * ((100vw - 360px) / 1080)), MAXpx)
+     TYPOGRAPHY – ATOMIC TOKENS
+     Scaling window: 360px → 1440px
      ----------------------- */
 
-  /* Headings */
-  --font-heading-xl: clamp(32px, calc(32px + (40 - 32) * ((100vw - 360px) / 1080)), 40px) "Merriweather", serif;
-  --font-heading-xl-line: 1.2; /* 120% */
+  /* Headings (Merriweather) */
+  --font-heading-xl-size: clamp(32px, calc(32px + (40 - 32) * ((100vw - 360px) / 1080)), 40px);
+  --font-heading-xl-line: 1.2;
+  --font-heading-xl-family: "Merriweather", serif;
 
-  --font-heading-lg: clamp(26px, calc(26px + (32 - 26) * ((100vw - 360px) / 1080)), 32px) "Merriweather", serif;
+  --font-heading-lg-size: clamp(26px, calc(26px + (32 - 26) * ((100vw - 360px) / 1080)), 32px);
   --font-heading-lg-line: 1.2;
+  --font-heading-lg-family: "Merriweather", serif;
 
-  --font-heading-md: clamp(20px, calc(20px + (24 - 20) * ((100vw - 360px) / 1080)), 24px) "Merriweather", serif;
+  --font-heading-md-size: clamp(20px, calc(20px + (24 - 20) * ((100vw - 360px) / 1080)), 24px);
   --font-heading-md-line: 1.3;
+  --font-heading-md-family: "Merriweather", serif;
 
-  --font-heading-sm: clamp(14px, calc(14px + (16 - 14) * ((100vw - 360px) / 1080)), 16px) "Merriweather", serif;
+  --font-heading-sm-size: clamp(14px, calc(14px + (16 - 14) * ((100vw - 360px) / 1080)), 16px);
   --font-heading-sm-line: 1.5;
-  --font-heading-sm-tracking: 0.01em; /* 1% */
+  --font-heading-sm-tracking: 0.01em;
+  --font-heading-sm-family: "Merriweather", serif;
 
-  /* Body */
-  --font-body-lg: clamp(18px, calc(18px + (20 - 18) * ((100vw - 360px) / 1080)), 20px) "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  /* Body text (Inter) */
+  --font-body-lg-size: clamp(18px, calc(18px + (20 - 18) * ((100vw - 360px) / 1080)), 20px);
   --font-body-lg-line: 1.4;
+  --font-body-lg-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 
-  --font-body-md: clamp(16px, calc(16px + (18 - 16) * ((100vw - 360px) / 1080)), 18px) "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-body-md-size: clamp(16px, calc(16px + (18 - 16) * ((100vw - 360px) / 1080)), 18px);
   --font-body-md-line: 1.4;
+  --font-body-md-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 
-  --font-body-sm: clamp(14px, calc(14px + (16 - 14) * ((100vw - 360px) / 1080)), 16px) "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-body-sm-size: clamp(14px, calc(14px + (16 - 14) * ((100vw - 360px) / 1080)), 16px);
   --font-body-sm-line: 1.5;
+  --font-body-sm-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 
-  --font-paragraph: clamp(13px, calc(13px + (14 - 13) * ((100vw - 360px) / 1080)), 14px) "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  /* Paragraph */
+  --font-paragraph-size: clamp(13px, calc(13px + (14 - 13) * ((100vw - 360px) / 1080)), 14px);
   --font-paragraph-line: 1.5;
+  --font-paragraph-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 
-  --font-meta: clamp(11px, calc(11px + (12 - 11) * ((100vw - 360px) / 1080)), 12px) "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  --font-meta-line: 1.2;
-  --font-meta-tracking: 0.05em; /* 5% */
+  /* Meta (Medium & Bold variants) */
+  --font-meta-medium-size: clamp(11px, calc(11px + (12 - 11) * ((100vw - 360px) / 1080)), 12px);
+  --font-meta-medium-line: 1.2;
+  --font-meta-medium-tracking: 0.05em;
+  --font-meta-medium-weight: 500;
+  --font-meta-medium-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 
-  --font-card-small: clamp(8px, calc(8px + (8 - 8) * ((100vw - 360px) / 1080)), 8px) "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-meta-bold-size: clamp(11px, calc(11px + (12 - 11) * ((100vw - 360px) / 1080)), 12px);
+  --font-meta-bold-line: 1.2;
+  --font-meta-bold-tracking: 0.05em;
+  --font-meta-bold-weight: 700;
+  --font-meta-bold-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 
-  /* utility text tokens (explicit) */
-  --text-color-default: var(--color-text-primary);
-  --text-color-muted: var(--color-text-muted);
-  --link-color: var(--color-text-link);
+  /* Caption */
+  --font-caption-size: clamp(10px, calc(10px + (11 - 10) * ((100vw - 360px) / 1080)), 11px);
+  --font-caption-line: 1.3;
+  --font-caption-tracking: 0.05em;
+  --font-caption-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 
-  /* Buttons: size tokens */
+  /* Card Small */
+  --font-card-small-size: 8px;
+  --font-card-small-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+
+  /* Buttons (sizing layer) */
   --button-padding-vertical: 12px;
   --button-padding-horizontal: 24px;
   --button-border-radius: var(--radius-sm);
+
+  /* -----------------------
+     STATE tokens (interaction colors)
+     ----------------------- */
+
+  /* Button states */
+  --state-primary-hover: #7A1D11; /* darker version of red */
+  --state-primary-active: #61170D; /* pressed */
+  --state-primary-focus-ring: rgba(148, 36, 20, 0.3);
+
+  --state-secondary-hover: #cf8c20; /* slightly darker gold */
+  --state-secondary-active: #b87a1b;
+  --state-secondary-focus-ring: rgba(229, 157, 37, 0.3);
+
+  /* Surface interactions */
+  --state-surface-hover: rgba(0, 0, 0, 0.03);
+  --state-surface-active: rgba(0, 0, 0, 0.06);
+  --state-surface-focus-ring: rgba(0, 0, 0, 0.15);
+
+  /* Text links */
+  --state-link-hover: #B72D1B;
+  --state-link-active: #7A1D11;
+  --state-link-focus-ring: rgba(148, 36, 20, 0.3);
+
+/* -----------------------
+   Links (inline text)
+   ----------------------- */
+a,
+.text-link {
+  color: var(--color-text-link);
+  text-decoration: underline;
+  transition: color 0.2s ease;
 }
 
-/* Dark theme placeholder (later) */
-[data-theme="dark"]{
-  /* will be filled when you want dark mode */
-  /* Example:
-  --color-bg-primary: #121212;
-  --color-text-primary: #FFFFFF;
-  */
+a:hover,
+.text-link:hover {
+  color: var(--state-link-hover);
+}
+
+a:active,
+.text-link:active {
+  color: var(--state-link-active);
+}
+
+a:focus-visible,
+.text-link:focus-visible {
+  outline: 2px solid var(--state-link-focus-ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* -----------------------
+   Cards (containers)
+   ----------------------- */
+.card {
+  background: var(--color-surface-default);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  padding: var(--space-24);
+}
+
+.card:hover {
+  background: var(--state-surface-hover);
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-2px);
+}
+
+.card:active {
+  background: var(--state-surface-active);
+  box-shadow: var(--shadow-inset);
+  transform: translateY(0);
+}
+
+.card:focus-visible {
+  outline: 3px solid var(--state-surface-focus-ring);
+  outline-offset: 3px;
+}
+
+/* -----------------------
+     Input & focus tokens
+     ----------------------- */
+  --state-input-border: var(--color-border-default);
+  --state-input-bg: var(--color-surface-default);
+  --state-input-hover-border: var(--color-border-strong);
+  --state-input-active-border: var(--color-base-red-942414);
+  --state-input-focus-ring: rgba(148, 36, 20, 0.4);
+  --state-input-placeholder: var(--color-text-muted);
+  --state-input-disabled-bg: var(--color-bg-alt);
+  --state-input-disabled-border: rgba(0,0,0,0.08);
+  --state-input-disabled-text: rgba(0,0,0,0.4);
+}
+
+/* Dark mode placeholder */
+[data-theme="dark"] {
+  /* will fill in later */
 }
