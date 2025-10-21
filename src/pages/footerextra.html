@@ -1,0 +1,66 @@
+---
+import { Github, Twitter, Linkedin, Dribbble } from "lucide-react";
+---
+
+<footer class="bg-[#3b1913] text-neutral-200">
+  <!-- Top Section -->
+  <div class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+    <!-- Logo + Description -->
+    <div>
+      <h2 class="text-2xl font-bold text-white mb-4">Oyo<span class="text-neutral-300">Times</span></h2>
+      <p class="text-neutral-400 leading-relaxed">
+        Empowering the youth with community news and insights.
+      </p>
+    </div>
+
+    <!-- Categories -->
+    <div>
+      <h3 class="text-lg font-semibold text-white mb-4">Categories</h3>
+      <ul class="space-y-3">
+        <li><a href="#" class="hover:text-white">Business</a></li>
+        <li><a href="#" class="hover:text-white">Politics</a></li>
+        <li><a href="#" class="hover:text-white">Tech</a></li>
+        <li><a href="#" class="hover:text-white">Education</a></li>
+        <li><a href="#" class="hover:text-white">Sports</a></li>
+      </ul>
+    </div>
+
+    <!-- Extras -->
+    <div>
+      <h3 class="text-lg font-semibold text-white mb-4">Extras</h3>
+      <ul class="space-y-3">
+        <li><a href="#" class="hover:text-white">Monarch’s Desk</a></li>
+        <li><a href="#" class="hover:text-white">Places to Visit</a></li>
+        <li class="flex items-center gap-2">
+          <a href="#" class="hover:text-white">People’s Insight</a>
+          <span class="bg-white text-black text-xs font-semibold px-2 py-0.5 rounded-full">New</span>
+        </li>
+        <li><a href="#" class="hover:text-white">About us</a></li>
+      </ul>
+    </div>
+
+    <!-- Social -->
+    <div>
+      <h3 class="text-lg font-semibold text-white mb-4">Social</h3>
+      <ul class="space-y-3">
+        <li><a href="#" class="hover:text-white flex items-center gap-2"><Twitter size={16}/> Twitter</a></li>
+        <li><a href="#" class="hover:text-white flex items-center gap-2"><Linkedin size={16}/> LinkedIn</a></li>
+        <li><a href="#" class="hover:text-white flex items-center gap-2"><Github size={16}/> GitHub</a></li>
+        <li><a href="#" class="hover:text-white flex items-center gap-2"><Dribbble size={16}/> Dribbble</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Bottom Section -->
+  <div class="bg-black py-6">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center text-sm text-neutral-400 gap-4">
+      <p>© 2025 Oyo Times. All rights reserved.</p>
+      <div class="flex items-center space-x-5">
+        <a href="#" class="hover:text-white"><Twitter size={18}/></a>
+        <a href="#" class="hover:text-white"><Linkedin size={18}/></a>
+        <a href="#" class="hover:text-white"><Github size={18}/></a>
+        <a href="#" class="hover:text-white"><Dribbble size={18}/></a>
+      </div>
+    </div>
+  </div>
+</footer>
