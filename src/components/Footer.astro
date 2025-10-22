@@ -2,7 +2,7 @@
 // src/components/Footer.astro
 
 // Logo path might need to be adjusted based on your project structure.
-import LogoFull from "../assets/exports/logos/logo-full.svg"; 
+import LogoFullWhite from "../assets/exports/logos/logo-full-white.svg"; 
 
 // Data for links is kept here for easy updating
 const footerLinks = {
@@ -41,28 +41,28 @@ const socialIcons = {
   <div class="container mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-textColor-inverse">
     <div class="md:col-span-1">
       <a href="/" aria-label="OyoTimes homepage">
-        <img src={LogoFull.src} alt="OyoTimes Logo" class="w-32 mb-4" />
+        <img src={LogoFullWhite.src} alt="OyoTimes Logo" class="w-32 mb-4" />
       </a>
-      <p class="text-sm leading-relaxed text-textColor-muted">
+      <p class="text-sm leading-relaxed caption">
         Empowering the youth with community news and insights.
       </p>
     </div>
 
     <div>
-      <h3 class="font-bold mb-4 text-textColor-inverse">Categories</h3>
+      <h3 class="font-bold mb-4 text-pastel">Categories</h3>
       <ul class="space-y-3 text-textColor-muted">
         {footerLinks.categories.map(link => (
-          <li><a href={link.href} class="hover:text-white transition-colors">{link.text}</a></li>
+          <li><a href={link.href} class="text-linkfooter hover:text-white transition-colors">{link.text}</a></li>
         ))}
       </ul>
     </div>
 
     <div>
-      <h3 class="font-bold mb-4 text-textColor-inverse">Extras</h3>
+      <h3 class="font-bold mb-4 text-pastel">Extras</h3>
       <ul class="space-y-3 text-textColor-muted">
         {footerLinks.extras.map(link => (
           <li>
-            <a href={link.href} class="hover:text-white transition-colors flex items-center gap-2">
+            <a href={link.href} class="text-linkfooter hover:text-white transition-colors flex items-center gap-2">
               {link.text}
               {link.isNew && (
                 <span class="bg-white text-background-footer text-xs font-bold px-2 py-0.5 rounded-full">New</span>
@@ -74,11 +74,11 @@ const socialIcons = {
     </div>
 
     <div>
-      <h3 class="font-bold mb-4 text-textColor-inverse">Social</h3>
+      <h3 class="font-bold mb-4 text-pastel">Social</h3>
       <ul class="space-y-3 text-textColor-muted">
         {footerLinks.social.map(link => (
           <li>
-            <a href={link.href} class="hover:text-white transition-colors flex items-center gap-3">
+            <a href={link.href} class="text-linkfooter hover:text-white transition-colors flex items-center gap-3">
               <Fragment set:html={socialIcons[link.text]} />
               <span class="ml-2">{link.text}</span>
             </a>
@@ -89,8 +89,22 @@ const socialIcons = {
   </div>
 
   <div class="bg-black py-4">
-    <div class="container mx-auto px-4 text-center sm:text-left text-sm text-body-sm">
-      <p>&copy; {new Date().getFullYear()} Oyo Times. All rights reserved.</p>
+    <div class="container mx-auto px-4 text-center sm:text-center text-sm text-body-sm">
+      <p class="text-body-smregular">&copy; {new Date().getFullYear()} Oyo Times. All rights reserved.</p>
     </div>
   </div>
 </footer>
+
+<style>
+  .foot-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0;
+  }
+
+  .caption {
+    color: #b3b3b3;
+  }
+</style>

@@ -41,6 +41,9 @@
   --color-text-muted: var(--color-base-gray-666666);
   --color-text-inverse: var(--color-base-white-ffffff);
   --color-text-link: var(--color-base-red-942414);
+  --color-text-linkfooter: var(--color-base-white-ffffff);
+  --color-text-pastel: var(--color-base-pastel-d1dce5);
+  --color-text-fadeblack: var(--color-base-fadeblack-23242a);
 
   --color-border-default: var(--color-base-pastel-d1dce5);
   --color-border-strong: var(--color-base-deepbrown-37140e);

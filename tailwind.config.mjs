@@ -26,7 +26,8 @@ export default {
            muted: 'var(--color-text-muted)',
            inverse: 'var(--color-text-inverse)',
            link: 'var(--color-text-link)',
-           white: 'var(--color-text-white)'
+           white: 'var(--color-text-white)',
+           pastel: 'var(--color-text-pastel)',
         },
         borderColor: {
             default: 'var(--color-border-default)',

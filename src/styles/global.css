@@ -41,6 +41,11 @@ html, body {
   height: 100%;
 }
 
+img, picture, video, canvas, svg {
+  display: block; /*Treat media as block elements */
+  max-width: 100%; /* Ensure images don't overflow */
+}
+
 /* -----------------------
    3. BASE BODY STYLES
 ----------------------- */
