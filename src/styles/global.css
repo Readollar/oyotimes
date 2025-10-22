@@ -7,6 +7,7 @@
 @import './tokens.css';
 @import './typography.css';
 @import './components.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -105,5 +106,32 @@ a:focus-visible {
   body {
     font-size: var(--font-body-sm-size);
     line-height: var(--font-body-sm-line);
+  }
+}
+
+/* =====================================
+   GLOBAL LAYOUT CONTAINER
+   ===================================== */
+.container {
+  width: 100%;
+  max-width: 1440px;   /* Corresponds to your Figma frame width */
+  margin-left: auto;   /* Centers the container */
+  margin-right: auto;
+  padding-left: 120px;  /* Your 120px margin on the left */
+  padding-right: 120px; /* Your 120px margin on the right */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 1200px) {
+  .container {
+    padding-left: 60px;
+    padding-right: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding-left: 24px;  /* On mobile, margin equals the gutter width */
+    padding-right: 24px;
   }
 }

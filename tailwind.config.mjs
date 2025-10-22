@@ -2,30 +2,42 @@
 export default {
   content: ['./src/**/*.{astro,js,ts,jsx,tsx,vue,html}'],
   theme: {
+    // THIS PART FIXES YOUR 120px MARGIN
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: '1rem', // A sensible default for mobile
+        md: '2rem',      // A default for tablets
+        lg: '120px',     // Your 120px margin for large screens
+      },
+    },
+
     extend: {
+      // THIS PART FIXES YOUR CUSTOM COLORS
       colors: {
-        oyo: {
-          primary: '#942414',
-          'primary-hover': '#7A1D11',
-          secondary: '#E59D25',
-          brown: '#B65C15',
-          deepbrown: '#37140E',
-          cream: '#F5ECDD',
-          'bg-alt': '#F2F2F2',
-          divider: '#D1DCE5',
-          neutral: '#666666',
-          fadeblack: '#23242A'
+        background: {
+           primary: 'var(--color-bg-primary)',
+           secondary: 'var(--color-bg-secondary)',
+           footer: 'var(--color-bg-footer)',
+        },
+        textColor: { 
+           primary: 'var(--color-text-primary)',
+           secondary: 'var(--color-text-secondary)',
+           muted: 'var(--color-text-muted)',
+           inverse: 'var(--color-text-inverse)',
+           link: 'var(--color-text-link)',
+           white: 'var(--color-text-white)'
+        },
+        borderColor: {
+            default: 'var(--color-border-default)',
+            strong: 'var(--color-border-strong)',
         }
       },
+      // THIS PART CONNECTS YOUR CUSTOM FONTS
       fontFamily: {
-        inter: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
-        merri: ['Merriweather', 'serif']
+        inter: 'var(--font-body)',
+        merri: 'var(--font-heading)'
       },
-      boxShadow: {
-        soft: '0 2px 4px rgba(0,0,0,0.10)',
-        lift: '0 6px 18px rgba(0,0,0,0.12)',
-        inset: 'inset 0 2px 6px rgba(0,0,0,0.08)'
-      }
     }
   },
   plugins: []

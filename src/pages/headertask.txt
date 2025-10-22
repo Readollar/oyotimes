@@ -1,5 +1,0 @@
-If you prefer, I’ll also:
-
-Add a small script to set the active nav item based on location.pathname (so Home becomes active automatically).
-
-Add hover/active underline or indicator under the nav item (BBC-like) — say the word and I’ll include it.

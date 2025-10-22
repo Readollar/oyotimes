@@ -1,4 +1,6 @@
 :root {
+
+   
   /* -----------------------
      FONTS
   ----------------------- */
@@ -26,8 +28,8 @@
   --color-bg-primary: var(--color-base-white-ffffff);
   --color-bg-secondary: var(--color-base-cream-f5ecdd);
   --color-bg-alt: #F2F2F2;
-  --color-bg-icon: var(--color-base-iconbg-f5f5f5)
-  --color-bg-footer: var(--color-base-deepbrown-37140e)
+  --color-bg-icon: var(--color-base-iconbg-f5f5f5);
+  --color-bg-footer: var(--color-base-deepbrown-37140e);
 
   --color-surface-default: var(--color-base-white-ffffff);
   --color-surface-subtle: var(--color-bg-alt);

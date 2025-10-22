@@ -1,26 +1,41 @@
 ---
-const { title = "OyoTimes" } = Astro.props;
+// src/layouts/BaseLayout.astro
+
+// You can add more props for SEO as your site grows
+const { 
+  title = "OyoTimes - Your Community News Source",
+  description = "The latest news, insights, and stories from Oyo town, powered by the community." 
+} = Astro.props;
+
 import Header from "../components/Header.astro";
-import BreakingNews from "../components/BreakingNews.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/tokens.css";
 import "../styles/global.css";
-import "../styles/typography.css";
-import "../styles/components.css";
-import "../styles/tailwind.css"; // ✅ create this file (see below)
+// ... any other global styles
 ---
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>{title}</title>
-  </head>
-  <body class="font-inter bg-white text-black">
-    <Header />
-    <BreakingNews />
-    <slot />
-    <Footer />
-  </body>
+    <meta name="description" content={description} />
+    
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/og-image.jpg" /> <meta property="og:type" content="website" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter bg-background-primary text-textColor-primary">
+  <Header />
+    <main class="container">
+    <slot /> {/* All your page content will be rendered here */}
+    </main>
+  <Footer />
+</body>
 </html>
