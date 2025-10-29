@@ -1,0 +1,45 @@
+---
+// src/components/cards/CardVertical.astro
+export interface Props {
+  href: string;
+  imgSrc: string;
+  category: string;
+  title: string;
+  date: string;
+  readTime: string;
+}
+const { href, imgSrc, category, title, date, readTime } = Astro.props;
+
+// SVG Icons
+const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
+const clockIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+---
+
+<article class="group">
+  <a href={href} class="block overflow-hidden rounded-lg mb-4 shadow-soft">
+    <img 
+      src={imgSrc} 
+      alt={title} 
+      class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+    />
+  </a>
+
+  <div class="space-y-2">
+    <span class="text-xs font-bold uppercase text-oyo-primary">
+      {category}
+    </span>
+    <h3 class="font-merri font-bold text-lg leading-tight text-textColor-primary group-hover:text-oyo-primary transition-colors">
+      <a href={href}>{title}</a>
+    </h3>
+    <div class="flex items-center gap-4 text-sm text-textColor-muted">
+      <span class="flex items-center gap-1.5">
+        <Fragment set:html={calendarIcon} />
+        {date}
+      </span>
+      <span class="flex items-center gap-1.5">
+        <Fragment set:html={clockIcon} />
+        {readTime}
+      </span>
+    </div>
+  </div>
+</article>

@@ -20,8 +20,8 @@ const activeId = "home"; // set dynamically later if you want
 
 <header class="oy-header" role="banner">
   <!-- Head bar: centered brand -->
-  <div class="head-bar">
-    <div class="container head-inner">
+  <div class="container head-bar">
+    <div class="head-inner">
       <div class="date-left" aria-hidden="false">
         <img src="/src/assets/exports/icons/icon-world.svg" alt="" class="icon-world" />
         <span id="oy-current-date" class="date-text">Loading date...</span>
@@ -92,13 +92,6 @@ const activeId = "home"; // set dynamically later if you want
     z-index: 120;
     background: var(--color-bg-primary);
     box-shadow: 0 1px 0 rgba(0,0,0,0.03);
-  }
-
-  /* generic centered container using your margins */
-  .container {
-    margin-left: var(--side-margin);
-    margin-right: var(--side-margin);
-    max-width: calc(100% - (var(--side-margin) * 2));
   }
 
   /* Head bar */
@@ -233,6 +226,6 @@ const activeId = "home"; // set dynamically later if you want
   /* Micro spacing / visual tuning */
   @media (min-width: 1440px) {
     /* optional: cap max width so it doesn't stretch too wide on huge screens */
-    .container { max-width: 1200px; margin-left: auto; margin-right: auto; }
+    .container { min-width: 1200px; margin-left: auto; margin-right: auto; }
   }
 </style>

@@ -1,0 +1,62 @@
+---
+// src/components/cards/CardOverlay.astro
+// This is our new REUSABLE card component.
+// It accepts "props" to make it dynamic.
+
+export interface Props {
+  href: string;
+  imgSrc: string;
+  category: string;
+  title: string;
+  date: string;
+  readTime: string;
+}
+
+const { href, imgSrc, category, title, date, readTime } = Astro.props;
+
+// Re-using the same helper maps
+const categoryColors = {
+  Business: "bg-category-business",
+  Sports: "bg-category-sports",
+  Politics: "bg-category-politics",
+  Tech: "bg-category-tech",
+  Education: "bg-category-education",
+};
+
+const clockIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" ...></svg>`;
+const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" ...></svg>`;
+---
+
+<a 
+  href={href} 
+  class="group relative block rounded-lg overflow-hidden shadow-soft hover:shadow-lift transition-all duration-300"
+>
+  <img 
+    src={imgSrc} 
+    alt={title} 
+    class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+  />
+  
+  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+
+  <div class="relative flex flex-col justify-end h-80 p-6 text-white">
+    <span class={`text-xs font-bold uppercase ${categoryColors[category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm mb-3`}>
+      {category}
+    </span>
+    
+    <h3 class="font-merri font-bold text-2xl leading-tight mb-4 group-hover:text-gray-200 transition-colors">
+      {title}
+    </h3>
+    
+    <div class="flex items-center gap-4 text-sm font-medium text-gray-300 border-t border-gray-600 pt-4">
+      <span class="flex items-center gap-1.5">
+        <Fragment set:html={calendarIcon} />
+        {date}
+      </span>
+      <span class="flex items-center gap-1.5">
+        <Fragment set:html={clockIcon} />
+        {readTime}
+      </span>
+    </div>
+  </div>
+</a>

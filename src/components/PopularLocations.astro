@@ -1,0 +1,55 @@
+---
+// src/components/PopularLocations.astro
+import CardLocation from './cards/CardLocation.astro';
+
+const locations = [
+  {
+    href: "#",
+    imgSrc: "src/assets/exports/img/places/lemasik.png", // Replace with your image
+    title: "Le'Masik",
+    subtitle: "85 seats"
+  },
+  {
+    href: "#",
+    imgSrc: "src/assets/exports/img/places/oldoyo.jpg", // Replace with your image
+    title: "Old Oyo Park",
+    subtitle: "100 seats"
+  },
+  {
+    href: "#",
+    imgSrc: "src/assets/exports/img/places/jfly.jpg", // Replace with yourG image
+    title: "J-FLY",
+    subtitle: "40 seats"
+  },
+];
+---
+
+<section class="py-8 md:py-12">
+  
+  <div class="text-center max-w-2xl mx-auto mb-10">
+    <h2 class="font-merri text-3xl md:text-4xl font-bold text-textColor-primary mb-4">
+      Popular locations
+    </h2>
+    <p class="text-lg text-textColor-muted">
+      With lots of unique blocks, you can easily build a page easily without any coding.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {locations.map(location => (
+      <CardLocation 
+        href={location.href}
+        imgSrc={location.imgSrc}
+        title={location.title}
+        subtitle={location.subtitle}
+      />
+    ))}
+  </div>
+
+  <div class="flex justify-center gap-2 mt-8">
+    <span class="w-3 h-3 bg-oyo-deepbrown rounded-full"></span>
+    <span class="w-3 h-3 bg-oyo-divider rounded-full"></span>
+    <span class="w-3 h-3 bg-oyo-divider rounded-full"></span>
+  </div>
+
+</section>

@@ -1,0 +1,34 @@
+---
+// src/components/cards/CardTextWithBadge.astro
+export interface Props {
+  href: string;
+  category: string;
+  title: string;
+  date: string;
+}
+const { href, category, title, date } = Astro.props;
+
+// Helper map for category BG colors
+const categoryColors = {
+  Business: "bg-category-business",
+  Sports: "bg-category-sports",
+  Politics: "bg-category-politics",
+  Tech: "bg-category-tech",
+  Education: "bg-category-education",
+};
+
+const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" ...></svg>`;
+---
+
+<article class="space-y-2">
+  <span class={`text-xs font-bold uppercase ${categoryColors[category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm`}>
+    {category}
+  </span>
+  <h4 class="font-merri font-semibold text-base leading-tight text-textColor-primary hover:text-oyo-primary transition-colors">
+    <a href={href}>{title}</a>
+  </h4>
+  <div class="flex items-center gap-1.5 text-sm text-textColor-muted">
+    <Fragment set:html={calendarIcon} />
+    {date}
+  </div>
+</article>

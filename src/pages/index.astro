@@ -1,11 +1,24 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import LatestNews from '../components/LatestNews.astro';
+import CategoriesSection from '../components/CategoriesSection.astro';
+import CommunityInsights from '../components/CommunityInsights.astro';
+import PopularLocations from '../components/PopularLocations.astro';
+import EditorsPicks from '../components/EditorsPicks.astro';
+import MonarchsDesk from '../components/MonarchsDesk.astro';
+import Newsletter from '../components/Newsletter.astro'; // 1. Import
 ---
 
-<BaseLayout>
-  <h1>Welcome to OyoTimes Homepage</h1>
+<BaseLayout title="OyoTimes - Your Community News Source">
+  
+  <HeroSection />
+  <LatestNews />
+  <CategoriesSection />
+  <CommunityInsights />
+  <PopularLocations />
+  <EditorsPicks />
+  <MonarchsDesk />
+  <Newsletter /> {/* 2. Add component */}
+
 </BaseLayout>

@@ -1,6 +1,14 @@
 :root {
 
+   /* Layout Tokens */
    
+  --container-max-width: 1920px;
+  --body-margin-desktop: 120px;
+  --body-margin-mobile: 24px;
+  --grid-columns: 12;
+  --grid-gutter: 24px; 
+
+
   /* -----------------------
      FONTS
   ----------------------- */
@@ -21,6 +29,10 @@
   --color-base-pastel-d1dce5: #D1DCE5;
   --color-base-fadeblack-23242a: #23242A;
   --color-base-iconbg-f5f5f5: #F5F5F5;
+  --color-base-blue-600: #2563EB;
+  --color-base-orange-500: #F97316;
+  --color-base-purple-600: #9333EA;
+  --color-base-green-600: #16A34A;
 
   /* -----------------------
      SEMANTIC COLORS
@@ -231,15 +243,3 @@
 
   --font-sans: 'Inter', system-ui, sans-serif;
 }
-
-/* =====================================
-   UTILITY CLASSES (used in Footer.astro)
-   ===================================== */
-.bg-footer { background-color: var(--clr-footer-bg); }
-.bg-footer-accent { background-color: var(--clr-footer-accent); }
-.text-text-primary { color: var(--clr-text-primary); }
-.text-text-secondary { color: var(--clr-text-secondary); }
-.text-text-muted { color: var(--clr-text-muted); }
-.text-text-inverse { color: var(--clr-text-inverse); }
-.bg-surface { background-color: var(--clr-surface); }
-.font-sans { font-family: var(--font-sans); }
