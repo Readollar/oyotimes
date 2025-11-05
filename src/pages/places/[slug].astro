@@ -56,7 +56,7 @@ const guideIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBo
             <div>
               <span class="font-merri font-bold text-5xl text-text-primary">{place.rating.toFixed(2)}</span>
               <span class="text-lg text-text-muted ml-2">{place.reviewCount} Reviews</span>
-              <div class="flex mt-2 justify-items-end">
+              <div class="flex mt-2">
                 {Array.from({ length: 5 }).map((_, i) => (
                   i < Math.round(place.rating) 
                     ? <Fragment set:html={starIcon} /> 
