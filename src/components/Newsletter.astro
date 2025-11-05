@@ -1,40 +1,38 @@
 ---
 // src/components/Newsletter.astro
+// REVISED with new, correct Tailwind classes
 
-// SVG Icon for the arrow
 const arrowIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>`;
 ---
 
-<section class="bg-oyo-bg-alt">
+<section class="bg-background-primary">
   
   <div class="container py-16 md:py-20">
-    
     <div class="grid grid-cols-12 gap-6 items-center">
       
       <div class="col-span-12 lg:col-span-7">
         
         <h2 class="font-inter font-extrabold text-5xl md:text-6xl uppercase tracking-tighter">
-          <span class="block text-textColor-primary">Newsletter</span>
-          <span class="block text-textColor-muted">Subscription</span>
+          <span class="block text-text-primary">Newsletter</span>
+          <span class="block text-text-muted">Subscription</span>
         </h2>
         
         <form class="mt-8 flex rounded-md overflow-hidden shadow-soft max-w-lg">
-          <label for="email-newsletter" class="sr-only b-1">Email address</label>
+          <label for="email-newsletter" class="sr-only">Email address</label>
           <input 
             id="email-newsletter"
             type="email" 
             placeholder="oyotimes@gmail.com"
-            class="w-full px-5 py-4 text-textColor-primary border-0 rounded-l-md focus:ring-2 focus:ring-oyo-primary focus:ring-inset"
+            class="w-full px-5 py-4 text-primary border-0 rounded-l-md focus:ring-2 focus:ring-primary focus:ring-inset"
           />
           <button 
             type="submit" 
             aria-label="Subscribe"
-            class="bg-oyo-primary text-white p-4 hover:bg-oyo-primary-hover transition-colors rounded-r-md"
+            class="bg-background-red text-white p-4 hover:bg-background-red-hover transition-colors rounded-r-md"
           >
             <Fragment set:html={arrowIcon} />
           </button>
         </form>
-
       </div>
       
       <div class="col-span-12 lg:col-span-5 hidden lg:block">

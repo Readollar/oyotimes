@@ -1,0 +1,168 @@
+---
+// src/pages/places.astro
+// REVISED with correct links and Tailwind classes
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CardPlace from '../components/cards/CardPlace.astro';
+import CardPlaceFeatured from '../components/cards/CardPlaceFeatured.astro';
+
+const allPlaces = [
+  { 
+    slug: "soro-hill", 
+    href: "/places/soro-hill/", // <-- LINK FIXED
+    dataCategory: "landmark", 
+    imgSrc: "/img/places/soro-hill.jpg", 
+    category: "Landmark", 
+    title: "Soro Hill", 
+    location: "Sabo, Oyo", 
+    description: "Lorem ipsum dolor sit amet...", 
+    rating: 4.5, 
+    reviewCount: 1421, 
+    priceText: "Free", 
+    priceLabel: "PER PERSON" 
+  },
+  { 
+    slug: "le-masik-hotel", 
+    href: "/places/le-masik-hotel/", // <-- LINK FIXED
+    dataCategory: "hotel", 
+    imgSrc: "/img/places/lemasik.png", 
+    category: "Hotel", 
+    title: "Le'Masik Hotel", 
+    location: "Fola-tyre, Oyo", 
+    description: "Lorem ipsum dolor sit amet...", 
+    rating: 4.8, 
+    reviewCount: 485, 
+    priceText: "$60,000", 
+    priceLabel: "PER NIGHT" 
+  },
+  // ... etc. for all places
+];
+
+// Data for "Editor's Picks" (3-col)
+const featuredPicks = [
+  { href: "#", imgSrc: "/img/places/soro-hill-featured.jpg", category: "Landmark", title: "Soro Hill", location: "Sabo, Oyo", description: "Lorem ipsum dolor sit amet...", rating: 4.5, reviewCount: 1421, priceText: "Free", priceLabel: "PER PERSON" },
+  { href: "#", imgSrc: "/img/places/soro-hill-featured-2.jpg", category: "Landmark", title: "Soro Hill 2", location: "Sabo, Oyo", description: "Lorem ipsum dolor sit amet...", rating: 4.5, reviewCount: 1421, priceText: "Free", priceLabel: "PER PERSON" },
+  { href: "#", imgSrc: "/img/places/soro-hill-featured-3.jpg", category: "Landmark", title: "Soro Hill 3", location: "Sabo, Oyo", description: "Lorem ipsum dolor sit amet...", rating: 4.5, reviewCount: 1421, priceText: "Free", priceLabel: "PER PERSON" },
+];
+
+// ✅ FIXED: The 'id' now matches the 'dataCategory' on the cards
+const filterTabs = [
+  { id: "all", name: "All" },
+  { id: "hotel", name: "Hotels" },
+  { id: "restaurant", name: "Restaurants" },
+  { id: "landmark", name: "Landmarks" },
+  { id: "bar-lounge", name: "Bars & Lounges" },
+];
+---
+<BaseLayout title="Places to Visit" activeId="places">
+
+  <!-- To be considered later
+   <section class="monarch-hero relative h-96 w-full" style="background-image: url('/public/img/alaafin.jpg');">
+    <div class="absolute inset-0 bg-black/60"></div>
+    <div class="container relative z-10 flex flex-col justify-center h-full text-white">
+      <h1 class="font-merri font-bold text-5xl md:text-6xl">
+        Explore popular places in Oyo
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-200 mt-2">
+      Discover restaurants, hotels, historical sites, and hangouts across Oyo.
+      </p>
+    </div>
+  </section> -->
+
+  
+  <section class="w-full h-64 md:h-80">
+    <img src="/img/alaafin.jpg" alt="Popular places in Oyo" class="w-full h-full object-cover" />
+  </section>
+
+  <section class="container text-center py-8 md:py-12">
+    <h1 class="font-merri font-bold text-4xl md:text-5xl text-text-primary">
+      Explore popular places in Oyo
+    </h1>
+    <p class="text-lg text-text-muted mt-2 mb-6">
+      Discover restaurants, hotels, historical sites, and hangouts across Oyo.
+    </p>
+
+    <form class="max-w-xl mx-auto flex rounded-lg border border-border-divider p-1.5 focus-within:ring-2 focus-within:ring-primary">
+      <input 
+        type="search" 
+        placeholder="Search by name or category (e.g., hotels, restaurants, landmarks)" 
+        class="w-full p-3 border-none focus:ring-0" 
+      />
+      <button 
+        type="submit" 
+        class="bg-button-default text-white font-bold py-3 px-6 rounded-md hover:bg-background-red-hover transition-colors"
+      >
+        Search
+      </button>
+    </form>
+
+    <div id="filter-tabs" class="flex flex-wrap justify-center gap-3 mt-6">
+      {filterTabs.map((tab, index) => (
+        <button 
+          data-filter={tab.id}
+          class:list={[
+            "filter-tab py-2 px-5 font-bold rounded-lg transition-colors border-2",
+            index === 0 
+              ? "bg-button-secondary border-primary text-white" 
+              : "bg-white border-divider text-text-primary hover:border-border-default"
+          ]}
+        >
+          {tab.name}
+        </button>
+      ))}
+    </div>
+  </section>
+
+  <div class="container pb-8 md:pb-12">
+    <div id="places-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {allPlaces.map(place => (
+        <div data-category={place.dataCategory} class="place-card">
+          <CardPlace {...place} />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="container py-12 md:py-16">
+    <div class="flex justify-between items-center mb-8 pb-4 border-b border-border-divider">
+      <h2 class="font-merri text-2xl md:text-3xl font-bold text-text-primary">
+        Editor's Picks
+      </h2>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {featuredPicks.map(pick => (
+        <CardPlaceFeatured {...pick} />
+      ))}
+    </div>
+  </div>
+
+</BaseLayout>
+
+<script>
+  // This JavaScript is now correct and will filter as expected.
+  const filterTabs = document.querySelectorAll('.filter-tab');
+  const placeCards = document.querySelectorAll('.place-card');
+  
+  filterTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const filter = tab.getAttribute('data-filter');
+      
+      filterTabs.forEach(t => {
+        t.classList.remove('bg-button-secondary', 'border-primary', 'text-white');
+        t.classList.add('bg-white', 'border-divider', 'text-primary', 'hover:border-primary');
+      });
+      tab.classList.add('bg-button-secondary', 'border-primary', 'text-white');
+      tab.classList.remove('bg-white', 'border-divider', 'text-primary');
+
+      placeCards.forEach(card => {
+        const cardCategory = card.getAttribute('data-category');
+        
+        if (filter === 'all' || filter === cardCategory) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

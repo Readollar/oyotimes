@@ -1,173 +1,82 @@
 ---
-// src/components/HeroSection.astro
-// v2 - Corrected based on user feedback.
+// src/components/CommunityInsights.astro
+import CardHorizontal from '/home/readollar/code/oyotimes/src/components/cards/CardHorizontal.astro';
 
-// --- Left Column Data ---
-const breakingArticles = [
+const insightsData = [
   {
     href: "#",
-    imgSrc: "/src/assets/exports/img/hero/in-journalism.jpg", // "IN JOURNALISM" image
-    date: "15 MINS AGO",
-    author: "SUNDAY TIMOTHY",
-    category: "Education",
-    title: "Food for thought: Is journalism still relevant today?",
+    imgSrc: "src/assets/exports/img/insights/transport.jpg",
+    author: "Habeeb Bakare",
+    date: "08 AUGUST, 2025",
+    title: "Transport Struggles in Oyo",
+    excerpt: "Every day, getting a cab in Oyo feels like a struggle. Can we have a better organized transport system?",
   },
   {
     href: "#",
-    imgSrc: "/src/assets/exports/img/hero/fuel-price.png", // Fuel station image
-    date: "20 MINS AGO",
-    author: "TAIWO OYELEYE",
-    category: "Business",
-    title: "Fuel Prices Surge Across Oyo",
+    imgSrc: "src/assets/exports/img/insights/park.jpg",
+    author: "Taiwo Atukale",
+    date: "08 AUGUST, 2025",
+    title: "Oyo Needs More Social Spaces",
+    excerpt: "Oyo is growing, but socially we're behind. We need more recreational centers, parks, and safe spots where young peo...",
+  },
+  {
+    href: "#",
+    imgSrc: "src/assets/exports/img/insights/shoprite.jpg",
+    author: "Ridwan Ilias",
+    date: "08 AUGUST, 2025",
+    title: "A Call for a Modern Mall",
+    excerpt: "It's high time Oyo had a proper mall to shop, relax and hang out instead of traveling to Ibadan for the simplest things",
+  },
+  {
+    href: "#",
+    imgSrc: "src/assets/exports/img/insights/badroads.jpg",
+    author: "Mujeeb Oyeleye",
+    date: "08 AUGUST, 2025",
+    title: "Bad Roads, Bigger Problems",
+    excerpt: "Some of the inner roads are almost unpassable, especially when it rains. If only we can get proper drainage and ro...",
+  },
+  {
+    href: "#",
+    imgSrc: "src/assets/exports/img/insights/youth.jpg",
+    author: "Mujeeb Oyeleye",
+    date: "08 AUGUST, 2025",
+    title: "Untapped Youth Potential in Oyo",
+    excerpt: "We have so many young talents in Oyo but very few platforms to showcase them. More hubs, skill centers, and you...",
+  },
+  {
+    href: "#",
+    imgSrc: "src/assets/exports/img/insights/transformer.jpg",
+    author: "Blessing James",
+    date: "08 AUGUST, 2025",
+    title: "Electricity Challenges for Businesses",
+    excerpt: "Our businesses keep suffering because of unstable electricity. Imagine how much growth we'd see if the light situation is ...",
   },
 ];
-
-// --- Center Column Data ---
-const mainArticle = {
-  href: "#",
-  imgSrc: "/src/assets/exports/img/hero/main-story.png",
-  category: "Tech",
-  date: "08 AUGUST, 2025",
-  readTime: "15 MIN READ",
-  comments: 5,
-  author: "AKINTUNDE BABATUNDE",
-  title: "Oyo Embraces Digital Payment Systems",
-};
-
-const subArticles = [
-  { href: "#", date: "08 AUGUST, 2025", readTime: "15 MIN READ", comments: 5, author: "MALIK OYELEYE", title: "New Innovation Hub Launches in Oyo Town" },
-  { href: "#", date: "08 AUGUST, 2025", readTime: "15 MIN READ", comments: 5, author: "TAIWO WAHAB", title: "Smart Farming Gains Ground" },
-];
-
-// --- Right Column Data ---
-const topStoryHero = {
-  href: "#",
-  imgSrc: "/src/assets/exports/img/hero/top-story-1.jpg",
-  category: "Business",
-  title: "Local Markets Record Rise in Food Prices",
-  date: "27 AUGUST, 2025",
-};
-
-const topStories = [
-  { href: "#", category: "Sports", title: "Oyo Mesi FC Secures Victory in Regional Tournament", date: "27 AUGUST, 2025" },
-  { href: "#", category: "Politics", title: "Community Leaders Engage in Peace Talks", date: "27 AUGUST, 2025" },
-  { href: "#", category: "Education", title: "New Classrooms Commissioned in Oyo Schools", date: "27 AUGUST, 2025" },
-];
-
-// Helper map for category BG colors (for Right Column)
-const categoryColors = {
-  Business: "bg-category-business",
-  Sports: "bg-category-sports",
-  Politics: "bg-category-politics",
-  Tech: "bg-category-tech",
-  Education: "bg-category-education",
-};
 ---
 
-<section class="container py-8 md:py-12">
-  <div class="grid grid-cols-12 gap-6">
-    <aside class="col-span-12 lg:col-span-3 space-y-6">
-      <div class="flex items-center gap-2">
-        <span class="h-5 w-2 bg-background-primary" style="background-color: #942414;"></span>
-         <h2 class="font-merri font-bold text-xl mb-0 text-textColor-primary">Breaking</h2>
-      </div>
-
-      {breakingArticles.map(article => (
-        <article class="space-y-3 pb-6 border-b border-oyo-divider">
-          <a href={article.href} class="group block overflow-hidden rounded-md">
-            <img src={article.imgSrc} alt={article.title} class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
-          </a>
-          <div class="flex items-center gap-3 text-xs text-textColor-muted">
-            <span>{article.date}</span>
-            <span>&bull;</span>
-            <span>{article.author}</span>
-          </div>
-          <div class="space-y-1">
-            <span class="text-xs font-bold uppercase text-oyo-primary">
-              {article.category}
-            </span>
-            <h3 class="font-merri font-bold text-lg leading-tight text-textColor-primary hover:text-oyo-primary transition-colors">
-              <a href={article.href}>{article.title}</a>
-            </h3>
-          </div>
-        </article>
-      ))}
-    </aside>
-
-    <div class="col-span-12 lg:col-span-6 space-y-6">
-      <article>
-        <a href={mainArticle.href} class="group block overflow-hidden rounded-md mb-4">
-          <img src={mainArticle.imgSrc} alt={mainArticle.title} class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300" />
-        </a>
-        <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-xs text-textColor-muted mb-2">
-          <span>{mainArticle.date}</span>
-          <span>{mainArticle.readTime}</span>
-          <span class="flex items-center gap-1">
-            <svg class_comment="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 21l1.9-4.24a9.98 9.98 0 01-1.34-4.68C3.55 7.582 7.582 3.55 12 3.55c4.418 0 8 4.03 8 8.45z"></path></svg>
-            {mainArticle.comments}
-          </span>
-          <span>{mainArticle.author}</span>
-        </div>
-        <span class={`text-sm font-bold uppercase ${categoryColors[mainArticle.category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm`}>
-          {mainArticle.category}
-        </span>
-        <h1 class="font-merri font-bold text-3xl md:text-4xl leading-tight text-textColor-primary hover:text-oyo-primary transition-colors mt-2">
-          <a href={mainArticle.href}>{mainArticle.title}</a>
-        </h1>
-      </article>
-
-      <div class="space-y-6">
-        {subArticles.map(article => (
-          <article class="pt-6 border-t border-oyo-divider">
-            <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-xs text-textColor-muted mb-2">
-              <span>{article.date}</span>
-              <span>{article.readTime}</span>
-              <span class="flex items-center gap-1">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 21l1.9-4.24a9.98 9.98 0 01-1.34-4.68C3.55 7.582 7.582 3.55 12 3.55c4.418 0 8 4.03 8 8.45z"></path></svg>
-                {article.comments}
-              </span>
-              <span>{article.author}</span>
-            </div>
-            <h2 class="font-merri font-bold text-xl leading-tight text-textColor-primary hover:text-oyo-primary transition-colors">
-              <a href={article.href}>{article.title}</a>
-            </h2>
-          </article>
-        ))}
-      </div>
+<section class="container bg-background-alt py-8 md:py-12">
+  
+  <div>
+    
+    <div class="mb-8 pb-4 border-b border-oyo-divider">
+      <h2 class="font-merri text-2xl md:text-3xl font-bold text-textColor-primary">
+        Community's Insights
+      </h2>
+      <div class="w-16 h-1 bg-oyo-primary mt-2"></div>
     </div>
 
-    <aside class="col-span-12 lg:col-span-3 space-y-6">
-      <h2 class="font-merri font-bold text-xl text-textColor-primary bg-background-secondary p-3 rounded-md">Top Stories</h2>
-      
-      <article class="space-y-2">
-        <a href={topStoryHero.href} class="group block overflow-hidden rounded-md">
-          <img src={topStoryHero.imgSrc} alt={topStoryHero.title} class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300" />
-        </a>
-        <span class={`text-xs font-bold uppercase ${categoryColors[topStoryHero.category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm`}>
-          {topStoryHero.category}
-        </span>
-        <h3 class="font-merri font-bold text-lg leading-tight text-textColor-primary hover:text-oyo-primary transition-colors">
-          <a href={topStoryHero.href}>{topStoryHero.title}</a>
-        </h3>
-        <p class="text-xs text-textColor-muted">{topStoryHero.date}</p>
-      </article>
-
-      <ul class="space-y-4">
-        {topStories.map(article => (
-          <li class="pt-4 border-t border-oyo-divider">
-            <article class="space-y-1">
-              <span class={`text-xs font-bold uppercase ${categoryColors[article.category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm`}>
-                {article.category}
-              </span>
-              <h4 class="font-merri font-semibold text-base leading-tight text-textColor-primary hover:text-oyo-primary transition-colors">
-                <a href={article.href}>{article.title}</a>
-              </h4>
-              <p class="text-xs text-textColor-muted">{article.date}</p>
-            </article>
-          </li>
-        ))}
-      </ul>
-    </aside>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
+      {insightsData.map(insight => (
+        <CardHorizontal
+          href={insight.href}
+          imgSrc={insight.imgSrc}
+          author={insight.author}
+          date={insight.date}
+          title={insight.title}
+          excerpt={insight.excerpt}
+        />
+      ))}
+    </div>
 
   </div>
 </section>

@@ -1,0 +1,107 @@
+---
+// src/pages/category/[category].astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CardFeatured from '../../components/cards/CardFeatured.astro';
+import CardVertical from '../../components/cards/CardVertical.astro';
+import EditorsPicks from '../../components/EditorsPicks.astro';
+import CategorySidebar from '../../components/CategorySidebar.astro';
+
+export async function getStaticPaths() {
+  // 1. This is the magic.
+  // Astro will find EVERY .md file inside your blog folder.
+// AFTER (This finds all .md files in /blog/ AND all subfolders)
+const allArticles = await Astro.glob('../../pages/blog/**/*.md');
+
+  // 2. Get a list of unique categories from all your posts.
+  const allCategories = [...new Set(allArticles.map(article => article.frontmatter.category))];
+
+  // 3. Create a page for each category
+  return allCategories.map(cat => {
+    // Filter the full list to get only posts for THIS category
+    const categoryArticles = allArticles.filter(article => article.frontmatter.category === cat);
+    
+    return {
+      params: { category: cat.toLowerCase() },
+      props: { 
+        categoryName: cat,
+        articles: categoryArticles // Pass just the filtered list
+      }
+    };
+  });
+}
+
+const { categoryName, articles } = Astro.props;
+
+// Now we use the 'articles' prop, which is already filtered.
+const featuredArticles = articles.slice(0, 2);
+const mainGridArticles = articles.slice(2);
+
+// --- PAGINATION LOGIC ---
+const articlesPerPage = 9; // Show 9 articles per page
+const mainGridPageOne = mainGridArticles.slice(0, articlesPerPage);
+const showPagination = mainGridArticles.length > articlesPerPage;
+---
+
+<BaseLayout title={categoryName} activeId={categoryName.toLowerCase()}>
+  <div class="container py-8 md:py-12">
+    <div class="grid grid-cols-12 gap-6">
+      
+      <main class="col-span-12 lg:col-span-9">
+        
+        <div class="mb-6 pb-4 border-b border-border-divider">
+          <h1 class="font-merri font-bold text-4xl mb-2">{categoryName}</h1>
+          <p class="text-lg text-text-muted">All posts, stories, and articles in the {categoryName} category.</p>
+        </div>
+
+        <section class="mb-10">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="h-5 w-1 bg-background-red"></span>
+            <h2 class="font-merri font-bold text-xl text-text-primary mb-0">Featured News</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {featuredArticles.map(article => (
+              <CardFeatured
+                href={article.url}
+                imgSrc={article.frontmatter.heroImage}
+                title={article.frontmatter.title}
+                excerpt={article.frontmatter.excerpt}
+                authorName={article.frontmatter.author}
+                authorAvatar={article.frontmatter.authorAvatar}
+                date={article.frontmatter.date}
+                views={article.frontmatter.views}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {mainGridPageOne.map(article => (
+              <CardVertical
+                href={article.url}
+                imgSrc={article.frontmatter.heroImage}
+                category={article.frontmatter.category}
+                title={article.frontmatter.title}
+                date={article.frontmatter.date}
+                readTime={article.frontmatter.readTime}
+              />
+            ))}
+          </div>
+        </section>
+
+        {showPagination && (
+          <nav class="flex justify-center gap-2 mt-10">
+          </nav>
+        )}
+      </main>
+
+      <aside class="col-span-12 lg:col-span-3">
+        <CategorySidebar articles={articles} />
+      </aside>
+    </div>
+  </div>
+
+  <div>
+    <EditorsPicks />
+  </div>
+</BaseLayout>

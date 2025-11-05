@@ -1,63 +1,147 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+// src/pages/about.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// --- Data for the Team Section ---
+const teamMembers = [
+  { name: "Esther Howard", role: "Copywriter", imgSrc: "/img/team/team-1.jpg" },
+  { name: "Dianne Russell", role: "Back-End Developer", imgSrc: "/img/team/team-2.jpg" },
+  { name: "Ridwan Awujoola", role: "Designer", imgSrc: "/img/team/ridwan-awujoola-headshot.jpg" },
+  { name: "Jerome Bell", role: "Marketing", imgSrc: "/img/team/team-4.jpg" },
+  { name: "Cody Fisher", role: "Human Resources", imgSrc: "/img/team/team-5.jpg" },
+  { name: "Bessie Cooper", role: "Quality Assurance", imgSrc: "/img/team/team-6.jpg" },
+  { name: "Jenny Wilson", role: "Content Manager", imgSrc: "/img/team/team-7.jpg" },
+  { name: "Kathryn Murphy", role: "Financial Analyst", imgSrc: "/img/team/team-8.jpg" },
+];
+
+// --- Data for the Values Section ---
+// I've created custom icons (SVG paths) for each value
+const coreValues = [
+  { title: "Community First", text: "Our primary goal is to amplify the voices of Oyo residents, telling the stories that matter most to our town.", icon: "M13 10H3c-.6 0-1 .4-1 1s.4 1 1 1h10c.6 0 1-.4 1-1s-.4-1-1-1zm7-5H3c-.6 0-1 .4-1 1s.4 1 1 1h17c.6 0 1-.4 1-1s-.4-1-1-1zm-7 10H3c-.6 0-1 .4-1 1s.4 1 1 1h10c.6 0 1-.4 1-1s-.4-1-1-1z" },
+  { title: "Local Focus", text: "We are hyper-focused on the news, challenges, and triumphs of Oyo. If it happens here, it matters to us.", icon: "M12 2C8.1 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5 2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5z" },
+  { title: "Truth & Accuracy", text: "We are committed to reliable, well-researched, and unbiased reporting. Trust is our foundation.", icon: "M9 16.2l-3.5-3.5c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l4.2 4.2c.4.4 1 .4 1.4 0L20.3 7.7c.4-.4.4-1 0-1.4s-1-.4-1.4 0L9 16.2z" },
+  { title: "Inclusivity", text: "A platform for all people, families, and businesses of Oyo, regardless of background, belief, or status.", icon: "M12 12c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z" },
+  { title: "Innovation", text: "Using modern technology (like this website!) to make local news more accessible and engaging for everyone.", icon: "M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 2h-2v3h-3v2h5v-5zm-3-2V7h-2V5h5v5h-3z" },
+  { title: "Constructive Dialogue", text: "We believe in building bridges. Our goal is to foster positive, respectful conversations that move Oyo forward.", icon: "M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 9h10.5v3.5H4V9zm0 5.5h10.5V16H4v-1.5z" },
+];
 ---
+<BaseLayout title="About OyoTimes" activeId="about">
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
->
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+  <section class="container py-16 md:py-24 text-center">
+    <h2 class="font-merri font-bold text-lg text-text-primary uppercase tracking-widest">
+      About Us
+    </h2>
+    <h1 class="font-merri font-bold text-4xl md:text-6xl text-text-primary mt-4">
+      Our vision is to connect, inform, and empower Oyo
+    </h1>
+    <p class="text-lg md:text-xl text-text-muted max-w-3xl mx-auto mt-6">
+      OyoTimes is a digital-first, community-powered news platform designed to simplify and streamline how we all access the local news, insights, and stories that matter most to our town.
+    </p>
+  </section>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
+  <section class="container pb-16 md:pb-24">
+    <div class="grid grid-cols-12 gap-6">
+      
+      <div class="col-span-12 lg:col-span-7">
+        <article class="prose prose-lg max-w-none text-primary">
+          <p class="font-bold">
+            OyoTimes was founded by Ridwan Awujoola (Readollar), a Product Designer, an Education Officer with the Oyo State Ministry of Education, Science and Technology, who saw a gap between our community and the digital world.
+          </p>
+          <p>
+            With a background in Educational Management and a deep passion for technology and community building, Ridwan's mission is to create a single, reliable, and accessible platform for the stories of our town.
+          </p>
+          <p>
+            This project is built on the belief that a connected community is a stronger community. By providing a modern, easy-to-use platform, we aim to bridge the gap between traditional media and the way we live our lives today—all with a hyper-local focus.
+          </p>
+          <p>
+            From the latest news and political insights to discovering local businesses and celebrating our shared culture, OyoTimes is a platform built *for* Oyo, *by* Oyo.
+          </p>
+        </article>
+      </div>
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
+      <div class="col-span-12 lg:col-span-5 grid grid-cols-2 gap-4">
+        <div class="text-center">
+          <img src="/img/team/ridwan-awujoola-suit.jpg" alt="Ridwan Awujoola" class="w-full h-auto rounded-lg shadow-soft" />
+          <h3 class="font-merri font-bold text-lg text-text-primary mt-3">Ridwan Awujoola</h3>
+          <p class="text-text-muted">Founder & Editor-in-Chief</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
+  <section class="bg-background-alt text-white">
+    <div class="container py-16 md:py-20">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+        <div>
+          <h3 class="font-merri font-bold text-5xl">100%</h3>
+          <p class="text-lg text-muted mt-2">Local Focus</p>
+        </div>
+        <div>
+          <h3 class="font-merri font-bold text-5xl">50+</h3>
+          <p class="text-lg text-muted mt-2">Community Contributors</p>
+        </div>
+        <div>
+          <h3 class="font-merri font-bold text-5xl">1000s</h3>
+          <p class="text-lg text-muted mt-2">Stories to Tell</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
-</Layout>
+  <section class="bg-background-primary text-white pt-28 md:pt-24 pb-20 md:pb-28">
+    <div class="container pt-16">
+      <h2 class="font-merri font-bold text-4xl md:text-5xl text-center mb-12">
+        Meet the Team
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
+        {teamMembers.map(member => (
+          <div class="text-center">
+            <img src={member.imgSrc} alt={member.name} class="w-full h-64 object-cover rounded-lg shadow-lift mb-4" />
+            <h3 class="font-merri font-bold text-xl">{member.name}</h3>
+            <p class="text-muted">{member.role}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-20 md:py-28">
+    <div class="container">
+      <div class="text-center max-w-2xl mx-auto">
+        <h2 class="font-merri font-bold text-4xl md:text-5xl text-text-primary">
+          Our Core Values
+        </h2>
+        <p class="text-lg text-text-muted mt-4">
+          It takes great people to make a great product. Our company culture champions these values, which our team members embody in everything we do.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+        {coreValues.map(value => (
+          <div class="bg-background-alt p-8 rounded-lg">
+            <div class="w-12 h-12 rounded-full bg-primary/10 text-text-primary flex items-center justify-center">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d={value.icon}></path></svg>
+            </div>
+            <h3 class="font-merri font-bold text-2xl text-text-primary mt-4">{value.title}</h3>
+            <p class="text-muted mt-2">{value.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-background-alt py-20 md:py-28">
+    <div class="container text-center max-w-2xl mx-auto">
+      <h2 class="font-merri font-bold text-4xl md:text-5xl text-text-primary">
+        Join Our Team
+      </h2>
+      <p class="text-lg text-text-muted mt-4 mb-8">
+        Interesting in applying for a position? View our Careers page for open positions and apply. We're looking for passionate people to join us.
+      </p>
+      <a href="/careers" class="inline-block bg-button-default text-white font-bold py-3 px-8 rounded-md hover:bg-button-hover transition-colors">
+        View open positions
+      </a>
+    </div>
+  </section>
+
+</BaseLayout>

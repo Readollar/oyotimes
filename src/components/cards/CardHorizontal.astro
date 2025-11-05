@@ -19,15 +19,14 @@ const { href, imgSrc, author, date, title, excerpt } = Astro.props;
       class="w-full h-full object-cover rounded-md group-hover:opacity-90 transition-opacity"
     />
   </div>
-
   <div class="w-3/5 md:w-2/3">
-    <p class="text-xs font-bold text-textColor-muted uppercase tracking-wide mb-1">
+    <p class="text-xs font-bold text-muted uppercase tracking-wide mb-1">
       {author} - {date}
     </p>
-    <h3 class="font-merri font-bold text-lg leading-tight text-textColor-primary group-hover:text-oyo-primary transition-colors mb-2">
+    <h3 class="font-merri font-bold text-lg leading-tight text-primary group-hover:text-link transition-colors mb-2">
       {title}
     </h3>
-    <p class="text-sm text-textColor-muted line-clamp-3">
+    <p class="text-sm text-muted line-clamp-3">
       {excerpt}
     </p>
   </div>

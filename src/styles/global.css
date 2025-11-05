@@ -111,6 +111,11 @@ a:focus-visible {
   padding-inline: var(--body-margin-mobile);
 }
 
+.prose-lg img {
+  width: 100%;
+  max-width: 100%;
+}
+
 /* -----------------------
    7. RESPONSIVE TYPOGRAPHY
 ----------------------- */

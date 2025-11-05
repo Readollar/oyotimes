@@ -41,6 +41,7 @@
   --color-bg-secondary: var(--color-base-cream-f5ecdd);
   --color-bg-alt: #F2F2F2;
   --color-bg-icon: var(--color-base-iconbg-f5f5f5);
+  --color-bg-red: var(--color-base-red-942414);
   --color-bg-footer: var(--color-base-deepbrown-37140e);
 
   --color-surface-default: var(--color-base-white-ffffff);
@@ -224,22 +225,6 @@
   --clr-text-inverse: #000000;
 
   --clr-surface: #ffffff;
-
-  --font-sans: 'Inter', system-ui, sans-serif;
-}
-
-/* ☀️ Light Theme */
-[data-theme="light"] {
-  --clr-base-red: #a94436; /* a warmer red tone for light mode */
-  --clr-footer-bg: #f9f6f4;
-  --clr-footer-accent: #e0d9d5;
-
-  --clr-text-primary: #2a1a16;
-  --clr-text-secondary: #3b1913;
-  --clr-text-muted: #5c4c47;
-  --clr-text-inverse: #ffffff;
-
-  --clr-surface: #3b1913; /* badge "New" still stands out in light mode */
 
   --font-sans: 'Inter', system-ui, sans-serif;
 }

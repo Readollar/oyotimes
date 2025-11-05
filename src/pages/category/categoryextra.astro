@@ -1,0 +1,126 @@
+---
+// src/pages/category/[category].astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CommunitySidebar from '../../components/CommunitySidebar.astro';
+import CardFeatured from '../../components/cards/CardFeatured.astro'; // <-- NEW CARD
+import CardVertical from '../../components/cards/CardVertical.astro'; // <-- EXISTING CARD
+import EditorsPicks from '../../components/EditorsPicks.astro';
+
+export function getStaticPaths() {
+  // This "database" now needs to have data for both card types
+  const allArticles = [
+    // Business
+    { slug: "local-startups-making-waves", title: "Local Startups Making Waves", category: "Business", date: "SEP 15, 2025", readTime: "20 MINS", imgSrc: "/img/picks/pick-4.jpg", excerpt: "Of course the Puget Sound is very watery...", authorName: "Babatunde Akintunde", authorAvatar: "/img/avatars/avatar-1.jpg", views: "15K" },
+    { slug: "oyo-traders-adapt", title: "Oyo Traders Adapt to Digital Payments", category: "Business", date: "SEP 15, 2025", readTime: "20 MINS", imgSrc: "/img/categories/business-main.jpg", excerpt: "Of course the Puget Sound is very watery...", authorName: "Babatunde Akintunde", authorAvatar: "/img/avatars/avatar-1.jpg", views: "15K" },
+    { slug: "google-ipo", title: "Up 50% since it's IPO: Should you buy Google stock?", category: "Business", date: "27 AUGUST, 2025", readTime: "20 MINS", imgSrc: "/img/editorspicks/business.jpg" },
+    { slug: "google-ipo-2", title: "Up 50% since it's IPO: Should you buy Google stock?", category: "Business", date: "27 AUGUST, 2025", readTime: "20 MINS", imgSrc: "/img/editorspicks/business.jpg" },
+    { slug: "google-ipo-3", title: "Up 50% since it's IPO: Should you buy Google stock?", category: "Business", date: "27 AUGUST, 2025", readTime: "20 MINS", imgSrc: "/img/editorspicks/business.jpg" },
+    { slug: "google-ipo-4", title: "Up 50% since it's IPO: Should you buy Google stock?", category: "Business", date: "27 AUGUST, 2025", readTime: "20 MINS", imgSrc: "/img/editorspicks/business.jpg" },
+    { slug: "google-ipo-5", title: "Up 50% since it's IPO: Should you buy Google stock?", category: "Business", date: "27 AUGUST, 2025", readTime: "20 MINS", imgSrc: "/img/editorspicks/business.jpg" },
+    { slug: "google-ipo-6", title: "Up 50% since it's IPO: Should you buy Google stock?", category: "Business", date: "27 AUGUST, 2025", readTime: "20 MINS", imgSrc: "/img/editorspicks/business.jpg" },
+    { slug: "google-ipo-7", title: "Up 50% since it's IPO: Should you buy Google stock?", category: "Business", date: "27 AUGUST, 2025", readTime: "20 MINS", imgSrc: "/img/editorspicks/business.jpg" },
+    { slug: "google-ipo-8", title: "Up 50% since it's IPO: Should you buy Google stock?", category: "Business", date: "27 AUGUST, 2025", readTime: "20 MINS", imgSrc: "/img/editorspicks/business.jpg" },
+    { slug: "google-ipo-9", title: "Up 50% since it's IPO: Should you buy Google stock?", category: "Business", date: "27 AUGUST, 2025", readTime: "20 MINS", imgSrc: "/img/editorspicks/business.jpg" },
+    { slug: "google-ipo-10", title: "Up 50% since it's IPO: Should you buy Google stock?", category: "Business", date: "27 AUGUST, 2025", readTime: "20 MINS", imgSrc: "/img/editorspicks/business.jpg" },
+
+    // Sports
+    { slug: "oyo-mesi-fc-victory", title: "Oyo Mesi FC Secures Victory", category: "Sports", date: "SEP 15, 2025", readTime: "20 MINS", imgSrc: "/img/picks/pick-2.jpg", excerpt: "Of course the Puget Sound is very watery...", authorName: "Babatunde Akintunde", authorAvatar: "/img/avatars/avatar-1.jpg", views: "15K" },
+    // ... add all other articles ...
+  ];
+
+  const categories = ["Business", "Politics", "Tech", "Education", "Sports"];
+  
+  return categories.map(cat => {
+    return {
+      params: { category: cat.toLowerCase() },
+      props: { 
+        categoryName: cat,
+        articles: allArticles.filter(a => a.category === cat) 
+      }
+    };
+  });
+}
+
+const { categoryName, articles } = Astro.props;
+
+// Split articles for the two sections
+const featuredArticles = articles.slice(0, 2);
+const mainGridArticles = articles.slice(2);
+
+// --- NEW PAGINATION LOGIC ---
+const articlesPerPage = 9; // Show 9 articles per page
+const mainGridPageOne = mainGridArticles.slice(0, articlesPerPage);
+const showPagination = mainGridArticles.length > articlesPerPage;
+---
+
+<BaseLayout title={categoryName} activeId={categoryName.toLowerCase()}>
+
+  <div class="container py-8 md:py-12">
+    <div class="grid grid-cols-12 gap-6">
+      
+      <main class="col-span-12 lg:col-span-8">
+        
+        <div class="mb-6 pb-4 border-b border-divider">
+          <h1 class="font-merri font-bold text-4xl mb-2">{categoryName}</h1>
+          <p class="text-lg text-muted">All posts, stories, and articles in the {categoryName} category.</p>
+        </div>
+
+        <section class="mb-10">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="h-5 w-1 bg-primary"></span>
+            <h2 class="font-merri font-bold text-xl text-primary">Featured News</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {featuredArticles.map(article => (
+              <CardFeatured
+                href={`/blog/${article.slug}`}
+                imgSrc={article.imgSrc}
+                title={article.title}
+                excerpt={article.excerpt}
+                authorName={article.authorName}
+                authorAvatar={article.authorAvatar}
+                date={article.date}
+                views={article.views}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {mainGridPageOne.map(article => (
+              <CardVertical
+                href={`/blog/${article.slug}`}
+                imgSrc={article.imgSrc}
+                category={article.category}
+                title={article.title}
+                date={article.date}
+                readTime={article.readTime}
+              />
+            ))}
+          </div>
+        </section>
+
+        {showPagination && (
+          <nav class="flex justify-center gap-2 mt-10">
+            <span class="w-10 h-10 flex items-center justify-center rounded bg-primary text-white font-bold">1</span>
+            <a href="#" class="w-10 h-10 flex items-center justify-center rounded bg-background-alt font-bold text-primary hover:bg-gray-300">2</a>
+            <a href="#" class="w-10 h-10 flex items-center justify-center rounded bg-background-alt font-bold text-primary hover:bg-gray-300">...</a>
+            <a href="#" class="w-10 h-10 flex items-center justify-center rounded bg-background-alt font-bold text-primary hover:bg-gray-300">9</a>
+            <a href="#" class="w-10 h-10 flex items-center justify-center rounded bg-background-alt font-bold text-primary hover:bg-gray-300">10</a>
+            <a href="#" class="w-10 h-10 flex items-center justify-center rounded bg-background-alt font-bold text-primary hover:bg-gray-300">&rarr;</a>
+          </nav>
+        )}
+      </main>
+
+      <aside class="col-span-12 lg:col-span-4">
+        <CommunitySidebar />
+      </aside>
+    </div>
+  </div>
+
+  <div class="container">
+    <EditorsPicks />
+  </div>
+
+</BaseLayout>

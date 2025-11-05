@@ -1,0 +1,234 @@
+---
+// src/pages/places/[slug].astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PlaceSidebar from '../../components/PlaceSidebar.astro';
+import CardPlaceFeatured from '../../components/cards/CardPlaceFeatured.astro';
+import { allPlacesData } from '../../data/places.js';
+
+export async function getStaticPaths() {
+  return allPlacesData.map(place => ({
+    params: { slug: place.slug },
+    props: { place: place }
+  }));
+}
+
+const { place } = Astro.props; 
+
+const featuredPicks = [
+  { href: "#", imgSrc: "/img/places/soro-hill-featured.jpg", category: "Landmark", title: "Soro Hill", location: "Sabo, Oyo", description: "Lorem ipsum dolor sit amet...", rating: 4.5, reviewCount: 1421, priceText: "Free", priceLabel: "PER PERSON" },
+  { href: "#", imgSrc: "/img/places/soro-hill-featured-2.jpg", category: "Landmark", title: "Soro Hill 2", location: "Sabo, Oyo", description: "Lorem ipsum dolor sit amet...", rating: 4.5, reviewCount: 1421, priceText: "Free", priceLabel: "PER PERSON" },
+  { href: "#", imgSrc: "/img/places/soro-hill-featured-3.jpg", category: "Landmark", title: "Soro Hill 3", location: "Sabo, Oyo", description: "Lorem ipsum dolor sit amet...", rating: 4.5, reviewCount: 1421, priceText: "Free", priceLabel: "PER PERSON" },
+];
+
+// SVGs
+const starIcon = `<svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.54-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"></path></svg>`;
+const starIconEmpty = `<svg class="w-6 h-6 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.54-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"></path></svg>`;
+const locationIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0L6.343 16.657a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>`;
+// Feature Icons
+const cancelIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>`;
+const healthIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+const ticketIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>`;
+const durationIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+const confirmIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+const guideIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-1.657-1.343-3-3-3s-3 1.343-3 3v2m6 0H9m12-9a3 3 0 10-6 0 3 3 0 006 0zm-3 4a3 3 0 100-6 3 3 0 000 6z"></path></svg>`;
+---
+<BaseLayout title={place.title} activeId="places">
+  <div class="container py-8 md:py-12">
+    <nav class="text-sm text-text-muted mb-4" aria-label="Breadcrumb">
+      <a href="/places" class="hover:text-text-primary">Places</a>
+      <span class="mx-1">&gt;</span>
+      <a href="#" class="hover:text-text-primary">{place.category}</a>
+      <span class="mx-1">&gt;</span>
+      <span class="truncate">{place.title}</span>
+    </nav>
+
+    <div class="grid grid-cols-12 gap-6">
+      
+      <main class="col-span-12 lg:col-span-9">
+        
+        <header class="mb-6">
+          <h1 class="font-merri font-bold text-4xl md:text-5xl text-text-primary">{place.title}</h1>
+          <div class="flex items-center gap-1.5 text-lg text-text-muted mt-2">
+            <Fragment set:html={locationIcon} />
+            {place.location}
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 items-center">
+            <div>
+              <span class="font-merri font-bold text-5xl text-text-primary">{place.rating.toFixed(2)}</span>
+              <span class="text-lg text-text-muted ml-2">{place.reviewCount} Reviews</span>
+              <div class="flex mt-2 justify-items-end">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  i < Math.round(place.rating) 
+                    ? <Fragment set:html={starIcon} /> 
+                    : <Fragment set:html={starIconEmpty} />
+                ))}
+              </div>
+            </div>
+            <div class="space-y-4 gap-x-6 gap-y-4 pt-2">
+              {place.ratingBars.map(bar => (
+                <div class="flex items-center gap-3">
+                  <span class="w-32 text-sm text-text-muted">{bar.name}</span>
+                  <div class="flex-1 bg-background-alt h-2 rounded-full">
+                    <div class="bg-yellow-400 h-2 rounded-full" style={`width: ${bar.score / 5 * 100}%`}></div>
+                  </div>
+                  <span class="text-sm font-bold w-6 text-text-primary">{bar.score.toFixed(1)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </header>
+
+        <div id="image-gallery">
+          <img 
+            id="main-image"
+            src={place.gallery[0].src} 
+            alt={place.gallery[0].alt} 
+            class="w-full h-96 object-cover rounded-lg mb-2"
+          />
+          <div class="grid grid-cols-6 gap-2">
+            {place.gallery.map((img, index) => (
+              <img
+                src={img.src}
+                alt={img.alt}
+                data-index={index}
+                class:list={[
+                  "gallery-thumb w-full h-20 object-cover rounded-md cursor-pointer transition-all",
+                  index === 0 ? "border-2 border-border-default" : "opacity-70 hover:opacity-100"
+                ]}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div class="my-8 text-center">
+          <a href="#" class="inline-block bg-button-default text-white font-bold py-3 px-12 rounded-md hover:bg-button-hover transition-colors">
+            Go to Website
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8 py-8 border-t border-b border-border-divider">
+          
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 text-yellow-600"><Fragment set:html={cancelIcon} /></div>
+            <div>
+              <h3 class="font-bold text-text-primary">Free cancellation</h3>
+              <p class="text-text-muted">Cancel up to 24 hours in advance to receive a full refund</p>
+            </div>
+          </div>
+          
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 text-yellow-600"><Fragment set:html={healthIcon} /></div>
+            <div>
+              <h3 class="font-bold text-text-primary">Health precaution</h3>
+              <p class="text-text-muted">Special health and safety measures apply. Learn more</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 text-yellow-600"><Fragment set:html={ticketIcon} /></div>
+            <div>
+              <h3 class="font-bold text-text-primary">Mobile Ticketing</h3>
+              <p class="text-text-muted">Use your phone or print your voucher</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 text-yellow-600"><Fragment set:html={durationIcon} /></div>
+            <div>
+              <h3 class="font-bold text-text-primary">Duration</h3>
+              <p class="text-text-muted">Check availability to see starting times.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 text-yellow-600"><Fragment set:html={confirmIcon} /></div>
+            <div>
+              <h3 class="font-bold text-text-primary">Instant Confirmation</h3>
+              <p class="text-text-muted">Don't wait for confirmation</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 text-yellow-600"><Fragment set:html={guideIcon} /></div>
+            <div>
+              <h3 class="font-bold text-text-primary">Live tour guide</h3>
+              <p class="text-text-muted">English</p>
+            </div>
+          </div>
+          
+        </div>
+
+        <article class="prose prose-lg max-w-none text-primary">
+          <h2>Description</h2>
+          <p>{place.description}</p>
+          
+          <h2>Activity</h2>
+          <h4 class="font-bold">What you will do</h4>
+          <ul>
+            {place.activity.map(item => <li>{item}</li>)}
+          </ul>
+          
+          <h2>What is included / not included</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 class="font-bold">Includes</h4>
+              <ul class="list-disc pl-5">
+                {place.included.map(item => <li>{item}</li>)}
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-bold">Not Includes</h4>
+              <ul class="list-disc pl-5">
+                {place.notIncluded.map(item => <li>{item}</li>)}
+              </ul>
+            </div>
+          </div>
+
+          <h2>Safety</h2>
+          <h4 class="font-bold">Health precautions</h4>
+          <ul class="list-disc pl-5">
+            {place.safety.map(item => <li>{item}</li>)}
+          </ul>
+        </article>
+
+      </main>
+
+      <aside class="col-span-12 lg:col-span-3">
+        <PlaceSidebar />
+      </aside>
+    </div>
+  </div>
+
+  <div class="container py-12 md:py-16">
+    <div class="flex justify-between items-center mb-8 pb-4 border-b border-border-divider">
+      <h2 class="font-merri text-2xl md:text-3xl font-bold text-text-primary">
+        Editor's Picks
+      </h2>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {featuredPicks.map(pick => (
+        <CardPlaceFeatured {...pick} />
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Simple Image Gallery
+  const mainImage = document.getElementById('main-image');
+  const thumbnails = document.querySelectorAll('.gallery-thumb');
+  
+  thumbnails.forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      mainImage.src = thumb.src;
+      mainImage.alt = thumb.alt;
+      
+      thumbnails.forEach(t => t.classList.remove('border-2', 'border-border-default', 'opacity-100'));
+      thumbnails.forEach(t => t.classList.add('opacity-70', 'hover:opacity-100'));
+      
+      thumb.classList.add('border-2', 'border-border-default', 'opacity-100');
+      thumb.classList.remove('opacity-70');
+    });
+  });
+</script>

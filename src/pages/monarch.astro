@@ -1,0 +1,119 @@
+---
+// src/pages/monarch.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import CardVertical from '../components/cards/CardVertical.astro';
+
+// Placeholder data for the page
+const featuredInsight = {
+  href: "/blog/monarch-speech-on-unity",
+  imgSrc: "/img/monarch/monarch-featured.jpg",
+  category: "History",
+  title: "Alaafin's Address on Unity and Heritage",
+  date: "01 NOVEMBER, 2025",
+  readTime: "8 MIN READ",
+  excerpt: "In a recent address, His Imperial Majesty, the Alaafin of Oyo, spoke on the importance of cultural preservation and unity among the Yoruba people..."
+};
+
+const pastInsights = [
+  {
+    href: "/blog/history-of-oyo-empire",
+    imgSrc: "/img/monarch/past-1.jpg",
+    category: "History",
+    title: "The Founding of the Oyo Empire",
+    date: "28 OCTOBER, 2025",
+    readTime: "12 MIN READ",
+  },
+  {
+    href: "/blog/role-of-oyo-mesi",
+    imgSrc: "/img/monarch/past-2.jpg",
+    category: "Politics",
+    title: "Understanding the Role of the Oyo Mesi",
+    date: "25 OCTOBER, 2025",
+    readTime: "7 MIN READ",
+  },
+];
+---
+
+<BaseLayout title="The Monarch's Desk" activeId="monarch">
+  
+  <section class="monarch-hero relative h-72 w-full">
+    <div class="absolute inset-0 bg-black/60"></div>
+    <div class="container relative z-10 flex flex-col justify-center h-full text-white">
+      <h1 class="font-merri font-bold text-5xl md:text-6xl">
+        The Monarch's Desk
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-200 mt-2">
+        Official insights, history, and perspectives from the Alaafin's palace.
+      </p>
+    </div>
+  </section>
+
+  <div class="container py-8 md:py-12">
+    <div class="grid grid-cols-12 gap-6">
+      
+      <main class="col-span-12 lg:col-span-9">
+        
+        <section class="mb-10">
+          <h2 class="font-merri text-3xl font-bold text-text-primary mb-4">
+            Latest Insight
+          </h2>
+          <article class="group">
+            <a href={featuredInsight.href} class="block overflow-hidden rounded-lg mb-4 shadow-soft">
+              <img 
+                src={featuredInsight.imgSrc} 
+                alt={featuredInsight.title} 
+                class="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </a>
+            <div class="space-y-3">
+              <span class="text-sm font-bold uppercase text-link">{featuredInsight.category}</span>
+              <h3 class="font-merri font-bold text-3xl leading-tight text-text-primary group-hover:text-link transition-colors">
+                <a href={featuredInsight.href}>{featuredInsight.title}</a>
+              </h3>
+              <div class="flex items-center gap-4 text-sm text-text-muted">
+                <span>{featuredInsight.date}</span>
+                <span>&bull;</span>
+                <span>{featuredInsight.readTime}</span>
+              </div>
+              <p class="text-lg text-text-muted">
+                {featuredInsight.excerpt}
+              </p>
+            </div>
+          </article>
+        </section>
+
+        <section>
+          <h2 class="font-merri text-3xl font-bold text-text-primary mb-6 pb-4 border-b border-border-divider">
+            Past Insights & History
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {pastInsights.map(article => (
+              <CardVertical
+                href={article.href}
+                imgSrc={article.imgSrc}
+                category={article.category}
+                title={article.title}
+                date={article.date}
+                readTime={article.readTime}
+              />
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <aside class="col-span-12 lg:col-span-3">
+        <Sidebar />
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .monarch-hero {
+    /* Replace with a high-quality, respectful image from your assets */
+    background-image: url('/img/alaafin.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+</style>

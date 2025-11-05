@@ -1,0 +1,57 @@
+---
+// src/components/cards/CardPlaceFeatured.astro
+// REVISED with correct classes and new fields
+export interface Props {
+  href: string;
+  imgSrc: string;
+  category: string;
+  title: string;
+  location: string;
+  description: string;
+  rating: number;
+  reviewCount: number;
+  priceText: string;
+  priceLabel: string;
+}
+const { 
+  href, imgSrc, category, title, location, 
+  description, rating, reviewCount, priceText, priceLabel 
+} = Astro.props;
+
+const starIcon = `<svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.54-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"></path></svg>`;
+const locationIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0L6.343 16.657a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>`;
+---
+
+<article class="group">
+  <a href={href} class="block overflow-hidden rounded-lg mb-4 shadow-soft">
+    <img 
+      src={imgSrc} 
+      alt={title} 
+      class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+    />
+  </a>
+
+  <div class="space-y-2">
+    <span class="text-xs font-bold uppercase text-link">{category}</span>
+    <h3 class="font-merri font-bold text-lg leading-tight text-primary group-hover:text-link transition-colors">
+      <a href={href}>{title}</a>
+    </h3>
+    <div class="flex items-center gap-1.5 text-sm text-muted">
+      <Fragment set:html={locationIcon} />
+      {location}
+    </div>
+    <p class="text-sm text-muted line-clamp-2">{description}</p>
+  </div>
+
+  <div class="flex justify-between items-center text-sm pt-3 mt-3 border-t border-border-divider">
+    <div class="flex items-center gap-1 text-text-muted">
+      <Fragment set:html={starIcon} />
+      <span class="font-bold text-text-primary">{rating}</span>
+      <span>({reviewCount} reviews)</span>
+    </div>
+    <div class="text-right">
+      <span class="font-bold text-text-primary">{priceText}</span>
+      <span class="text-xs text-text-muted block uppercase">{priceLabel}</span>
+    </div>
+  </div>
+</article>

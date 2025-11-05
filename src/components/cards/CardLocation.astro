@@ -8,7 +8,6 @@ export interface Props {
 }
 const { href, imgSrc, title, subtitle } = Astro.props;
 ---
-
 <a href={href} class="group block text-center">
   <div class="overflow-hidden rounded-lg mb-4 shadow-soft">
     <img 
@@ -17,11 +16,10 @@ const { href, imgSrc, title, subtitle } = Astro.props;
       class="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
     />
   </div>
-
   <div class="mt-4">
-    <h3 class="font-merri font-bold text-xl text-textColor-primary group-hover:text-oyo-primary transition-colors">
+    <h3 class="font-merri font-bold text-xl text-primary group-hover:text-link transition-colors">
       {title}
     </h3>
-    <p class="text-sm text-textColor-muted">{subtitle}</p>
+    <p class="text-sm text-muted">{subtitle}</p>
   </div>
 </a>

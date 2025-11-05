@@ -1,0 +1,97 @@
+---
+// src/layouts/ArticleLayout.astro
+import BaseLayout from './BaseLayout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import EditorsPicks from '../components/EditorsPicks.astro';
+import Comments from '../components/Comments.astro';
+
+const { frontmatter } = Astro.props;
+
+const { 
+  title, 
+  date, 
+  author, 
+  category = "Blog", 
+  heroImage,
+  comments = 0
+} = frontmatter;
+
+const categoryId = category.toLowerCase();
+
+// SVG Icons
+const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"...></svg>`;
+const commentIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"...></svg>`;
+const categoryIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"...></svg>`;
+const shareIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"...></svg>`;
+const bookmarkIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"...></svg>`;
+---
+
+<BaseLayout title={title} activeId={categoryId}>
+  <div class="container py-8 md:py-12">
+        <nav class="text-sm text-text-muted mb-4" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-link">Home</a>
+      <span class="mx-1">&gt;</span>
+      <a href={`/category/${categoryId}`} class="hover:text-link">{category}</a>
+      <span class="mx-1">&gt;</span>
+      <span class="truncate">{title}</span>
+    </nav>
+
+    <div class="grid grid-cols-12 gap-6">
+      <main class="col-span-12 lg:col-span-9">
+        
+                <header class="mb-6 border-b border-border-divider pb-6">
+          <h1 class="font-merri font-bold text-4xl md:text-5xl text-text-primary mb-4">{title}</h1>
+          
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-text-muted mb-3">
+            <span class="flex items-center gap-1.5">
+              <Fragment set:html={calendarIcon} />
+              {date}
+            </span>
+            <span class="flex items-center gap-1.5">
+              <Fragment set:html={commentIcon} />
+              COMMENTS: {comments}
+            </span>
+            <span class="flex items-center gap-1.5">
+              <Fragment set:html={categoryIcon} />
+              CATEGORY: {category.toUpperCase()}
+            </span>
+          </div>
+          
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+              <span class="font-bold text-text-primary">By {author}</span>
+                            <span class="text-text-muted">30 MINS AGO</span> 
+              <span class="text-text-muted">2 MIN READ</span> 
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="w-9 h-9 flex items-center justify-center rounded-full bg-background-alt text-text-muted hover:bg-gray-300 transition-colors" aria-label="Show comments">
+                <Fragment set:html={commentIcon} />
+              </button>
+              <button class="w-9 h-9 flex items-center justify-center rounded-full bg-background-alt text-text-muted hover:bg-gray-300 transition-colors" aria-label="Share">
+                <Fragment set:html={shareIcon} />
+              </button>
+              <button class="w-9 h-9 flex items-center justify-center rounded-full bg-background-alt text-text-muted hover:bg-gray-300 transition-colors" aria-label="Bookmark">
+                <Fragment set:html={bookmarkIcon} />
+              </button>
+            </div>
+          </div>
+        </header>
+
+                <article class="prose prose-lg max-w-none prose-h2:font-merri prose-a:text-link">
+          <img src={heroImage} alt={title} class="rounded-lg mb-6" />
+         <slot /> 
+        </article>
+        
+        <Comments />
+      </main>
+
+      <aside class="col-span-12 lg:col-span-3">
+        <Sidebar />
+      </aside>
+    </div>
+  </div>
+
+  <div>
+    <EditorsPicks />
+  </div>
+</BaseLayout>

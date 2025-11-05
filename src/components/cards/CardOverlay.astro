@@ -24,7 +24,7 @@ const categoryColors = {
 };
 
 const clockIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" ...></svg>`;
-const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" ...></svg>`;
+const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
 ---
 
 <a 
@@ -40,11 +40,11 @@ const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" vie
   <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
 
   <div class="relative flex flex-col justify-end h-80 p-6 text-white">
-    <span class={`text-xs font-bold uppercase ${categoryColors[category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm mb-3`}>
+    <span class={`text-xs font-bold uppercase ${categoryColors[category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm mb-3 w-max`}>
       {category}
     </span>
     
-    <h3 class="font-merri font-bold text-2xl leading-tight mb-4 group-hover:text-gray-200 transition-colors">
+    <h3 class="font-merri font-bold text-text-white text-2xl leading-tight mb-4 group-hover:text-gray-200 transition-colors">
       {title}
     </h3>
     

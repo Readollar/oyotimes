@@ -1,0 +1,54 @@
+---
+// src/components/PlaceSidebar.astro
+// REVISED to use the correct, full-size 'CardPlace' component.
+
+import CardPlace from './cards/CardPlace.astro'; // <-- USES THE CORRECT CARD
+
+// Placeholder data for Top Places
+// This data now needs all the props that CardPlace expects.
+const topPlaces = [
+  { 
+    href: "/places/le-masik-hotel/",
+    imgSrc: "/img/places/lemasik.png", 
+    category: "Hotel", 
+    title: "Le'Masik Hotel", 
+    location: "Fola-tyre, Oyo", 
+    description: "Lorem ipsum dolor sit amet...", 
+    rating: 4.8, 
+    reviewCount: 485, 
+    priceText: "$60,000", 
+    priceLabel: "PER NIGHT" 
+  },
+  { 
+    href: "/places/chicken-republic/",
+    imgSrc: "/img/places/chickenrepublic.jpg", 
+    category: "Restaurant", 
+    title: "Chicken Republic", 
+    location: "Owode, Oyo", 
+    description: "Lorem ipsum dolor sit amet...", 
+    rating: 4.2, 
+    reviewCount: 652, 
+    priceText: "Paid", 
+    priceLabel: "PER MEAL" 
+  },
+];
+---
+<aside class="space-y-8">
+  <div>
+    <h3 class="font-merri font-bold text-xl mb-4 border-b border-border-divider pb-2">Top Places</h3>
+    <div class="space-y-6">
+      {topPlaces.map(place => (
+        <CardPlace {...place} />
+      ))}
+    </div>
+  </div>
+
+  <div class="space-y-4">
+    <div class="bg-background-alt h-64 rounded-md flex items-center justify-center text-text-muted">
+      Ad Space (250x250)
+    </div>
+    <div class="bg-background-alt h-64 rounded-md flex items-center justify-center text-text-muted">
+      Ad Space (250x250)
+    </div>
+  </div>
+</aside>

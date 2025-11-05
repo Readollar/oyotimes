@@ -1,0 +1,37 @@
+---
+// src/components/cards/CardInsightGrid.astro
+export interface Props {
+  href: string;
+  imgSrc: string;
+  author: string;
+  date: string;
+  title: string;
+  excerpt: string;
+}
+const { href, imgSrc, author, date, title, excerpt } = Astro.props;
+---
+
+<article class.list={[
+  "group bg-white rounded-lg shadow-soft",
+  "flex flex-col h-full" // Added for consistent height in a grid
+]}>
+  <a href={href} class="block overflow-hidden rounded-t-lg">
+    <img 
+      src={imgSrc} 
+      alt={title} 
+      class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+    />
+  </a>
+
+  <div class="p-4 flex flex-col flex-grow">
+    <p class="text-xs font-bold text-muted uppercase tracking-wide mb-2">
+      {author} - {date}
+    </p>
+    <h3 class="font-merri font-bold text-lg leading-tight text-primary group-hover:text-link transition-colors mb-2">
+      <a href={href}>{title}</a>
+    </h3>
+    <p class="text-sm text-muted line-clamp-3 flex-grow">
+      {excerpt}
+    </p>
+  </div>
+</article>

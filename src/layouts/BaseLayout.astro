@@ -3,8 +3,9 @@
 
 // You can add more props for SEO as your site grows
 const { 
-  title = "OyoTimes",
-  description = "The latest news, insights, and stories from Oyo town, powered by the community." 
+  title = "OyoTimes - Your Community News Source",
+  description = "The latest news, insights, and stories from Oyo town, powered by the community.",
+  activeId // <-- Add this line
 } = Astro.props;
 
 import Header from "../components/Header.astro";
@@ -37,8 +38,8 @@ import "../styles/global.css";
     <link rel="manifest" href="/site.webmanifest">
 </head>
 <body class="font-inter bg-background-primary text-textColor-primary">
-  <Header />
-    <main class="container">
+  <Header activeId={activeId} />
+    <main>
     <slot /> {/* All your page content will be rendered here */}
     </main>
   <Footer />
