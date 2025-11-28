@@ -1,0 +1,22 @@
+---
+// src/pages/blog/[...slug].astro
+import { getCollection } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+
+// 1. Generate a new path for every blog post found in src/content/blog/
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog');
+  return blogEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+// 2. Get the data for the specific post
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<ArticleLayout frontmatter={entry.data}>
+  <Content />
+</ArticleLayout>

@@ -1,88 +1,98 @@
 ---
 // src/pages/community.astro
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CommunitySidebar from '../components/CommunitySidebar.astro';
-import CardHorizontal from '../components/cards/CardHorizontal.astro'; // Reused
-import CardInsightGrid from '../components/cards/CardInsightGrid.astro'; // New card
-import EditorsPicks from '../components/EditorsPicks.astro'; // Reused
+import CardHorizontal from '../components/cards/CardHorizontal.astro';
+import CardInsightGrid from '../components/cards/CardInsightGrid.astro';
+import EditorsPicks from '../components/EditorsPicks.astro';
 
-// Data for Featured Insights (2-col grid)
-const featuredInsights = [
-  {
-    href: "#",
-    imgSrc: "/img/insights/insights-4.jpg",
-    author: "Mujeeb Oyeleye",
-    date: "08 AUGUST, 2025",
-    title: "Bad Roads, Bigger Problems",
-    excerpt: "Some of the inner roads are almost unpassable, especially when it rains. If only we can get proper drainage and ro...",
-  },
-  {
-    href: "#",
-    imgSrc: "/img/insights/insights-3.jpg",
-    author: "Ridwan Ilias",
-    date: "08 AUGUST, 2025",
-    title: "A Call for a Modern Mall",
-    excerpt: "It's high time Oyo had a proper mall to shop, relax and hang out instead of traveling to Ibadan for the simplest things",
-  },
-];
+// 1. Fetch all blog posts
+const allPosts = await getCollection('blog');
 
-// Data for Main Grid (3-col grid)
-const insightsGrid = [
-  { href: "#", imgSrc: "/img/insights/insights-5.jpg", author: "RIDWAN AWUJOOLA", date: "AUGUST, 2025", title: "We need solid projects in Oyo town.", excerpt: "We call on Oyo sons and daughters, home and abroad to come and invest in their hometown..." },
-  { href: "#", imgSrc: "/img/insights/insights-1.jpg", author: "HABEEB BAKARE", date: "AUGUST, 2025", title: "Transport Struggles in Oyo", excerpt: "Every day, getting a cab in Oyo feels like a struggle. Can we have a better organized transport system?" },
-  { href: "#", imgSrc: "/img/insights/insights-6.jpg", author: "MUJEEB OYELEYE", date: "AUGUST, 2025", title: "Untapped Youth Potential in Oyo", excerpt: "We have so many young talents in Oyo but very few platforms to showcase them. More hubs, skill centers..." },
-  { href: "#", imgSrc: "/img/insights/insights-5.jpg", author: "RIDWAN AWUJOOLA", date: "AUGUST, 2025", title: "We need solid projects in Oyo town.", excerpt: "We call on Oyo sons and daughters, home and abroad to come and invest in their hometown..." },
-  { href: "#", imgSrc: "/img/insights/insights-1.jpg", author: "HABEEB BAKARE", date: "AUGUST, 2025", title: "Transport Struggles in Oyo", excerpt: "Every day, getting a cab in Oyo feels like a struggle. Can we have a better organized transport system?" },
-  { href: "#", imgSrc: "/img/insights/insights-6.jpg", author: "MUJEEB OYELEYE", date: "AUGUST, 2025", title: "Untapped Youth Potential in Oyo", excerpt: "We have so many young talents in Oyo but very few platforms to showcase them. More hubs, skill centers..." },
-];
+// 2. Filter for "Insight" category & Sort by Date
+const insightPosts = allPosts
+  .filter(post => post.data.category === "Insight" || post.data.category === "Community's Insight")
+  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+// 3. Separate "Featured" from "Main Grid"
+const featuredInsights = insightPosts.filter(post => post.data.isFeatured).slice(0, 2);
+const mainGridInsights = insightPosts.filter(post => !post.data.isFeatured);
+
+// 4. Pagination Logic (Simple slice for V1)
+const itemsPerPage = 9;
+const currentGrid = mainGridInsights.slice(0, itemsPerPage);
+const showPagination = mainGridInsights.length > itemsPerPage;
 ---
+
 <BaseLayout title="Community's Insight" activeId="community">
 
   <div class="container py-8 md:py-12">
     <div class="grid grid-cols-12 gap-6">
       
-      <main class="col-span-12 lg:col-span-8">
+      <main class="col-span-12 lg:col-span-9">
         
         <div class="mb-6 pb-4 border-b border-divider">
           <h1 class="font-merri font-bold text-4xl mb-2">Community's Insight</h1>
           <p class="text-lg text-muted">Voices of Oyo: Stories, ideas, and opinions from the people.</p>
         </div>
 
-        <section class="mb-10">
-          <h2 class="font-merri font-bold text-2xl mb-4">Featured Insights</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {featuredInsights.map(insight => (
-              <CardHorizontal {...insight} />
-            ))}
-          </div>
-        </section>
+        {featuredInsights.length > 0 && (
+          <section class="mb-10 pb-10 border-b border-divider">
+            <h2 class="font-merri font-bold text-xl mb-4">Featured Insights</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {featuredInsights.map(post => (
+                <CardHorizontal 
+                  href={`/blog/${post.slug}/`}
+                  imgSrc={post.data.heroImage}
+                  author={post.data.author}
+                  date={post.data.date}
+                  title={post.data.title}
+                  excerpt={post.data.excerpt}
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
         <section>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {insightsGrid.map(insight => (
-              <CardInsightGrid {...insight} />
-            ))}
+            {currentGrid.length > 0 ? (
+              currentGrid.map(post => (
+                <CardInsightGrid 
+                  href={`/blog/${post.slug}/`}
+                  imgSrc={post.data.heroImage}
+                  author={post.data.author}
+                  date={post.data.date}
+                  title={post.data.title}
+                  excerpt={post.data.excerpt}
+                />
+              ))
+            ) : (
+              !featuredInsights.length && (
+                <div class="col-span-3 text-center py-12 text-muted">
+                  No insights found yet. <a href="/submit" class="text-link underline">Submit one?</a>
+                </div>
+              )
+            )}
           </div>
         </section>
 
-        <nav class="flex justify-center gap-2 mt-10">
-          <span class="w-10 h-10 flex items-center justify-center rounded bg-primary text-white font-bold">1</span>
-          <a href="#" class="w-10 h-10 flex items-center justify-center rounded bg-background-alt font-bold text-primary hover:bg-gray-300">2</a>
-          <a href="#" class="w-10 h-10 flex items-center justify-center rounded bg-background-alt font-bold text-primary hover:bg-gray-300">...</a>
-          <a href="#" class="w-10 h-10 flex items-center justify-center rounded bg-background-alt font-bold text-primary hover:bg-gray-300">9</a>
-          <a href="#" class="w-10 h-10 flex items-center justify-center rounded bg-background-alt font-bold text-primary hover:bg-gray-300">10</a>
-          <a href="#" class="w-10 h-10 flex items-center justify-center rounded bg-background-alt font-bold text-primary hover:bg-gray-300">&rarr;</a>
-        </nav>
+        {showPagination && (
+          <nav class="flex justify-center gap-2 mt-10">
+            <span class="w-10 h-10 flex items-center justify-center rounded bg-primary text-white font-bold">1</span>
+            </nav>
+        )}
 
       </main>
 
-      <aside class="col-span-12 lg:col-span-4">
+      <aside class="col-span-12 lg:col-span-3">
         <CommunitySidebar />
       </aside>
     </div>
   </div>
 
-  <div class="container">
+  <div>
     <EditorsPicks />
   </div>
 

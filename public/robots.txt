@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# This tells Google where your sitemap will be
+Sitemap: https://oyotimes.netlify.app/sitemap-index.xml

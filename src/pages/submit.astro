@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Submit Your Story" activeId="submit">
+  <div class="container py-8 md:py-12">
+    <div class="max-w-3xl mx-auto">
+
+      <div class="text-center mb-8">
+        <h1 class="font-merri font-bold text-4xl md:text-5xl text-primary">
+          Submit Your Story
+        </h1>
+        <p class="text-lg text-muted mt-4">
+          Share your voice with the Oyo community.
+        </p>
+      </div>
+<iframe data-tally-src="https://tally.so/embed/rjjOgl?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&formEventsForwarding=1" loading="lazy" width="100%" height="1032" frameborder="0" marginheight="0" marginwidth="0" title="OyoTimes Story Submission"></iframe>
+<script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
+<br />
+
+<div class="prose prose-lg max-w-none text-primary mb-12">
+        <h2 class="font-merri">Our Editorial Process</h2>
+        <p>
+          OyoTimes is a community-driven platform, and we welcome your submissions. Whether it's a story about a local hero, an announcement for your school, or an insight into a community issue, we want to hear it.
+        </p>
+        <p>
+          Please note: All submissions are sent to our editorial team for review. This is not an automated system. We review for accuracy, clarity, and relevance to the Oyo community. We will contact you via email if your story is selected for publication.
+        </p>
+        <p>
+          Thank you for helping us build a more connected Oyo.
+        </p>
+      </div>
+
+      <div class="border border-divider rounded-lg p-4 bg-background-alt">
+        
+        </div>
+      
+    </div>
+  </div>
+</BaseLayout>

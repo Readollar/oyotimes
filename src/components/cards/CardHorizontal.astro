@@ -1,5 +1,7 @@
 ---
 // src/components/cards/CardHorizontal.astro
+import { Fragment } from 'astro:jsx';
+
 export interface Props {
   href: string;
   imgSrc: string;
@@ -11,17 +13,20 @@ export interface Props {
 const { href, imgSrc, author, date, title, excerpt } = Astro.props;
 ---
 
-<a href={href} class="group flex gap-4">
-  <div class="w-2/5 md:w-1/3 flex-shrink-0">
+<a href={href} class="group flex gap-4 items-start">
+  <div class="shrink-0 w-[196px] h-[145px] overflow-hidden rounded-md">
     <img 
       src={imgSrc} 
       alt={title} 
-      class="w-full h-full object-cover rounded-md group-hover:opacity-90 transition-opacity"
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
     />
   </div>
-  <div class="w-3/5 md:w-2/3">
-    <p class="text-xs font-bold text-muted uppercase tracking-wide mb-1">
-      {author} - {date}
+
+  <div class="flex-1 min-w-0">
+    <p class="text-xs font-bold text-muted uppercase tracking-wide mb-1 flex items-center gap-1">
+      {author} 
+      <span>&bull;</span> 
+      <time class="time-ago" datetime={date}>{date.split('T')[0]}</time>
     </p>
     <h3 class="font-merri font-bold text-lg leading-tight text-primary group-hover:text-link transition-colors mb-2">
       {title}
@@ -31,3 +36,21 @@ const { href, imgSrc, author, date, title, excerpt } = Astro.props;
     </p>
   </div>
 </a>
+
+<script>
+  import { formatDistanceToNow, parseISO, differenceInDays } from 'date-fns';
+  const now = new Date();
+  const timeElements = document.querySelectorAll('.time-ago');
+  timeElements.forEach(timeEl => {
+    const isoDate = timeEl.getAttribute('datetime');
+    if (isoDate) {
+      try {
+        const date = parseISO(isoDate);
+        const daysDifference = differenceInDays(now, date);
+        if (daysDifference <= 7) {
+          timeEl.textContent = formatDistanceToNow(date, { addSuffix: true });
+        }
+      } catch (e) {}
+    }
+  });
+</script>

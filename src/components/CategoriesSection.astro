@@ -1,73 +1,38 @@
 ---
 // src/components/CategoriesSection.astro
-// Self-contained version. No external card imports.
-// This code correctly uses the "image-on-top" card style for the main article.
+// REVISED: Now fully dynamic using Content Collections
 
-// Placeholder data for all four columns
-const categoriesData = [
-  {
-    name: "Business",
-    categoryClass: "bg-category-business",
-    mainArticle: {
-      href: "#",
-      imgSrc: "/img/latest/business.jpg", // Replace with your image
-      title: "Local Startups Making Waves",
-      date: "27 AUGUST, 2025",
-    },
-    subArticles: [
-      { href: "#", title: "Oyo Traders Adapt to Digital Payments", date: "27 AUGUST, 2025" },
-      { href: "#", title: "Akesan Market Expansion Plans Unveiled", date: "27 AUGUST, 2025" },
-      { href: "#", title: "Oyo Farmers Explore Export Opportunities", date: "27 AUGUST, 2025" },
-    ]
-  },
-  {
-    name: "Sports",
-    categoryClass: "bg-category-sports",
-    mainArticle: {
-      href: "#",
-      imgSrc: "/img/latest/sports.jpg", // Replace with your image
-      title: "Oyo Youth Football League Kicks Off",
-      date: "27 AUGUST, 2025",
-    },
-    subArticles: [
-      { href: "#", title: "Grassroots Sports Development Grows", date: "27 AUGUST, 2025" },
-      { href: "#", title: "Cele Boys Shine in their first league match", date: "27 AUGUST, 2025" },
-      { href: "#", title: "Traditional Wrestling Returns to Durbar Ground", date: "27 AUGUST, 2025" },
-    ]
-  },
-  {
-    name: "Politics",
-    categoryClass: "bg-category-politics",
-    mainArticle: {
-      href: "#",
-      imgSrc: "/img/latest/politics.jpg", // Replace with your image
-      title: "Community Leaders Call for Inclusive Governance",
-      date: "27 AUGUST, 2025",
-    },
-    subArticles: [
-      { href: "#", title: "Local Government Elections Draw Closer", date: "27 AUGUST, 2025" },
-      { href: "#", title: "Oyo Lawmakers Debate Infrastructure Bill", date: "27 AUGUST, 2025" },
-      { href: "#", title: "Monarch Meets with State Officials on Security Issues", date: "27 AUGUST, 2025" },
-    ]
-  },
-  {
-    name: "Tech",
-    categoryClass: "bg-category-tech",
-    mainArticle: {
-      href: "#",
-      imgSrc: "/img/latest/tech.jpg", // Replace with your image
-      title: "Oyo Youths Explore AI for Business Growth",
-      date: "27 AUGUST, 2025",
-    },
-    subArticles: [
-      { href: "#", title: "Digital Skills Training Expands Across Oyo", date: "27 AUGUST, 2025" },
-      { href: "#", title: "E-Governance Platforms Launched in Oyo", date: "27 AUGUST, 2025" },
-      { href: "#", title: "Startups in Oyo Attract National Attention", date: "27 AUGUST, 2025" },
-    ]
-  },
-];
+import { getCollection } from 'astro:content';
 
-// SVG Icon for the calendar
+// 1. Fetch all blog posts
+const allPosts = await getCollection('blog');
+
+// 2. Sort by Date (Newest First)
+const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+// 3. Define the categories we want to show
+const categoryNames = ["Business", "Sports", "Politics", "Tech"];
+
+// 4. Build the dynamic data for each category
+const categoriesData = categoryNames.map(catName => {
+  // Filter posts for this category
+  const catPosts = sortedPosts.filter(p => p.data.category === catName);
+  
+  // If no posts, return null (we'll filter these out later)
+  if (catPosts.length === 0) return null;
+
+  return {
+    name: catName,
+    // Map category name to your color classes
+    categoryClass: `bg-category-${catName.toLowerCase()}`, 
+    // First post is Main
+    mainArticle: catPosts[0],
+    // Next 3 are Sub-articles
+    subArticles: catPosts.slice(1, 4)
+  };
+}).filter(Boolean); // Remove nulls (empty categories)
+
+// SVG Icon
 const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
 ---
 
@@ -77,53 +42,54 @@ const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" vie
     {categoriesData.map(category => (
       <div class="col-span-12 md:col-span-6 lg:col-span-3 space-y-5">
         
-        <h2 class="font-merri text-xl font-bold text-textColor-primary border-b border-oyo-divider pb-2">
+        <h2 class="font-merri text-xl font-bold text-primary border-b border-divider pb-2">
           {category.name}
         </h2>
 
         <article class="group">
-          <a href={category.mainArticle.href} class="block overflow-hidden rounded-lg mb-4 shadow-soft">
+          <a href={`/blog/${category.mainArticle.slug}/`} class="block overflow-hidden rounded-lg mb-4 shadow-soft">
             <img 
-              src={category.mainArticle.imgSrc} 
-              alt={category.mainArticle.title} 
+              src={category.mainArticle.data.heroImage} 
+              alt={category.mainArticle.data.title} 
               class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
             />
           </a>
           <div class="space-y-2">
-            <span class={`text-xs font-bold uppercase ${category.categoryClass || 'bg-gray-500'} text-white py-1 px-2 rounded-sm`}>
+            <span class={`text-xs font-bold uppercase ${category.categoryClass || 'bg-gray-500'} text-white py-1 px-2 rounded-sm w-max`}>
               {category.name}
             </span>
-            <h3 class="font-merri font-bold text-lg leading-tight text-textColor-primary group-hover:text-oyo-primary transition-colors">
-              <a href={category.mainArticle.href}>{category.mainArticle.title}</a>
+            <h3 class="font-merri font-bold text-heading-sm leading-tight text-primary group-hover:text-link transition-colors">
+              <a href={`/blog/${category.mainArticle.slug}/`}>{category.mainArticle.data.title}</a>
             </h3>
-            <div class="flex items-center gap-1.5 text-sm text-textColor-muted">
+            <div class="flex items-center gap-1.5 text-sm text-muted">
               <Fragment set:html={calendarIcon} />
-              {category.mainArticle.date}
+              {new Date(category.mainArticle.data.date).toLocaleDateString()}
             </div>
           </div>
         </article>
+
         <ul class="space-y-4">
           {category.subArticles.map(article => (
             <li class="space-y-2">
-              <span class={`text-xs font-bold uppercase ${category.categoryClass || 'bg-gray-500'} text-white py-1 px-2 rounded-sm`}>
+              <span class={`text-xs font-bold uppercase ${category.categoryClass || 'bg-gray-500'} text-white py-1 px-2 rounded-sm w-max`}>
                 {category.name}
               </span>
-              <h4 class="font-merri font-semibold text-base leading-tight text-textColor-primary hover:text-oyo-primary transition-colors">
-                <a href={article.href}>{article.title}</a>
+              <h4 class="font-merri font-semibold text-heading-sm leading-tight text-primary hover:text-link transition-colors">
+                <a href={`/blog/${article.slug}/`}>{article.data.title}</a>
               </h4>
-              <div class="flex items-center gap-1.5 text-sm text-textColor-muted">
+              <div class="flex items-center gap-1.5 text-sm text-muted">
                 <Fragment set:html={calendarIcon} />
-                {article.date}
+                {new Date(article.data.date).toLocaleDateString()}
               </div>
             </li>
           ))}
         </ul>
 
-        <a href={`/category/${category.name.toLowerCase()}`} class="inline-block text-sm font-bold text-oyo-primary hover:underline">
+        <a href={`/category/${category.name.toLowerCase()}`} class="inline-block text-sm font-bold text-link hover:underline">
           READ MORE &rarr;
         </a>
       </div>
-      ))}
+    ))}
 
   </div>
 </section>

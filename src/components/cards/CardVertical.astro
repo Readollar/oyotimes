@@ -5,13 +5,18 @@ export interface Props {
   imgSrc: string;
   category: string;
   title: string;
-  date: string;
+  date: string | Date; // ✅ Accept both
   readTime: string;
 }
+
 const { href, imgSrc, category, title, date, readTime } = Astro.props;
 
+// ✅ Helper to safely get the ISO string
+const isoDate = date instanceof Date ? date.toISOString() : date;
+const displayDate = isoDate.split('T')[0];
+
 const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
-const clockIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" ...></svg>`;
+const clockIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
 ---
 
 <article class="group">
@@ -30,14 +35,37 @@ const clockIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBo
       <a href={href}>{title}</a>
     </h3>
     <div class="flex items-center gap-4 text-sm text-muted">
+      
       <span class="flex items-center gap-1.5">
         <Fragment set:html={calendarIcon} />
-        {date}
+        <time class="time-ago" datetime={isoDate} data-fallback={displayDate}>
+          {displayDate}
+        </time>
       </span>
-      <span class="flex items-center gap-1.5">
+
+      <span class="flex items-center gap-1.5 whitespace-nowrap">
         <Fragment set:html={clockIcon} />
         {readTime}
       </span>
     </div>
   </div>
 </article>
+
+<script>
+  import { formatDistanceToNow, parseISO, differenceInDays } from 'date-fns';
+  const now = new Date();
+  const timeElements = document.querySelectorAll('.time-ago');
+
+  timeElements.forEach(timeEl => {
+    const isoDate = timeEl.getAttribute('datetime');
+    if (isoDate) {
+      try {
+        const date = parseISO(isoDate);
+        const daysDifference = differenceInDays(now, date);
+        if (daysDifference <= 7) {
+          timeEl.textContent = formatDistanceToNow(date, { addSuffix: true });
+        }
+      } catch (e) { }
+    }
+  });
+</script>

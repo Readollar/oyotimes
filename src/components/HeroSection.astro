@@ -1,174 +1,217 @@
 ---
 // src/components/HeroSection.astro
-// REVISED with new, correct Tailwind classes
+import { getCollection } from 'astro:content';
 
-// --- Left Column Data ---
-const breakingArticles = [
-  {
-    href: "/blog/is-journalism-still-relevant-today/",
-    imgSrc: "/img/hero/in-journalism.jpg",
-    date: "15 MINS AGO",
-    author: "SUNDAY TIMOTHY",
-    category: "Education",
-    title: "Food for thought: Is journalism still relevant today?",
-  },
-  {
-    href: "/blog/fuel-prices-surges-across-oyo/",
-    imgSrc: "/img/hero/fuel-price.png",
-    date: "20 MINS AGO",
-    author: "TAIWO OYELEYE",
-    category: "Business",
-    title: "Fuel Prices Surge Across Oyo",
-  },
-];
+// 1. Fetch all blog posts
+const allPosts = await getCollection('blog');
 
-// --- Center Column Data ---
-const mainArticle = {
-  href: "/blog/oyo-embraces-digital-payments/",
-  imgSrc: "/img/hero/main-story.png",
-  category: "Tech",
-  date: "08 AUGUST, 2025",
-  readTime: "15 MIN READ",
-  comments: 5,
-  author: "AKINTUNDE BABATUNDE",
-  title: "Oyo Embraces Digital Payment Systems",
-};
+// 2. FILTER: Exclude "Insight" and "Monarch" categories immediately
+// This ensures they never show up in the Hero section.
+const heroEligiblePosts = allPosts.filter(post => 
+  post.data.category !== "Insight" && 
+  post.data.category !== "Community's Insight" &&
+  post.data.category !== "Monarch's Desk"
+);
 
-const subArticles = [
-  { href: "/blog/new-innovation-hub-launches-in-oyo-town/", date: "08 AUGUST, 2025", readTime: "15 MIN READ", comments: 5, author: "MALIK OYELEYE", title: "New Innovation Hub Launches in Oyo Town" },
-  { href: "/blog/smart-farming-gains-ground/", date: "08 AUGUST, 2025", readTime: "15 MIN READ", comments: 5, author: "TAIWO WAHAB", title: "Smart Farming Gains Ground" },
-];
+// 3. Sort by Date (Newest First)
+const sortedPosts = heroEligiblePosts.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 
-// --- Right Column Data ---
-const topStoryHero = {
-  href: "/blog/local-markets-record-rise-in-food-prices/",
-  imgSrc: "/img/hero/top-story-1.jpg",
-  category: "Business",
-  title: "Local Markets Record Rise in Food Prices",
-  date: "27 AUGUST, 2025",
-};
+// --- LOGIC FOR COLUMNS ---
 
-const topStories = [
-  { href: "/blog/oyo-mesi-fc-secures-victory-in-regional-tournament/", category: "Sports", title: "Oyo Mesi FC Secures Victory in Regional Tournament", date: "27 AUGUST, 2025" },
-  { href: "/blog/community-leaders-engage-in-peace-talks/", category: "Politics", title: "Community Leaders Engage in Peace Talks", date: "27 AUGUST, 2025" },
-  { href: "/blog/new-classrooms-commissioned-in-oyo-schools/", category: "Education", title: "New Classrooms Commissioned in Oyo Schools", date: "27 AUGUST, 2025" },
-];
+// A. Main Story (Center)
+const mainStory = sortedPosts.find(post => post.data.isMainStory === true) || sortedPosts[0];
+
+// Helper to track used posts so we don't repeat them
+const usedSlugs = [mainStory.slug];
+
+// B. Breaking News (Left) - The 2 most recent posts (excluding Main)
+const breakingArticles = sortedPosts.filter(p => !usedSlugs.includes(p.slug)).slice(0, 2);
+breakingArticles.forEach(p => usedSlugs.push(p.slug));
+
+// C. Sub-Articles (Center, below Main) - The next 2 most recent
+const subArticles = sortedPosts.filter(p => !usedSlugs.includes(p.slug)).slice(0, 2);
+subArticles.forEach(p => usedSlugs.push(p.slug));
+
+// D. Top Stories (Right) - 1 from each of the 5 core Categories
+const categoriesToFeature = ["Business", "Sports", "Politics", "Tech", "Education"];
+let topStoriesRaw = [];
+
+// Loop through specific categories and grab the freshest post from each
+categoriesToFeature.forEach(cat => {
+  const post = sortedPosts.find(p => p.data.category === cat && !usedSlugs.includes(p.slug));
+  if (post) {
+    topStoriesRaw.push(post);
+    usedSlugs.push(post.slug);
+  }
+});
+
+// Fallback: If we don't have enough category posts, fill with whatever is recent
+if (topStoriesRaw.length < 4) {
+  const filler = sortedPosts.filter(p => !usedSlugs.includes(p.slug)).slice(0, 4 - topStoriesRaw.length);
+  topStoriesRaw = [...topStoriesRaw, ...filler];
+}
+
+// Split into 1 Hero (Image) and 4 List items (Text only)
+const topStoryHero = topStoriesRaw[0];
+const topStoriesList = topStoriesRaw.slice(1, 4);
 
 // Helper map for category BG colors
 const categoryColors = {
-  Business: "bg-category-business",
-  Sports: "bg-category-sports",
-  Politics: "bg-category-politics",
-  Tech: "bg-category-tech",
-  Education: "bg-category-education",
+  Business: "bg-category-business",
+  Sports: "bg-category-sports",
+  Politics: "bg-category-politics",
+  Tech: "bg-category-tech",
+  Education: "bg-category-education",
 };
+
+// SVGs
+const commentIcon = `<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 21l1.9-4.24a9.98 9.98 0 01-1.34-4.68C3.55 7.582 7.582 3.55 12 3.55c4.418 0 8 4.03 8 8.45z"></path></svg>`;
 ---
 
 <section class="container py-8 md:py-12">
-  <div class="grid grid-cols-12 gap-6">
-    
-    <aside class="col-span-12 lg:col-span-3 space-y-6">
-      <div class="flex items-center gap-2">
-        <span class="h-5 w-2 bg-background-red"></span>
-        <h2 class="font-merri font-bold text-xl mb-0 text-primary">Breaking</h2>
-      </div>
+  <div class="flex flex-col lg:grid lg:grid-cols-12 lg:gap-6 gap-8">
+    
+    <aside class="col-span-12 lg:col-span-3 space-y-6 lg:order-1">
+      <div class="flex items-center gap-2">
+        <span class="h-5 w-2 bg-background-red"></span>
+        <h2 class="font-merri font-bold text-xl mb-0 text-text-primary">Breaking</h2>
+      </div>
 
-      {breakingArticles.map(article => (
-        <article class="space-y-3 pb-6 border-b border-border-divider">
-          <a href={article.href} class="group block overflow-hidden rounded-md">
-            <img src={article.imgSrc} alt={article.title} class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
-          </a>
-          <div class="flex items-center gap-3 text-xs text-muted">
-            <span>{article.date}</span>
-            <span>&bull;</span>
-            <span>{article.author}</span>
-          </div>
-          <div class="space-y-1">
-            <span class="text-xs font-bold uppercase text-link">
-              {article.category}
-            </span>
-            <h3 class="font-merri font-bold text-lg leading-tight text-primary hover:text-link transition-colors">
-              <a href={article.href}>{article.title}</a>
-            </h3>
-          </div>
-        </article>
-      ))}
-    </aside>
+      {breakingArticles.map(article => (
+        <article class="space-y-3 pb-6 border-b border-divider">
+          <a href={`/blog/${article.slug}/`} class="group block overflow-hidden rounded-md">
+            <img src={article.data.heroImage} alt={article.data.title} class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+          </a>
+          <div class="flex items-center gap-3 text-xs text-muted">
+            <span class="text-red-800 font-bold">
+               <time class="time-ago" datetime={article.data.date} data-fallback={new Date(article.data.date).toLocaleDateString()}>
+                  {new Date(article.data.date).toLocaleDateString()}
+               </time>
+            </span>
+            <span>&bull;</span>
+            <span>{article.data.author}</span>
+          </div>
+          <div class="space-y-1">
+            <span class="text-xs font-bold uppercase text-link">
+              {article.data.category}
+            </span>
+            <h3 class="font-merri font-bold text-heading-sm leading-tight text-primary hover:text-link transition-colors">
+              <a href={`/blog/${article.slug}/`}>{article.data.title}</a>
+            </h3>
+          </div>
+        </article>
+      ))}
+    </aside>
 
-    <div class="col-span-12 lg:col-span-6 space-y-6">
-      <article>
-        <a href={mainArticle.href} class="group block overflow-hidden rounded-md mb-4">
-          <img src={mainArticle.imgSrc} alt={mainArticle.title} class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300" />
-        </a>
-        <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-xs text-muted mb-2">
-          <span>{mainArticle.date}</span>
-          <span>{mainArticle.readTime}</span>
-          <span class="flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 21l1.9-4.24a9.98 9.98 0 01-1.34-4.68C3.55 7.582 7.582 3.55 12 3.55c4.418 0 8 4.03 8 8.45z"></path></svg>
-            {mainArticle.comments}
-          </span>
-          <span>{mainArticle.author}</span>
-        </div>
-        <span class={`text-sm font-bold uppercase ${categoryColors[mainArticle.category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm w-max`}>
-          {mainArticle.category}
-        </span>
-        <h1 class="font-merri font-bold text-3xl md:text-4xl leading-tight text-primary hover:text-link transition-colors mt-2">
-          <a href={mainArticle.href}>{mainArticle.title}</a>
-        </h1>
-      </article>
+    <div class="col-span-12 lg:col-span-6 space-y-6 order-first lg:order-2">
+      <article>
+        <a href={`/blog/${mainStory.slug}/`} class="group block overflow-hidden rounded-md mb-4">
+          <img src={mainStory.data.heroImage} alt={mainStory.data.title} class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300" />
+        </a>
+        <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-xs text-muted mb-2">
+          <time class="time-ago" datetime={mainStory.data.date} data-fallback={new Date(mainStory.data.date).toLocaleDateString()}>
+             {new Date(mainStory.data.date).toLocaleDateString()}
+          </time>
+          <span>{mainStory.readingTime}</span>
+          <span>{mainStory.data.author}</span>
+        </div>
+        <span class={`text-sm font-bold uppercase ${categoryColors[mainStory.data.category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm w-max`}>
+          {mainStory.data.category}
+        </span>
+        <h1 class="font-merri font-bold text-heading-lg leading-tight text-primary hover:text-link transition-colors mt-2">
+          <a href={`/blog/${mainStory.slug}/`}>{mainStory.data.title}</a>
+        </h1>
+      </article>
 
-      <div class="space-y-6">
-        {subArticles.map(article => (
-          <article class="pt-6 border-t border-border-divider">
-            <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-xs text-muted mb-2">
-              <span>{article.date}</span>
-              <span>{article.readTime}</span>
-              <span class="flex items-center gap-1">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 21l1.9-4.24a9.98 9.98 0 01-1.34-4.68C3.55 7.582 7.582 3.55 12 3.55c4.418 0 8 4.03 8 8.45z"></path></svg>
-                {article.comments}
-              </span>
-              <span>{article.author}</span>
-            </div>
-            <h2 class="font-merri font-bold text-xl leading-tight text-primary hover:text-link transition-colors">
-              <a href={article.href}>{article.title}</a>
-            </h2>
-          </article>
-        ))}
-      </div>
-    </div>
+      <div class="space-y-6">
+        {subArticles.map(article => (
+          <article class="pt-6 border-t border-divider">
+            <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-xs text-muted mb-2">
+              <time class="time-ago" datetime={article.data.date} data-fallback={new Date(article.data.date).toLocaleDateString()}>
+                {new Date(article.data.date).toLocaleDateString()}
+              </time>
+              <span>{article.readingTime}</span>
+              <span>{article.data.author}</span>
+            </div>
+            <h2 class="font-merri font-bold text-xl leading-tight text-primary hover:text-link transition-colors">
+              <a href={`/blog/${article.slug}/`}>{article.data.title}</a>
+            </h2>
+          </article>
+        ))}
+      </div>
+    </div>
 
-    <aside class="col-span-12 lg:col-span-3 space-y-6">
-      <h2 class="font-merri font-bold text-xl text-primary bg-background-secondary p-3 rounded-md">Top Stories</h2>
-      
-      <article class="space-y-2">
-        <a href={topStoryHero.href} class="group block overflow-hidden rounded-md">
-          <img src={topStoryHero.imgSrc} alt={topStoryHero.title} class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300" />
-        </a>
-        <span class={`text-xs font-bold uppercase ${categoryColors[topStoryHero.category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm w-max`}>
-          {topStoryHero.category}
-        </span>
-        <h3 class="font-merri font-bold text-lg leading-tight text-primary hover:text-link transition-colors">
-          <a href={topStoryHero.href}>{topStoryHero.title}</a>
-        </h3>
-        <p class="text-xs text-muted">{topStoryHero.date}</p>
-      </article>
+    <aside class="col-span-12 lg:col-span-3 space-y-6 lg:order-3">
+      <h2 class="font-merri font-bold text-xl text-text-primary bg-background-secondary p-3 rounded-md">Top Stories</h2>
+      
+      {/* 1. First Item (Image) */}
+      {topStoryHero && (
+        <article class="space-y-2">
+          <a href={`/blog/${topStoryHero.slug}/`} class="group block overflow-hidden rounded-md">
+            <img src={topStoryHero.data.heroImage} alt={topStoryHero.data.title} class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+          </a>
+          <br/>
+          <span class={`text-xs font-bold uppercase ${categoryColors[topStoryHero.data.category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm w-max`}>
+            {topStoryHero.data.category}
+          </span>
+          <h3 class="font-merri font-bold text-heading-sm leading-tight text-primary hover:text-link transition-colors">
+            <a href={`/blog/${topStoryHero.slug}/`}>{topStoryHero.data.title}</a>
+          </h3>
+          <p class="text-xs text-muted">
+             <time class="time-ago" datetime={topStoryHero.data.date} data-fallback={new Date(topStoryHero.data.date).toLocaleDateString()}>
+               {new Date(topStoryHero.data.date).toLocaleDateString()}
+             </time>
+          </p>
+        </article>
+      )}
 
-      <ul class="space-y-4">
-        {topStories.map(article => (
-          <li class="pt-4 border-t border-border-divider">
-            <article class="space-y-1">
-              <span class={`text-xs font-bold uppercase ${categoryColors[article.category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm w-max`}>
-                {article.category}
-              </span>
-              <h4 class="font-merri font-semibold text-base leading-tight text-primary hover:text-link transition-colors">
-                <a href={article.href}>{article.title}</a>
-              </h4>
-              <p class="text-xs text-muted">{article.date}</p>
-            </article>
-          </li>
-        ))}
-      </ul>
-    </aside>
+      {/* 2. Remaining 4 Items (Text Only) */}
+      <ul class="space-y-4">
+        {topStoriesList.map(article => (
+          <li class="pt-4 border-t border-divider">
+            <article class="space-y-1">
+              <span class={`text-xs font-bold uppercase ${categoryColors[article.data.category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm w-max`}>
+                {article.data.category}
+              </span>
+              <h4 class="font-merri font-semibold text-heading-sm leading-tight text-primary hover:text-link transition-colors">
+                <a href={`/blog/${article.slug}/`}>{article.data.title}</a>
+              </h4>
+              <p class="text-xs text-muted">
+                <time class="time-ago" datetime={article.data.date} data-fallback={new Date(article.data.date).toLocaleDateString()}>
+                   {new Date(article.data.date).toLocaleDateString()}
+                 </time>
+              </p>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </aside>
 
-  </div>
+  </div>
 </section>
+
+<script>
+  import { format, formatDistanceToNow, parseISO, differenceInDays } from 'date-fns';
+
+  const now = new Date();
+  const timeElements = document.querySelectorAll('.time-ago');
+
+  timeElements.forEach(timeEl => {
+    const isoDate = timeEl.getAttribute('datetime');
+    if (isoDate) {
+      try {
+        const date = parseISO(isoDate);
+        const daysDifference = differenceInDays(now, date);
+
+        // Logic: Use "X ago" if less than 7 days, otherwise use full date
+        if (daysDifference <= 7) {
+          timeEl.textContent = formatDistanceToNow(date, { addSuffix: true });
+        } else {
+          timeEl.textContent = format(date, 'MMMM d, yyyy');
+        }
+      } catch (e) {
+        // If failed, leave the fallback text
+      }
+    }
+  });
+</script>

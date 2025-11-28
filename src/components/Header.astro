@@ -14,11 +14,21 @@ const navItems = [
   { name: "Tech", href: "/category/tech", id: "tech" },
   { name: "Education", href: "/category/education", id: "education" },
   { name: "Sports", href: "/category/sports", id: "sports" },
+  { name: "Events", href: "/events", id: "events" },
   { name: "Places", href: "/places", id: "places" },
-  { name: "Community's Insight", href: "/community", id: "community" },
+  { name: "Community Voices", href: "/community", id: "community" },
   { name: "Monarch's Desk", href: "/monarch", id: "monarch" },
-  { name: "About", href: "/about", id: "about" },
+  //{ name: "About", href: "/about", id: "about" },
 ];
+// 2. Dropdown now only has utility links
+const dropdownItems = [
+  { name: "About", href: "/about", id: "about" },
+  { name: "Bookmarks", href: "/bookmarks", id: "bookmarks" },
+  { name: "Submit Article", href: "/submit", id: "submit" },
+];
+
+// 3. Check if any dropdown item is active
+const isDropdownActive = dropdownItems.some(item => item.id === activeId);
 ---
 
 <header class="oy-header" role="banner">
@@ -32,9 +42,19 @@ const navItems = [
         <img src="/img/logos/logo-full.svg" alt="OyoTimes" class="brand-logo" />
       </div>
       <div class="right-actions">
-        <button class="search-btn" aria-label="Search">
-          <img src="/icons/icon-search.svg" alt="Search" />
-        </button>
+
+        <form action="/search" method="GET" class="search-form">
+          <label for="header-search" class="sr-only">Search</label>
+          <input 
+            type="search" 
+            name="q" 
+            id="header-search" 
+            class="search-input" 
+            placeholder="Search..."
+          />
+  	 	  <button type="submit" class="search-btn" aria-label="Search">
+  	 	    <img src="/icons/icon-search.svg" alt="Search" />
+  	 	  </button> </form>
         <button class="hamburger" id="oy-hamburger" aria-label="Open menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
@@ -44,18 +64,31 @@ const navItems = [
 </header>
 
 <div class="nav-band" id="oy-nav-band">
-    <div class="container nav-inner">
-      <nav class="main-nav" role="navigation" aria-label="Main">
-        <ul class="nav-list">
-          {navItems.map(item => (
-            <li class={`nav-item ${item.id === activeId ? 'active' : ''}`}>
-              <a href={item.href} class="nav-link">{item.name}</a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </div>
+  <div class="container nav-inner">
+    <nav class="main-nav" role="navigation" aria-label="Main">
+      <ul class="nav-list">
+        {navItems.map(item => (
+  	 	   <li class={`nav-item ${item.id === activeId ? 'active' : ''}`}>
+  	 	 	 <a href={item.href} class="nav-link">{item.name}</a>
+  	 	   </li>
+  	 	 ))}
+
+        <li class={`nav-item dropdown-container ${isDropdownActive ? 'active' : ''}`}>
+          <a href="#" class="nav-link" onclick="event.preventDefault();">
+            More &darr;
+          </a>
+          <ul class="dropdown-menu">
+            {dropdownItems.map(item => (
+              <li class={`dropdown-item ${item.id === activeId ? 'active' : ''}`}>
+                <a href={item.href} class="nav-link">{item.name}</a>
+              </li>
+            ))}
+          </ul>
+        </li>
+      </ul>
+    </nav>
   </div>
+</div>
 
 <script>
   // live date
@@ -127,6 +160,38 @@ const navItems = [
  align-items: center;
  gap: 12px;
 }
+.utility-link {
+ display: block;
+ font-size: 14px;
+ font-weight: 600;
+ color: var(--color-text-primary);
+ text-decoration: none;
+ transition: color 0.15s ease;
+}
+.utility-link:hover {
+ color: var(--color-base-red-942414);
+}
+.search-form {
+ display: flex;
+ align-items: center;
+ background: #f5f5f5;
+ border-radius: 8px;
+ padding-left: 10px;
+ overflow: hidden;
+}
+.search-input {
+ border: none;
+ background: transparent;
+ outline: none;
+ padding: 0;
+ width: 0; /* Hidden by default */
+ transition: width 0.3s ease;
+}
+.search-form:focus-within .search-input,
+.search-input:not(:placeholder-shown) {
+ width: 150px; /* Expand on focus or when it has text */
+ padding-right: 5px;
+}
 .search-btn {
  background: #f5f5f5;
  border: none;
@@ -138,6 +203,7 @@ const navItems = [
  cursor: pointer;
 }
 .search-btn img { width: 18px; height:18px; }
+
 .hamburger {
  display: none;
  background: none;
@@ -189,20 +255,146 @@ const navItems = [
  color: var(--color-base-red-942414);
 }
 
- @media (max-width: 980px) {
-:root { --side-margin: 24px; }
+/* Styles for the Dropdown */
+  .dropdown-container {
+    position: relative;
+  }
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 240px;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-divider);
+    border-top: none;
+    box-shadow: var(--shadow-soft);
+    z-index: 100;
+    list-style: none;
+    padding: 8px;
+    margin: 0;
+  }
+  .dropdown-item {
+    width: 100%;
+  }
+  .dropdown-item .nav-link {
+    width: 100%;
+    display: block;
+    padding: 8px 12px;
+    border-radius: 4px;
+  }
+  .dropdown-item .nav-link:hover {
+    background: var(--color-bg-alt);
+    color: var(--color-base-red-942414);
+  }
+  .dropdown-item.active .nav-link {
+    background: var(--color-bg-alt);
+    color: var(--color-base-red-942414);
+  }
+  
+  .dropdown-container:hover .dropdown-menu {
+    display: block;
+  }
+
+@media (max-width: 980px) {
+:root { --side-margin: 24px; } 
 .head-inner { grid-template-columns: 1fr auto; }
 .brand { grid-column: 1 / 2; justify-self: start; }
 .right-actions { justify-self: end; }
-.nav-list { display: none; flex-direction: column; align-items: stretch; gap: 12px; padding: 12px; }
 .hamburger { display: inline-flex; }
+
+    /* 1. Hide the nav list by default */
+.nav-list { 
+ display: none;
+}
+.nav-inner {
+  padding: 0px;
+}
+
+    /* 2. When the menu is open... */
+.nav-band.open {
+      /* Allows the list to be positioned relative to the nav-band */
+ position: relative; 
+}
 .nav-band.open .nav-list {
  display: flex;
- background: var(--color-bg-secondary);
+ flex-direction: column; /* Stack the links vertically */
+ align-items: flex-start; /* Align text to the left */
+      
+      /* Make it a full-width dropdown */
+ position: absolute;
+ top: 100%; /* Position it right below the nav-band */
+ left: 0;
+ right: 0;
+      
+      /* Style the dropdown container */
+ background: var(--color-bg-primary); /* Use your main white bg */
+ padding: var(--gutter); /* Use your 24px gutter for padding */
+ box-shadow: var(--shadow-soft); /* Add a nice shadow */
+ border-top: 1px solid var(--color-border-default);
 }
-.nav-band.open { position: relative; }
+.nav-band.open .nav-item {
+ width: 100%; /* Make each link take the full width */
 }
- @media (min-width: 1440px) {
+.nav-band.open .nav-link {
+ padding: 12px 0; /* Add some vertical padding to each link */
+}
+.utility-link {
+ display: none;
+}
+
+/* Mobile Dropdown Logic */
+    .dropdown-container {
+      width: 100%;
+    }
+    .dropdown-container .nav-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+    .dropdown-container:hover .dropdown-menu,
+    .dropdown-container .dropdown-menu {
+      display: block;
+      position: static;
+      box-shadow: none;
+      border: none;
+      padding: 0 0 0 16px; /* Indent the sub-menu */
+    }
+    .dropdown-item .nav-link {
+      color: var(--color-text-muted);
+      font-size: 15px;
+    }
+}
+
+@media (min-width: 1440px) {
 .container { min-width: 1200px; margin-left: auto; margin-right: auto; }
+}
+
+@media (max-width: 768px) {
+body {
+ font-size: var(--font-body-sm-size);
+ line-height: var(--font-body-sm-line);
+ padding-inline: calc(var(--grid-gutter));
+}
+.container {
+ padding-left: 0px;  /* On mobile, margin equals the gutter width */
+ padding-right: 0px;
+}
+.head-inner {
+ align-items: center;
+ justify-content: space-between;
+ padding-inline: 16px;
+}
+div.date-left {
+ margin-bottom: 16px;
+}
+div.container.head-bar {
+  padding-block: 0px;
+}
+div#oy-nav-band.container.nav-band {
+  padding: 0px;
+}
+
 }
 </style>

@@ -1,0 +1,127 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/img/uploads"
+public_folder: "/img/uploads"
+
+collections:
+  # ------------------------------------------------
+  # 1. NEWS ARTICLES (Blog)
+  # ------------------------------------------------
+  - name: "blog"
+    label: "News Articles"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DDTHH:mm:ss" }
+      - { label: "Author", name: "author", widget: "string", default: "Ridwan Awujoola" }
+      
+      # ✅ UPDATED: Includes 'Insight' and 'Monarch's Desk'
+      - { label: "Category", name: "category", widget: "select", options: ["Business", "Politics", "Tech", "Education", "Sports", "Insight", "Monarch's Desk", "Events"] }
+      
+      - { label: "Hero Image", name: "heroImage", widget: "image" }
+      
+      # ✅ UPDATED: All Editorial Flags
+      - { label: "Is Main Story? (Home Center)", name: "isMainStory", widget: "boolean", required: false }
+      - { label: "Is Featured? (Category Hero)", name: "isFeatured", widget: "boolean", required: false }
+      - { label: "Is Top Story? (Sidebar)", name: "isTopStory", widget: "boolean", required: false }
+      - { label: "Is Editor Pick? (Slider)", name: "isEditorPick", widget: "boolean", required: false }
+
+      - { label: "Excerpt (Short Summary)", name: "excerpt", widget: "text", required: false }
+      - { label: "Author Avatar", name: "authorAvatar", widget: "image", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  # ------------------------------------------------
+  # 2. PLACES DIRECTORY
+  # ------------------------------------------------
+  - name: "places"
+    label: "Places"
+    folder: "src/content/places"
+    create: true
+    slug: "{{slug}}"
+    editor:
+      preview: false
+    fields:
+      - { label: "Name of Place", name: "title", widget: "string" }
+      - { label: "Location (Short)", name: "location", widget: "string" }
+      - { label: "Category", name: "category", widget: "select", options: ["Landmark", "Hotel", "Restaurant", "Bar & Lounge", "Business"] }
+      - { label: "Main Image", name: "imgSrc", widget: "image" }
+      - { label: "Website / Booking Link", name: "website", widget: "string", required: false }
+      
+      # Flags
+      - { label: "Show in 'Top Places' Sidebar?", name: "isTopPlace", widget: "boolean", required: false }
+      - { label: "Show in 'Editor's Picks'?", name: "isEditorPick", widget: "boolean", required: false }
+
+      # Rating Info
+      - { label: "Overall Rating (0.0 - 5.0)", name: "rating", widget: "number", value_type: "float", min: 0, max: 5, step: 0.1 }
+      - { label: "Review Count", name: "reviewCount", widget: "number" }
+      - { label: "Price Text (e.g. Free, #5,000)", name: "priceText", widget: "string" }
+      - { label: "Price Label (e.g. PER PERSON)", name: "priceLabel", widget: "string" }
+
+      # ✅ COMPLEX LISTS (Matching your Schema)
+      
+      # 1. Rating Bars
+      - label: "Rating Bars (Score Breakdown)"
+        name: "ratingBars"
+        widget: "list"
+        fields:
+          - { label: "Name (e.g. Safety)", name: "name", widget: "string" }
+          - { label: "Score (0-5)", name: "score", widget: "number", value_type: "float", step: 0.1 }
+      
+      # 2. Gallery
+      - label: "Photo Gallery"
+        name: "gallery"
+        widget: "list"
+        fields:
+           - { label: "Image", name: "src", widget: "image" }
+           - { label: "Alt Text", name: "alt", widget: "string" }
+
+      # 3. Features (6-Grid)
+      - label: "Features (The 6-Grid icons)"
+        name: "features"
+        widget: "list"
+        fields:
+          - { label: "Title (e.g. Free Wifi)", name: "title", widget: "string" }
+          - { label: "Text (e.g. High speed)", name: "text", widget: "string" }
+
+      # 4. Simple Lists
+      - { label: "Activities List", name: "activity", widget: "list" }
+      - { label: "Included Items", name: "included", widget: "list" }
+      - { label: "Not Included Items", name: "notIncluded", widget: "list" }
+      - { label: "Safety Rules", name: "safety", widget: "list" }
+      
+      - { label: "Description (Main Text)", name: "body", widget: "markdown" }
+
+  # ------------------------------------------------
+  # 3. EVENTS CALENDAR (New!)
+  # ------------------------------------------------
+  - name: "events"
+    label: "Events"
+    folder: "src/content/events"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Event Title", name: "title", widget: "string" }
+      - { label: "Short Description (Card Text)", name: "description", widget: "text" }
+      
+      # Date & Time
+      - { label: "Start Date", name: "startDate", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Start Time", name: "startTime", widget: "string", default: "10:00 AM" }
+      - { label: "End Date (Optional)", name: "endDate", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, required: false }
+      
+      # Location
+      - { label: "Venue Name", name: "location", widget: "string" }
+      - { label: "Full Address", name: "address", widget: "string", required: false }
+      
+      # Details
+      - { label: "Organizer", name: "organizer", widget: "string", required: false }
+      - { label: "Price (e.g. Free, Ticketed)", name: "price", widget: "string", default: "Free" }
+      - { label: "Website / Ticket Link", name: "website", widget: "string", required: false }
+      
+      - { label: "Event Flyer/Image", name: "imgSrc", widget: "image" }
+      - { label: "Is Featured? (Big Card)", name: "isFeatured", widget: "boolean", required: false }
+      
+      - { label: "Full Event Details", name: "body", widget: "markdown" }

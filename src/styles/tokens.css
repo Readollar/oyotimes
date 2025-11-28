@@ -115,11 +115,11 @@
   --font-heading-lg-line: 1.2;
   --font-heading-lg-family: var(--font-heading);
 
-  --font-heading-md-size: clamp(20px, calc(20px + (24 - 20) * ((100vw - 360px) / 1080)), 24px);
+  --font-heading-md-size: clamp(22px, calc(22px + (24 - 22) * ((100vw - 360px) / 1080)), 24px);
   --font-heading-md-line: 1.3;
   --font-heading-md-family: var(--font-heading);
 
-  --font-heading-sm-size: clamp(14px, calc(14px + (16 - 14) * ((100vw - 360px) / 1080)), 16px);
+  --font-heading-sm-size: clamp(18px, calc(18px + (20 - 18) * ((100vw - 360px) / 1080)), 20px);
   --font-heading-sm-line: 1.5;
   --font-heading-sm-tracking: 0.01em;
   --font-heading-sm-family: var(--font-heading);

@@ -1,81 +1,53 @@
 ---
 // src/components/CommunityInsights.astro
+import { getCollection } from 'astro:content';
 import CardHorizontal from './cards/CardHorizontal.astro';
 
-const insightsData = [
-  {
-    href: "/blog/transport-struggles-in-oyo/",
-    imgSrc: "/img/insights/transport.jpg",
-    author: "Habeeb Bakare",
-    date: "08 AUGUST, 2025",
-    title: "Transport Struggles in Oyo",
-    excerpt: "Every day, getting a cab in Oyo feels like a struggle. Can we have a better organized transport system?",
-  },
-  {
-    href: "#",
-    imgSrc: "/img/insights/park.jpg",
-    author: "Taiwo Atukale",
-    date: "08 AUGUST, 2025",
-    title: "Oyo Needs More Social Spaces",
-    excerpt: "Oyo is growing, but socially we're behind. We need more recreational centers, parks, and safe spots where young peo...",
-  },
-  {
-    href: "#",
-    imgSrc: "/img/insights/shoprite.jpg",
-    author: "Ridwan Kareem",
-    date: "08 AUGUST, 2025",
-    title: "A Call for a Modern Mall",
-    excerpt: "It's high time Oyo had a proper mall to shop, relax and hang out instead of traveling to Ibadan for the simplest things",
-  },
-  {
-    href: "#",
-    imgSrc: "/img/insights/badroads.jpg",
-    author: "Ridwan Awujoola",
-    date: "08 AUGUST, 2025",
-    title: "Bad Roads, Bigger Problems",
-    excerpt: "Some of the inner roads are almost unpassable, especially when it rains. If only we can get proper drainage and ro...",
-  },
-  {
-    href: "#",
-    imgSrc: "/img/insights/youth.jpg",
-    author: "Mujeeb Oyeleye",
-    date: "08 AUGUST, 2025",
-    title: "Untapped Youth Potential in Oyo",
-    excerpt: "We have so many young talents in Oyo but very few platforms to showcase them. More hubs, skill centers, and you...",
-  },
-  {
-    href: "#",
-    imgSrc: "/img/insights/transformer.jpg",
-    author: "Blessing James",
-    date: "08 AUGUST, 2025",
-    title: "Electricity Challenges for Businesses",
-    excerpt: "Our businesses keep suffering because of unstable electricity. Imagine how much growth we'd see if the light situation is ...",
-  },
-];
+// 1. Fetch all blog posts
+const allPosts = await getCollection('blog');
+
+// 2. Filter for "Insight" category
+const insightPosts = allPosts
+  .filter(post => post.data.category === "Insight" || post.data.category === "Community's Insight")
+  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+  .slice(0, 6); // Show the latest 6
 ---
 
-<section class="container bg-background-alt py-8 md:py-12" style="background-color: #f2f2f2;">
-  
-  <div>
+<section class="bg-background-alt py-8 md:py-12">
+  <div class="container">
     
-    <div class="mb-8 pb-4 border-b border-oyo-divider">
-      <h2 class="font-merri text-2xl md:text-3xl font-bold text-textColor-primary">
-        Community's Insights
-      </h2>
-      <div class="w-16 h-1 bg-oyo-primary mt-2"></div>
+    <div class="flex flex-col md:flex-row justify-between md:items-end mb-8 pb-4 border-b border-divider">
+      <div>
+        <h2 class="font-merri font-bold text-2xl md:text-3xl text-primary">
+          Community's Insight
+        </h2>
+        <div class="w-16 h-1 bg-primary mt-2"></div>
+      </div>
+      
+      <div class="mt-4 md:mt-0">
+        <a href="/submit" class="inline-block bg-button-default text-white font-bold py-2 px-4 rounded-md hover:bg-button-hover transition-colors shadow-soft">
+          Submit Your Insight &rarr;
+        </a>
+      </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
-      {insightsData.map(insight => (
-        <CardHorizontal
-          href={insight.href}
-          imgSrc={insight.imgSrc}
-          author={insight.author}
-          date={insight.date}
-          title={insight.title}
-          excerpt={insight.excerpt}
-        />
-      ))}
+      {insightPosts.length > 0 ? (
+        insightPosts.map(post => (
+          <CardHorizontal
+            href={`/blog/${post.slug}/`}
+            imgSrc={post.data.heroImage}
+            author={post.data.author}
+            date={post.data.date}
+            title={post.data.title}
+            excerpt={post.data.excerpt}
+          />
+        ))
+      ) : (
+        <div class="col-span-2 text-center py-12 text-muted italic">
+          No community insights yet. <a href="/submit" class="underline text-primary">Be the first to submit one!</a>
+        </div>
+      )}
     </div>
 
   </div>

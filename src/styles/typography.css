@@ -37,7 +37,7 @@
   line-height: var(--font-heading-sm-line);
   letter-spacing: var(--font-heading-sm-tracking);
   font-weight: 600;
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
 }
 
 /* -----------------------

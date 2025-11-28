@@ -7,17 +7,18 @@ import LogoFullWhite from "/public/img/logos/logo-full-white.svg";
 // Data for links is kept here for easy updating
 const footerLinks = {
   categories: [
-    { href: "#", text: "Business" },
-    { href: "#", text: "Politics" },
-    { href: "#", text: "Tech" },
-    { href: "#", text: "Education" },
-    { href: "#", text: "Sports" },
+    { href: "/business", text: "Business" },
+    { href: "/politics", text: "Politics" },
+    { href: "/tech", text: "Tech" },
+    { href: "/education", text: "Education" },
+    { href: "/sports", text: "Sports" },
   ],
   extras: [
-    { href: "#", text: "Monarch’s Desk" },
-    { href: "#", text: "Places to Visit" },
-    { href: "#", text: "People’s Insight", isNew: true },
-    { href: "#", text: "About us" },
+    { href: "/monarch", text: "Monarch’s Desk" },
+    { href: "/event", text: "Events" },
+    { href: "/places", text: "Places to Visit" },
+    { href: "/community", text: "Community Voices", isNew: true },
+    { href: "/about", text: "About us" },
   ],
   social: [
     { href: "#", text: "Twitter" },
@@ -38,7 +39,7 @@ const socialIcons = {
 
 <footer class="bg-background-footer font-inter" aria-labelledby="footer-heading">
   <h2 id="footer-heading" class="sr-only">Footer</h2>
-  <div class="container mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-textColor-inverse">
+  <div class="container mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-text-inverse">
     <div class="md:col-span-1">
       <a href="/" aria-label="OyoTimes homepage">
         <img src={LogoFullWhite.src} alt="OyoTimes Logo" class="w-32 mb-4" />
@@ -87,11 +88,15 @@ const socialIcons = {
       </ul>
     </div>
   </div>
-
   <div class="bg-black py-4">
     <div class="container mx-auto px-4 text-center sm:text-center text-sm text-body-sm">
       <p class="text-body-smregular">&copy; {new Date().getFullYear()} Oyo Times. All rights reserved.</p>
+    <div class="container flex gap-6 items-center justify-center mx-auto px-4 text-center sm:text-center text-sm text-body-sm">
+        <a href="/privacy" class="hover:text-white transition-colors">Privacy Policy</a>
+        <a href="/terms" class="hover:text-white transition-colors">Terms of Service</a>
     </div>
+    </div>
+
   </div>
 </footer>
 

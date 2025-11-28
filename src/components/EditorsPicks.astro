@@ -1,45 +1,31 @@
 ---
 // src/components/EditorsPicks.astro
+import { getCollection } from 'astro:content';
 import CardVertical from './cards/CardVertical.astro';
 
-const picks = [
-  {
-    href: "#",
-    imgSrc: "/img/editorspicks/tech.jpg", // Replace with your image
-    category: "Tech",
-    title: "Everything Developers Must Know About Figma",
-    date: "27 AUGUST, 2025",
-    readTime: "20 MINS",
-  },
-  {
-    href: "#",
-    imgSrc: "/img/editorspicks/sports.jpg", // Replace with your image
-    category: "Sports",
-    title: "Bamford penalty gives Leeds a win over Burnley",
-    date: "27 AUGUST, 2025",
-    readTime: "20 MINS",
-  },
-  {
-    href: "#",
-    imgSrc: "/img/editorspicks/education.jpg", // Replace with your image
-    category: "Education",
-    title: "Tech Program for Kids are more than just fun",
-    date: "27 AUGUST, 2025",
-    readTime: "20 MINS",
-  },
-  {
-    href: "#",
-    imgSrc: "/img/editorspicks/business.jpg", // Replace with your image
-    category: "Business",
-    title: "Up 50% since it's IPO: Should you buy Google stock?",
-    date: "27 AUGUST, 2025",
-    readTime: "20 MINS",
-  },
-];
+// 1. Fetch all blog posts
+const allPosts = await getCollection('blog');
 
-// SVG Icons for Arrows
-const arrowLeftIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>`;
-const arrowRightIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>`;
+// 2. Define Core Categories (Exclude "Insight" and "Monarch")
+const coreCategories = ["Business", "Politics", "Tech", "Education", "Sports"];
+
+// 3. Filter: Only allow posts from Core Categories
+const eligiblePosts = allPosts.filter(post => coreCategories.includes(post.data.category));
+
+// 4. Sort by Date (Newest First)
+const sortedPosts = eligiblePosts.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+// 5. Filter for specific "isEditorPick" tag
+const manualPicks = sortedPosts.filter(post => post.data.isEditorPick === true);
+
+// 6. Selection Logic:
+// Use manual picks if they exist, otherwise fallback to the 8 most recent core articles.
+// We slice to max 8 items.
+const displayPicks = manualPicks.length > 0 ? manualPicks.slice(0, 8) : sortedPosts.slice(0, 8);
+
+// SVG Icons
+const arrowLeftIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>`;
+const arrowRightIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>`;
 ---
 
 <section class="container py-8 md:py-12">
@@ -48,27 +34,54 @@ const arrowRightIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" v
     <h2 class="font-merri text-2xl md:text-3xl font-bold text-primary">
       Editor's Picks
     </h2>
+    
     <div class="flex gap-2">
-      <button class="w-8 h-8 flex items-center justify-center rounded-md border border-border-divider text-muted hover:bg-background-alt hover:text-primary transition-colors">
+      <button id="scroll-left" class="w-8 h-8 flex items-center justify-center rounded-md border border-divider text-muted hover:bg-background-alt hover:text-primary transition-colors">
         <Fragment set:html={arrowLeftIcon} />
       </button>
-      <button class="w-8 h-8 flex items-center justify-center rounded-md border border-border-divider text-muted hover:bg-background-alt hover:text-primary transition-colors">
+      <button id="scroll-right" class="w-8 h-8 flex items-center justify-center rounded-md border border-divider text-muted hover:bg-background-alt hover:text-primary transition-colors">
         <Fragment set:html={arrowRightIcon} />
       </button>
     </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    {picks.map(pick => (
-      <CardVertical 
-        href={pick.href}
-        imgSrc={pick.imgSrc}
-        category={pick.category}
-        title={pick.title}
-        date={pick.date}
-        readTime={pick.readTime}
-      />
+  <div 
+    id="picks-slider"
+    class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide"
+    style="scrollbar-width: none; -ms-overflow-style: none;" 
+  >
+    {displayPicks.map(pick => (
+      // Mobile: 85% width (peek effect), Tablet: 45%, Desktop: 23% (4 per view)
+      <div class="min-w-[85%] md:min-w-[45%] lg:min-w-[23%] snap-start flex-shrink-0">
+        <CardVertical 
+          href={`/blog/${pick.slug}/`}
+          imgSrc={pick.data.heroImage}
+          category={pick.data.category}
+          title={pick.data.title}
+          date={pick.data.date}
+          readTime={pick.readingTime}
+        />
+      </div>
     ))}
   </div>
 
 </section>
+
+<script>
+  // Slider Logic
+  const slider = document.getElementById('picks-slider');
+  const leftBtn = document.getElementById('scroll-left');
+  const rightBtn = document.getElementById('scroll-right');
+
+  if (slider && leftBtn && rightBtn) {
+    leftBtn.addEventListener('click', () => {
+      // Scroll left by approx one card width
+      slider.scrollBy({ left: -320, behavior: 'smooth' });
+    });
+
+    rightBtn.addEventListener('click', () => {
+      // Scroll right by approx one card width
+      slider.scrollBy({ left: 320, behavior: 'smooth' });
+    });
+  }
+</script>

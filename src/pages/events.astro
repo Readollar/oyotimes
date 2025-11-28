@@ -1,0 +1,98 @@
+---
+// src/pages/events.astro
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CardEvent from '../components/cards/CardEvent.astro';
+import CardPlaceFeatured from '../components/cards/CardPlaceFeatured.astro'; // Reusing for featured
+
+// 1. Fetch all events
+const allEvents = await getCollection('events');
+
+// 2. Filter Logic: Only show future events, sorted soonest first
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const upcomingEvents = allEvents
+  .filter(event => event.data.startDate >= today)
+  .sort((a, b) => a.data.startDate.valueOf() - b.data.startDate.valueOf());
+
+// 3. Separate Featured vs Regular
+const featuredEventsData = upcomingEvents.filter(e => e.data.isFeatured).slice(0, 2);
+const mainListEvents = upcomingEvents.filter(e => !featuredEventsData.includes(e));
+
+// Map to needed format
+const featured = featuredEventsData.map(e => ({...e.data, href: `/events/${e.slug}/`}));
+const mainList = mainListEvents.map(e => ({...e.data, href: `/events/${e.slug}/`}));
+---
+
+<BaseLayout title="Upcoming Events in Oyo" activeId="events" description="Find festivals, workshops, community gatherings, and nightlife events happening in Oyo Town.">
+  
+  <section class="relative w-full h-80 md:h-96 bg-primary flex items-center justify-center text-center px-4 overflow-hidden">
+    
+ 
+    <div class="absolute inset-0 bg-black/50">
+       <img 
+      src="/img/hero/events.jpg" 
+      alt="Events in Oyo" 
+      class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" 
+    />
+    </div>
+
+    <div class="relative z-10 max-w-3xl">
+      <h1 class="font-merri font-bold text-4xl md:text-6xl text-white mb-6 leading-tight">
+        What's happening in <span class="text-link">Oyo</span>
+      </h1>
+      <p class="text-lg md:text-xl text-gray-200">
+        Discover festivals, workshops, cultural gatherings, and nightlife.
+      </p>
+    </div>
+  </section>
+
+  <div class="container py-12 md:py-16">
+    
+    {featured.length > 0 && (
+      <div class="mb-16">
+        <div class="flex items-center gap-3 mb-8">
+          <h2 class="font-merri font-bold text-2xl md:text-3xl text-primary">Don't Miss These</h2>
+          <div class="h-px bg-divider flex-grow"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {featured.map(event => (
+            <CardPlaceFeatured
+              href={event.href}
+              imgSrc={event.imgSrc}
+              category="Featured Event"
+              title={event.title}
+              location={`${event.location} • ${event.startDate.toLocaleDateString()}`}
+              description={event.description}
+              rating={5.0} reviewCount={0} priceText={event.price} priceLabel="ENTRY"
+            />
+          ))}
+        </div>
+      </div>
+    )}
+
+    <div>
+      <div class="flex items-center gap-3 mb-8">
+        <h2 class="font-merri font-bold text-2xl md:text-3xl text-primary">Upcoming Events Calendar</h2>
+        <div class="h-px bg-divider flex-grow"></div>
+      </div>
+      
+      {mainList.length > 0 ? (
+        <div class="flex flex-col gap-6">
+          {mainList.map(event => (
+            <CardEvent {...event} />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-16 bg-background-alt rounded-lg">
+          <svg class="w-16 h-16 text-muted mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          <h3 class="text-xl font-bold text-primary mb-2">No upcoming events yet</h3>
+          <p class="text-muted">Check back soon or submit your own event.</p>
+           <a href="/submit" class="inline-block mt-4 text-link font-bold hover:underline">Submit an Event &rarr;</a>
+        </div>
+      )}
+    </div>
+
+  </div>
+</BaseLayout>

@@ -1,52 +1,50 @@
 ---
 // src/components/LatestNews.astro
+import { getCollection } from 'astro:content';
 import CardOverlay from './cards/CardOverlay.astro';
 
-const latestArticles = [
-  {
-    href: "/blog/oyo-youth-football-league-kicks-off/",
-    imgSrc: "/img/latest/sports.jpg",
-    category: "Sports",
-    title: "Oyo Youth Football League Kicks Off",
-    date: "27 AUGUST, 2025",
-    readTime: "20 MINS",
-  },
-  {
-    href: "/blog/oyo-youths-explore-ai-for-business-growth/",
-    imgSrc: "/img/latest/tech.jpg",
-    category: "Tech",
-    title: "Oyo Youths Explore AI for Business Growth",
-    date: "27 AUGUST, 2025",
-    readTime: "20 MINS",
-  },
-  {
-    href: "/blog/local-startups-making-waves/",
-    imgSrc: "/img/latest/business.jpg",
-    category: "Business",
-    title: "Local Startups Making Waves",
-    date: "27 AUGUST, 2025",
-    readTime: "20 MINS",
-  },
-];
+// 1. Fetch all blog posts
+const allPosts = await getCollection('blog');
+
+// 2. FILTER: Exclude special sections (Insight, Monarch)
+// We only want the 5 core news categories here
+const newsPosts = allPosts.filter(post => 
+  post.data.category !== "Insight" && 
+  post.data.category !== "Community's Insight" &&
+  post.data.category !== "Monarch's Desk"
+);
+
+// 3. Sort by Date (Newest First)
+const sortedPosts = newsPosts.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+// 4. Pick articles
+// SKIP the first 9 (because they are already in the Hero Section)
+// Take the NEXT 6 articles
+const latestArticles = sortedPosts.slice(9, 12);
 ---
 
 <section class="container py-8 md:py-12">
-  <div class="mb-8 pb-4 border-b border-divider">
-    <h2 class="font-merri text-2xl md:text-3xl font-bold text-primary">
-      Latest News
-    </h2> 
-  </div>
+  <div class="mb-8 pb-4 border-b border-divider">
+    <h2 class="font-merri text-2xl md:text-3xl font-bold text-primary">
+      Latest News
+    </h2>
+    <div class="w-16 h-1 bg-primary mt-2"></div>
+  </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {latestArticles.map(article => (
-      <CardOverlay
-        href={article.href}
-        imgSrc={article.imgSrc}
-        category={article.category}
-        title={article.title}
-        date={article.date}
-        readTime={article.readTime}
-      />
-    ))}
-  </div>
+  {latestArticles.length > 0 ? (
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {latestArticles.map(article => (
+        <CardOverlay
+          href={`/blog/${article.slug}/`}
+          imgSrc={article.data.heroImage}
+          category={article.data.category}
+          title={article.data.title}
+          date={article.data.date}
+          readTime={article.readingTime}
+        />
+      ))}
+    </div>
+  ) : (
+    <p class="text-muted italic">More news coming soon...</p>
+  )}
 </section>

@@ -7,13 +7,15 @@ export interface Props {
   excerpt: string;
   authorName: string;
   authorAvatar: string;
-  date: string;
-  views: string;
+  date: string | Date; // ✅ Accept both String and Date object
 }
-const { href, imgSrc, title, excerpt, authorName, authorAvatar, date, views } = Astro.props;
+const { href, imgSrc, title, excerpt, authorName, authorAvatar, date } = Astro.props;
+
+// ✅ Helper to safely get the ISO string
+const isoDate = date instanceof Date ? date.toISOString() : date;
+const displayDate = isoDate.split('T')[0];
 
 const avatarIcon = `<svg class="w-full h-full" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>`;
-const eyeIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>`;
 ---
 
 <article class="group bg-white rounded-lg shadow-soft flex flex-col h-full overflow-hidden">
@@ -44,11 +46,31 @@ const eyeIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox=
     </div>
     <div class="flex-1">
       <div class="font-bold text-sm text-primary">{authorName}</div>
-      <div class="text-xs text-muted">{date}</div>
-    </div>
-    <div class="flex items-center gap-1.5 text-sm text-muted">
-      <Fragment set:html={eyeIcon} />
-      <span>{views}</span>
+      <div class="text-xs text-muted">
+        <time class="time-ago" datetime={isoDate} data-fallback={displayDate}>
+          {displayDate}
+        </time>
+      </div>
     </div>
   </div>
 </article>
+
+<script>
+  import { formatDistanceToNow, parseISO, differenceInDays } from 'date-fns';
+  const now = new Date();
+  const timeElements = document.querySelectorAll('.time-ago');
+
+  timeElements.forEach(timeEl => {
+    const isoDate = timeEl.getAttribute('datetime');
+    if (isoDate) {
+      try {
+        const date = parseISO(isoDate);
+        const daysDifference = differenceInDays(now, date);
+        if (daysDifference <= 7) {
+          timeEl.textContent = formatDistanceToNow(date, { addSuffix: true });
+        }
+        // If > 7 days, we leave the fallback date (e.g. 2025-08-20) or format it differently here
+      } catch (e) { }
+    }
+  });
+</script>

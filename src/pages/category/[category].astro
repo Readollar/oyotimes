@@ -1,5 +1,6 @@
 ---
 // src/pages/category/[category].astro
+import { getCollection } from 'astro:content'; // 1. Use getCollection
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CardFeatured from '../../components/cards/CardFeatured.astro';
 import CardVertical from '../../components/cards/CardVertical.astro';
@@ -7,24 +8,17 @@ import EditorsPicks from '../../components/EditorsPicks.astro';
 import CategorySidebar from '../../components/CategorySidebar.astro';
 
 export async function getStaticPaths() {
-  // 1. This is the magic.
-  // Astro will find EVERY .md file inside your blog folder.
-// AFTER (This finds all .md files in /blog/ AND all subfolders)
-const allArticles = await Astro.glob('../../pages/blog/**/*.md');
+  // 2. Fetch from the new 'blog' collection
+  const allArticles = await getCollection('blog');
+  const allCategories = [...new Set(allArticles.map(article => article.data.category))];
 
-  // 2. Get a list of unique categories from all your posts.
-  const allCategories = [...new Set(allArticles.map(article => article.frontmatter.category))];
-
-  // 3. Create a page for each category
   return allCategories.map(cat => {
-    // Filter the full list to get only posts for THIS category
-    const categoryArticles = allArticles.filter(article => article.frontmatter.category === cat);
-    
+    const categoryArticles = allArticles.filter(article => article.data.category === cat);
     return {
       params: { category: cat.toLowerCase() },
       props: { 
         categoryName: cat,
-        articles: categoryArticles // Pass just the filtered list
+        articles: categoryArticles 
       }
     };
   });
@@ -32,12 +26,11 @@ const allArticles = await Astro.glob('../../pages/blog/**/*.md');
 
 const { categoryName, articles } = Astro.props;
 
-// Now we use the 'articles' prop, which is already filtered.
-const featuredArticles = articles.slice(0, 2);
-const mainGridArticles = articles.slice(2);
+// 3. UPDATE LOGIC: Use '.data' instead of '.frontmatter'
+const featuredArticles = articles.filter(article => article.data.isFeatured === true);
+const mainGridArticles = articles.filter(article => !article.data.isFeatured);
 
-// --- PAGINATION LOGIC ---
-const articlesPerPage = 9; // Show 9 articles per page
+const articlesPerPage = 9;
 const mainGridPageOne = mainGridArticles.slice(0, articlesPerPage);
 const showPagination = mainGridArticles.length > articlesPerPage;
 ---
@@ -48,50 +41,52 @@ const showPagination = mainGridArticles.length > articlesPerPage;
       
       <main class="col-span-12 lg:col-span-9">
         
-        <div class="mb-6 pb-4 border-b border-border-divider">
+        <div class="mb-6 pb-4 border-b border-divider">
           <h1 class="font-merri font-bold text-4xl mb-2">{categoryName}</h1>
-          <p class="text-lg text-text-muted">All posts, stories, and articles in the {categoryName} category.</p>
+          <p class="text-lg text-muted">All posts, stories, and articles in the {categoryName} category.</p>
         </div>
 
-        <section class="mb-10">
-          <div class="flex items-center gap-2 mb-4">
-            <span class="h-5 w-1 bg-background-red"></span>
-            <h2 class="font-merri font-bold text-xl text-text-primary mb-0">Featured News</h2>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {featuredArticles.map(article => (
-              <CardFeatured
-                href={article.url}
-                imgSrc={article.frontmatter.heroImage}
-                title={article.frontmatter.title}
-                excerpt={article.frontmatter.excerpt}
-                authorName={article.frontmatter.author}
-                authorAvatar={article.frontmatter.authorAvatar}
-                date={article.frontmatter.date}
-                views={article.frontmatter.views}
-              />
-            ))}
-          </div>
-        </section>
-
+        {featuredArticles.length > 0 && (
+          <section class="mb-10">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="h-5 w-1 bg-primary"></span>
+              <h2 class="font-merri font-bold text-xl text-primary">Featured News</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {featuredArticles.map(article => (
+                <CardFeatured
+                  href={`/blog/${article.slug}/`} 
+                  imgSrc={article.data.heroImage}
+                  title={article.data.title}
+                  excerpt={article.data.excerpt}
+                  authorName={article.data.author}
+                  authorAvatar={article.data.authorAvatar}
+                  date={article.data.date}
+                  // views removed
+                />
+              ))}
+            </div>
+          </section>
+        )}
+        
         <section>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             {mainGridPageOne.map(article => (
               <CardVertical
-                href={article.url}
-                imgSrc={article.frontmatter.heroImage}
-                category={article.frontmatter.category}
-                title={article.frontmatter.title}
-                date={article.frontmatter.date}
-                readTime={article.frontmatter.readTime}
+                href={`/blog/${article.slug}/`}
+                imgSrc={article.data.heroImage}
+                category={article.data.category}
+                title={article.data.title}
+                date={article.data.date}
+                readTime={article.readingTime}
               />
             ))}
           </div>
         </section>
 
         {showPagination && (
-          <nav class="flex justify-center gap-2 mt-10">
-          </nav>
+           <nav class="flex justify-center gap-2 mt-10">
+             </nav>
         )}
       </main>
 

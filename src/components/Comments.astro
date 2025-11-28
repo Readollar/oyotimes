@@ -1,78 +1,16 @@
 ---
-// src/components/Comments.astro
-// REVISED with new, correct Tailwind classes
-
-const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
-const replyIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>`;
+// This component now uses CommentBox.io
+// Make sure to add your Project ID below!
 ---
+<div 
+  class="commentbox"
+  data-project-id="YOUR_PROJECT_ID_HERE"
+  data-page-id={Astro.url.pathname}
+>
+</div>
 
-<section class="mt-12 pt-8 border-t border-divider">
-  <h2 class="font-merri font-bold text-2xl mb-6 text-text-primary">Join the Conversation</h2>
-
-  <div class="space-y-6">
-    
-    <div class="p-5 sm:p-6 bg-background-alt rounded-lg">
-      <article class="flex gap-4">
-        <img src="/img/avatars/avatar-1.jpg" alt="Tawakalt Olukokun" class="w-10 h-10 rounded-full hidden sm:block" />
-        <div class="flex-1">
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
-            <div>
-              <span class="font-bold text-text-primary">Tawakalt Olukokun</span>
-              <div class="flex items-center gap-1.5 text-xs text-text-muted mt-1">
-                <Fragment set:html={calendarIcon} />
-                27 AUGUST, 2025
-              </div>
-            </div>
-            <button class="flex items-center gap-1.5 text-sm font-bold text-text-muted hover:text-link transition-colors mt-2 sm:mt-0">
-              <Fragment set:html={replyIcon} />
-              Reply
-            </button>
-          </div>
-          <p class="text-text-muted">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
-          </p>
-        </div>
-      </article>
-
-      <div class="mt-6 ml-8 sm:ml-14 pl-4 sm:pl-6 border-l border-border-divider">
-        <article class="flex gap-4 bg-white p-5 rounded-lg shadow-soft">
-          <img src="/img/avatars/avatar-2.jpg" alt="Ridwan Awujoola" class="w-10 h-10 rounded-full hidden sm:block" />
-          <div class="flex-1">
-            <span class="font-bold text-text-primary">Ridwan Awujoola</span>
-            <div class="flex items-center gap-1.5 text-xs text-text-muted mt-1 mb-2">
-              <Fragment set:html={calendarIcon} />
-              27 AUGUST, 2025
-            </div>
-            <p class="text-text-muted">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
-            </p>
-          </div>
-        </article>
-      </div>
-    </div>
-    
-  </div>
-
-  <form class="mt-10 space-y-6">
-    <h3 class="font-merri font-bold text-xl text-text-primary">Add a comment</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
-        <label for="comment-name" class="block text-sm font-bold text-text-primary mb-2">Name</label>
-        <input type="text" id="comment-name" class="w-full border border-divider rounded-md p-3 focus:ring-2 focus:ring-primary focus:outline-none" />
-      </div>
-      <div>
-        <label for="comment-email" class="block text-sm font-bold text-text-primary mb-2">Email</label>
-        <input type="email" id="comment-email" class="w-full border border-border-divider rounded-md p-3 focus:ring-2 focus:ring-primary focus:outline-none" />
-      </div>
-    </div>
-    <div>
-      <label for="comment-body" class="block text-sm font-bold text-text-primary mb-2">Comment</label>
-      <textarea id="comment-body" rows="6" class="w-full border border-border-divider rounded-md p-3 focus:ring-2 focus:ring-primary focus:outline-none"></textarea>
-    </div>
-    <div class="text-right">
-      <button type="submit" class="bg-background-red text-white font-bold py-3 px-8 rounded-md hover:bg-background-primary-hover transition-colors">
-        Send Comment
-      </button>
-    </div>
-  </form>
-</section>
+<script 
+  src="https://commentbox.io/js/commentbox.min.js"
+  client:visible
+>
+</script>

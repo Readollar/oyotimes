@@ -1,43 +1,61 @@
 ---
 // src/pages/places/[slug].astro
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PlaceSidebar from '../../components/PlaceSidebar.astro';
 import CardPlaceFeatured from '../../components/cards/CardPlaceFeatured.astro';
-import { allPlacesData } from '../../data/places.js';
 
+// 1. Generate paths for ALL places using Content Collections
 export async function getStaticPaths() {
-  return allPlacesData.map(place => ({
-    params: { slug: place.slug },
-    props: { place: place }
+  const allPlaces = await getCollection('places');
+  return allPlaces.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
   }));
 }
 
-const { place } = Astro.props; 
+// 2. Get the specific place entry and render content
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const place = entry.data; // We use 'place' to match your preferred variable name
 
-const featuredPicks = [
-  { href: "#", imgSrc: "/img/places/soro-hill-featured.jpg", category: "Landmark", title: "Soro Hill", location: "Sabo, Oyo", description: "Lorem ipsum dolor sit amet...", rating: 4.5, reviewCount: 1421, priceText: "Free", priceLabel: "PER PERSON" },
-  { href: "#", imgSrc: "/img/places/soro-hill-featured-2.jpg", category: "Landmark", title: "Soro Hill 2", location: "Sabo, Oyo", description: "Lorem ipsum dolor sit amet...", rating: 4.5, reviewCount: 1421, priceText: "Free", priceLabel: "PER PERSON" },
-  { href: "#", imgSrc: "/img/places/soro-hill-featured-3.jpg", category: "Landmark", title: "Soro Hill 3", location: "Sabo, Oyo", description: "Lorem ipsum dolor sit amet...", rating: 4.5, reviewCount: 1421, priceText: "Free", priceLabel: "PER PERSON" },
-];
+// 3. FETCH DYNAMIC DATA FOR SIDEBAR & BOTTOM GRID
+const allPlacesCollection = await getCollection('places');
 
-// SVGs
+// Sidebar: "Top Places" (Filtered)
+const topPlaces = allPlacesCollection
+  .filter(p => p.data.isTopPlace === true)
+  .map(p => ({ ...p.data, href: `/places/${p.slug}/` }));
+
+// Bottom: "Editor's Picks" (Filtered & Excludes current page)
+const editorPicks = allPlacesCollection
+  .filter(p => p.data.isEditorPick === true && p.slug !== entry.slug)
+  .slice(0, 3)
+  .map(p => ({ ...p.data, href: `/places/${p.slug}/` }));
+
+// --- SHARE LOGIC ---
+const shareText = encodeURIComponent(`Check out ${place.title} on OyoTimes!`);
+const shareUrl = encodeURIComponent(Astro.url.href);
+const whatsappLink = `https://wa.me/?text=${shareText}%20${shareUrl}`;
+const facebookLink = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+
+// Icons
 const starIcon = `<svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.54-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"></path></svg>`;
 const starIconEmpty = `<svg class="w-6 h-6 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.54-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"></path></svg>`;
 const locationIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0L6.343 16.657a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>`;
-// Feature Icons
-const cancelIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>`;
-const healthIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
-const ticketIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>`;
-const durationIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
-const confirmIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
-const guideIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-1.657-1.343-3-3-3s-3 1.343-3 3v2m6 0H9m12-9a3 3 0 10-6 0 3 3 0 006 0zm-3 4a3 3 0 100-6 3 3 0 000 6z"></path></svg>`;
+const featureIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+const whatsappIcon = `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>`;
+const facebookIcon = `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`;
 ---
+
+
 <BaseLayout title={place.title} activeId="places">
   <div class="container py-8 md:py-12">
-    <nav class="text-sm text-text-muted mb-4" aria-label="Breadcrumb">
-      <a href="/places" class="hover:text-text-primary">Places</a>
+    
+    <nav class="text-sm text-muted mb-4" aria-label="Breadcrumb">
+      <a href="/places" class="hover:text-primary">Places</a>
       <span class="mx-1">&gt;</span>
-      <a href="#" class="hover:text-text-primary">{place.category}</a>
+      <a href="#" class="hover:text-primary">{place.category}</a>
       <span class="mx-1">&gt;</span>
       <span class="truncate">{place.title}</span>
     </nav>
@@ -47,15 +65,16 @@ const guideIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBo
       <main class="col-span-12 lg:col-span-9">
         
         <header class="mb-6">
-          <h1 class="font-merri font-bold text-4xl md:text-5xl text-text-primary">{place.title}</h1>
-          <div class="flex items-center gap-1.5 text-lg text-text-muted mt-2">
+          <h1 class="font-merri font-bold text-4xl md:text-5xl text-primary">{place.title}</h1>
+          <div class="flex items-center gap-1.5 text-lg text-muted mt-2">
             <Fragment set:html={locationIcon} />
             {place.location}
           </div>
+            
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 items-center">
             <div>
-              <span class="font-merri font-bold text-5xl text-text-primary">{place.rating.toFixed(2)}</span>
-              <span class="text-lg text-text-muted ml-2">{place.reviewCount} Reviews</span>
+              <span class="font-merri font-bold text-5xl text-primary">{place.rating.toFixed(2)}</span>
+              <span class="text-lg text-muted ml-2">{place.reviewCount} Reviews</span>
               <div class="flex mt-2">
                 {Array.from({ length: 5 }).map((_, i) => (
                   i < Math.round(place.rating) 
@@ -63,172 +82,176 @@ const guideIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBo
                     : <Fragment set:html={starIconEmpty} />
                 ))}
               </div>
+              <div class="flex gap-2 mt-4">
+              <a href={whatsappLink} target="_blank" class="w-9 h-9 flex items-center justify-center rounded-full bg-green-100 text-green-600 hover:bg-green-200 transition-colors" aria-label="Share on WhatsApp">
+                 <Fragment set:html={whatsappIcon} />
+              </a>
+              <a href={facebookLink} target="_blank" class="w-9 h-9 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors" aria-label="Share on Facebook">
+                 <Fragment set:html={facebookIcon} />
+              </a>
+            </div>
             </div>
             <div class="space-y-4 gap-x-6 gap-y-4 pt-2">
-              {place.ratingBars.map(bar => (
+              {place.ratingBars && place.ratingBars.map(bar => (
                 <div class="flex items-center gap-3">
-                  <span class="w-32 text-sm text-text-muted">{bar.name}</span>
+                  <span class="w-32 text-sm text-muted">{bar.name}</span>
                   <div class="flex-1 bg-background-alt h-2 rounded-full">
                     <div class="bg-yellow-400 h-2 rounded-full" style={`width: ${bar.score / 5 * 100}%`}></div>
                   </div>
-                  <span class="text-sm font-bold w-6 text-text-primary">{bar.score.toFixed(1)}</span>
+                  <span class="text-sm font-bold w-6 text-primary">{bar.score.toFixed(1)}</span>
                 </div>
               ))}
             </div>
           </div>
         </header>
 
-        <div id="image-gallery">
-          <img 
-            id="main-image"
-            src={place.gallery[0].src} 
-            alt={place.gallery[0].alt} 
-            class="w-full h-96 object-cover rounded-lg mb-2"
-          />
-          <div class="grid grid-cols-6 gap-2">
-            {place.gallery.map((img, index) => (
-              <img
-                src={img.src}
-                alt={img.alt}
-                data-index={index}
-                class:list={[
-                  "gallery-thumb w-full h-20 object-cover rounded-md cursor-pointer transition-all",
-                  index === 0 ? "border-2 border-border-default" : "opacity-70 hover:opacity-100"
-                ]}
-              />
-            ))}
-          </div>
-        </div>
-
-        <div class="my-8 text-center">
-          <a href="#" class="inline-block bg-button-default text-white font-bold py-3 px-12 rounded-md hover:bg-button-hover transition-colors">
-            Go to Website
-          </a>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8 py-8 border-t border-b border-border-divider">
-          
-          <div class="flex gap-3">
-            <div class="flex-shrink-0 text-yellow-600"><Fragment set:html={cancelIcon} /></div>
-            <div>
-              <h3 class="font-bold text-text-primary">Free cancellation</h3>
-              <p class="text-text-muted">Cancel up to 24 hours in advance to receive a full refund</p>
+        {place.gallery && place.gallery.length > 0 && (
+          <div id="image-gallery">
+            <img 
+              id="main-image"
+              src={place.gallery[0].src} 
+              alt={place.gallery[0].alt} 
+              class="w-full h-96 object-cover rounded-lg mb-2"
+            />
+            <div class="grid grid-cols-6 gap-2">
+              {place.gallery.map((img, index) => (
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  data-index={index}
+                  class:list={[
+                    "gallery-thumb w-full h-20 object-cover rounded-md cursor-pointer transition-all",
+                    index === 0 ? "border-2 border-primary" : "opacity-70 hover:opacity-100"
+                  ]}
+                />
+              ))}
             </div>
           </div>
-          
-          <div class="flex gap-3">
-            <div class="flex-shrink-0 text-yellow-600"><Fragment set:html={healthIcon} /></div>
-            <div>
-              <h3 class="font-bold text-text-primary">Health precaution</h3>
-              <p class="text-text-muted">Special health and safety measures apply. Learn more</p>
-            </div>
-          </div>
+        )}
 
-          <div class="flex gap-3">
-            <div class="flex-shrink-0 text-yellow-600"><Fragment set:html={ticketIcon} /></div>
-            <div>
-              <h3 class="font-bold text-text-primary">Mobile Ticketing</h3>
-              <p class="text-text-muted">Use your phone or print your voucher</p>
-            </div>
+        {place.website && (
+          <div class="my-8 text-center">
+            <a 
+              href={place.website} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="inline-block bg-button-default text-white font-bold py-3 px-12 rounded-md hover:bg-button-hover transition-colors"
+            >
+              Go to Website
+            </a>
           </div>
+        )}
 
-          <div class="flex gap-3">
-            <div class="flex-shrink-0 text-yellow-600"><Fragment set:html={durationIcon} /></div>
-            <div>
-              <h3 class="font-bold text-text-primary">Duration</h3>
-              <p class="text-text-muted">Check availability to see starting times.</p>
-            </div>
+        {place.features && place.features.length > 0 && (
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8 py-8 border-t border-b border-divider">
+            {place.features.map((feature, i) => (
+                <div class="flex gap-3">
+                  <div class="flex-shrink-0 text-link"><Fragment set:html={featureIcon} /></div>
+                  <div>
+                    <h3 class="font-bold text-primary">{feature.title}</h3>
+                    <p class="text-muted">{feature.text}</p>
+                  </div>
+                </div>
+             ))}
           </div>
-
-          <div class="flex gap-3">
-            <div class="flex-shrink-0 text-yellow-600"><Fragment set:html={confirmIcon} /></div>
-            <div>
-              <h3 class="font-bold text-text-primary">Instant Confirmation</h3>
-              <p class="text-text-muted">Don't wait for confirmation</p>
-            </div>
-          </div>
-
-          <div class="flex gap-3">
-            <div class="flex-shrink-0 text-yellow-600"><Fragment set:html={guideIcon} /></div>
-            <div>
-              <h3 class="font-bold text-text-primary">Live tour guide</h3>
-              <p class="text-text-muted">English</p>
-            </div>
-          </div>
-          
-        </div>
+        )}
 
         <article class="prose prose-lg max-w-none text-primary">
           <h2>Description</h2>
           <p>{place.description}</p>
           
-          <h2>Activity</h2>
-          <h4 class="font-bold">What you will do</h4>
-          <ul>
-            {place.activity.map(item => <li>{item}</li>)}
-          </ul>
-          
-          <h2>What is included / not included</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 class="font-bold">Includes</h4>
-              <ul class="list-disc pl-5">
-                {place.included.map(item => <li>{item}</li>)}
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-bold">Not Includes</h4>
-              <ul class="list-disc pl-5">
-                {place.notIncluded.map(item => <li>{item}</li>)}
-              </ul>
-            </div>
-          </div>
+          <Content />
 
-          <h2>Safety</h2>
-          <h4 class="font-bold">Health precautions</h4>
-          <ul class="list-disc pl-5">
-            {place.safety.map(item => <li>{item}</li>)}
-          </ul>
+          {place.activity && (
+            <>
+              <h2>Activity</h2>
+              <h4 class="font-bold">What you will do</h4>
+              <ul>{place.activity.map(item => <li>{item}</li>)}</ul>
+            </>
+          )}
+
+          {(place.included || place.notIncluded) && (
+            <>
+              <h2>What is included / not included</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {place.included && (
+                  <div>
+                    <h4 class="font-bold">Includes</h4>
+                    <ul class="list-disc pl-5">{place.included.map(item => <li>{item}</li>)}</ul>
+                  </div>
+                )}
+                {place.notIncluded && (
+                  <div>
+                    <h4 class="font-bold">Not Includes</h4>
+                    <ul class="list-disc pl-5">{place.notIncluded.map(item => <li>{item}</li>)}</ul>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+
+          {place.safety && (
+            <>
+              <h2>Safety</h2>
+              <h4 class="font-bold">Health precautions</h4>
+              <ul class="list-disc pl-5">{place.safety.map(item => <li>{item}</li>)}</ul>
+            </>
+          )}
         </article>
 
       </main>
 
       <aside class="col-span-12 lg:col-span-3">
-        <PlaceSidebar />
+        <PlaceSidebar places={topPlaces} />
       </aside>
     </div>
   </div>
 
-  <div class="container py-12 md:py-16">
-    <div class="flex justify-between items-center mb-8 pb-4 border-b border-border-divider">
-      <h2 class="font-merri text-2xl md:text-3xl font-bold text-text-primary">
-        Editor's Picks
-      </h2>
+  {editorPicks.length > 0 && (
+    <div class="container py-12 md:py-16">
+      <div class="flex justify-between items-center mb-8 pb-4 border-b border-divider">
+        <h2 class="font-merri text-2xl md:text-3xl font-bold text-primary">
+          Editor's Picks
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {editorPicks.map(pick => (
+          <CardPlaceFeatured 
+            href={pick.href}
+            imgSrc={pick.imgSrc}
+            category={pick.category}
+            title={pick.title}
+            location={pick.location}
+            description={pick.description}
+            rating={pick.rating}
+            reviewCount={pick.reviewCount}
+            priceText={pick.priceText}
+            priceLabel={pick.priceLabel}
+          />
+        ))}
+      </div>
     </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {featuredPicks.map(pick => (
-        <CardPlaceFeatured {...pick} />
-      ))}
-    </div>
-  </div>
+  )}
 </BaseLayout>
 
 <script>
-  // Simple Image Gallery
   const mainImage = document.getElementById('main-image');
   const thumbnails = document.querySelectorAll('.gallery-thumb');
   
   thumbnails.forEach(thumb => {
     thumb.addEventListener('click', () => {
-      mainImage.src = thumb.src;
-      mainImage.alt = thumb.alt;
-      
-      thumbnails.forEach(t => t.classList.remove('border-2', 'border-border-default', 'opacity-100'));
-      thumbnails.forEach(t => t.classList.add('opacity-70', 'hover:opacity-100'));
-      
-      thumb.classList.add('border-2', 'border-border-default', 'opacity-100');
-      thumb.classList.remove('opacity-70');
+      if(mainImage) {
+        mainImage.src = thumb.src;
+        mainImage.alt = thumb.alt;
+        
+        thumbnails.forEach(t => {
+          t.classList.remove('border-2', 'border-primary', 'opacity-100');
+          t.classList.add('opacity-70', 'hover:opacity-100');
+        });
+        
+        thumb.classList.add('border-2', 'border-primary', 'opacity-100');
+        thumb.classList.remove('opacity-70');
+      }
     });
   });
 </script>

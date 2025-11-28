@@ -1,20 +1,15 @@
 ---
 // src/components/cards/CardOverlay.astro
-// This is our new REUSABLE card component.
-// It accepts "props" to make it dynamic.
-
 export interface Props {
   href: string;
   imgSrc: string;
   category: string;
   title: string;
-  date: string;
-  readTime: string;
+  date: string; // Expects ISO date
+  readTime: string; // Injected by plugin
 }
-
 const { href, imgSrc, category, title, date, readTime } = Astro.props;
 
-// Re-using the same helper maps
 const categoryColors = {
   Business: "bg-category-business",
   Sports: "bg-category-sports",
@@ -36,22 +31,23 @@ const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" vie
     alt={title} 
     class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
   />
-  
   <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-
   <div class="relative flex flex-col justify-end h-80 p-6 text-white">
+    
     <span class={`text-xs font-bold uppercase ${categoryColors[category] || 'bg-gray-500'} text-white py-1 px-2 rounded-sm mb-3 w-max`}>
       {category}
     </span>
     
-    <h3 class="font-merri font-bold text-text-white text-2xl leading-tight mb-4 group-hover:text-gray-200 transition-colors">
+    <h3 class="font-merri font-bold text-2xl leading-tight text-text-white mb-4 group-hover:text-gray-200 transition-colors">
       {title}
     </h3>
     
     <div class="flex items-center gap-4 text-sm font-medium text-gray-300 border-t border-gray-600 pt-4">
       <span class="flex items-center gap-1.5">
         <Fragment set:html={calendarIcon} />
-        {date}
+        <time class="time-ago" datetime={date} data-fallback={date.split('T')[0]}>
+          {date.split('T')[0]}
+        </time>
       </span>
       <span class="flex items-center gap-1.5">
         <Fragment set:html={clockIcon} />
@@ -60,3 +56,31 @@ const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" vie
     </div>
   </div>
 </a>
+
+<script>
+  import { format, formatDistanceToNow, parseISO, differenceInDays } from 'date-fns';
+
+  const now = new Date();
+  const timeElements = document.querySelectorAll('.time-ago');
+
+  timeElements.forEach(timeEl => {
+    const isoDate = timeEl.getAttribute('datetime');
+    if (isoDate) {
+      try {
+        const date = parseISO(isoDate);
+        const daysDifference = differenceInDays(now, date);
+
+        if (daysDifference <= 7) {
+          // WITHIN 7 DAYS: Show "X days ago"
+          timeEl.textContent = formatDistanceToNow(date, { addSuffix: true });
+        } else {
+          // OLDER THAN 7 DAYS: Show "August 27, 2025"
+          timeEl.textContent = format(date, 'MMMM d, yyyy');
+        }
+      } catch (e) {
+        console.error("Failed to parse date:", isoDate, e);
+        timeEl.textContent = timeEl.getAttribute('data-fallback');
+      }
+    }
+  });
+</script>

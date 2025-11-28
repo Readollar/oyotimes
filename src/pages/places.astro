@@ -1,52 +1,27 @@
 ---
 // src/pages/places.astro
-// REVISED with correct links and Tailwind classes
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CardPlace from '../components/cards/CardPlace.astro';
 import CardPlaceFeatured from '../components/cards/CardPlaceFeatured.astro';
 
-const allPlaces = [
-  { 
-    slug: "soro-hill", 
-    href: "/places/soro-hill/", // <-- LINK FIXED
-    dataCategory: "landmark", 
-    imgSrc: "/img/places/soro-hill.jpg", 
-    category: "Landmark", 
-    title: "Soro Hill", 
-    location: "Sabo, Oyo", 
-    description: "Lorem ipsum dolor sit amet...", 
-    rating: 4.5, 
-    reviewCount: 1421, 
-    priceText: "Free", 
-    priceLabel: "PER PERSON" 
-  },
-  { 
-    slug: "le-masik-hotel", 
-    href: "/places/le-masik-hotel/", // <-- LINK FIXED
-    dataCategory: "hotel", 
-    imgSrc: "/img/places/lemasik.png", 
-    category: "Hotel", 
-    title: "Le'Masik Hotel", 
-    location: "Fola-tyre, Oyo", 
-    description: "Lorem ipsum dolor sit amet...", 
-    rating: 4.8, 
-    reviewCount: 485, 
-    priceText: "$60,000", 
-    priceLabel: "PER NIGHT" 
-  },
-  // ... etc. for all places
-];
+const allPlacesFromCollection = await getCollection('places');
 
-// Data for "Editor's Picks" (3-col)
-const featuredPicks = [
-  { href: "#", imgSrc: "/img/places/soro-hill-featured.jpg", category: "Landmark", title: "Soro Hill", location: "Sabo, Oyo", description: "Lorem ipsum dolor sit amet...", rating: 4.5, reviewCount: 1421, priceText: "Free", priceLabel: "PER PERSON" },
-  { href: "#", imgSrc: "/img/places/soro-hill-featured-2.jpg", category: "Landmark", title: "Soro Hill 2", location: "Sabo, Oyo", description: "Lorem ipsum dolor sit amet...", rating: 4.5, reviewCount: 1421, priceText: "Free", priceLabel: "PER PERSON" },
-  { href: "#", imgSrc: "/img/places/soro-hill-featured-3.jpg", category: "Landmark", title: "Soro Hill 3", location: "Sabo, Oyo", description: "Lorem ipsum dolor sit amet...", rating: 4.5, reviewCount: 1421, priceText: "Free", priceLabel: "PER PERSON" },
-];
+const allPlaces = allPlacesFromCollection.map(place => ({
+  ...place.data,
+  slug: place.slug,
+  href: `/places/${place.slug}/`
+}));
 
-// ✅ FIXED: The 'id' now matches the 'dataCategory' on the cards
+const featuredPicksData = allPlacesFromCollection.filter(p => p.data.isTopPlace === true);
+const featuredPicks = featuredPicksData.map(place => ({
+  ...place.data,
+  href: `/places/${place.slug}/`
+}));
+
 const filterTabs = [
   { id: "all", name: "All" },
+  { id: "business", name: "Businesses" },
   { id: "hotel", name: "Hotels" },
   { id: "restaurant", name: "Restaurants" },
   { id: "landmark", name: "Landmarks" },
@@ -54,42 +29,29 @@ const filterTabs = [
 ];
 ---
 <BaseLayout title="Places to Visit" activeId="places">
-
-  <!-- To be considered later
-   <section class="monarch-hero relative h-96 w-full" style="background-image: url('/public/img/alaafin.jpg');">
-    <div class="absolute inset-0 bg-black/60"></div>
-    <div class="container relative z-10 flex flex-col justify-center h-full text-white">
-      <h1 class="font-merri font-bold text-5xl md:text-6xl">
-        Explore popular places in Oyo
-      </h1>
-      <p class="text-xl md:text-2xl text-gray-200 mt-2">
-      Discover restaurants, hotels, historical sites, and hangouts across Oyo.
-      </p>
-    </div>
-  </section> -->
-
   
   <section class="w-full h-64 md:h-80">
-    <img src="/img/alaafin.jpg" alt="Popular places in Oyo" class="w-full h-full object-cover" />
+    <img src="/img/hero/oyoview.jpg" alt="Popular places in Oyo" class="w-full h-full object-cover" />
   </section>
 
   <section class="container text-center py-8 md:py-12">
-    <h1 class="font-merri font-bold text-4xl md:text-5xl text-text-primary">
-      Explore popular places in Oyo
+    <h1 class="font-merri font-bold text-4xl md:text-5xl text-primary">
+      Discover Oyo: Businesses & Places
     </h1>
-    <p class="text-lg text-text-muted mt-2 mb-6">
+    <p class="text-lg text-muted mt-2 mb-6">
       Discover restaurants, hotels, historical sites, and hangouts across Oyo.
     </p>
 
-    <form class="max-w-xl mx-auto flex rounded-lg border border-border-divider p-1.5 focus-within:ring-2 focus-within:ring-primary">
+    <form id="search-form" class="max-w-xl mx-auto flex rounded-lg border border-divider p-1.5 focus-within:ring-2 focus-within:ring-primary">
       <input 
         type="search" 
-        placeholder="Search by name or category (e.g., hotels, restaurants, landmarks)" 
+        id="search-input"
+        placeholder="Search by name or category (e.g., hotels, businesses, restaurants, landmarks)" 
         class="w-full p-3 border-none focus:ring-0" 
       />
       <button 
         type="submit" 
-        class="bg-button-default text-white font-bold py-3 px-6 rounded-md hover:bg-background-red-hover transition-colors"
+        class="bg-button-default text-white font-bold py-3 px-6 rounded-md hover:bg-button-hover transition-colors"
       >
         Search
       </button>
@@ -101,9 +63,10 @@ const filterTabs = [
           data-filter={tab.id}
           class:list={[
             "filter-tab py-2 px-5 font-bold rounded-lg transition-colors border-2",
+            // ✅ FIXED: Use 'bg-secondary' (Gold) for active state
             index === 0 
-              ? "bg-button-secondary border-primary text-white" 
-              : "bg-white border-divider text-text-primary hover:border-border-default"
+              ? "bg-button-secondary border-border-default text-white" 
+              : "bg-white border-border-divider text-text-primary hover:border-secondary"
           ]}
         >
           {tab.name}
@@ -115,8 +78,23 @@ const filterTabs = [
   <div class="container pb-8 md:pb-12">
     <div id="places-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {allPlaces.map(place => (
-        <div data-category={place.dataCategory} class="place-card">
-          <CardPlace {...place} />
+        <div 
+          data-category={place.category.toLowerCase()} 
+          data-title={place.title.toLowerCase()} 
+          class="place-card"
+        >
+          <CardPlace 
+            href={place.href}
+            imgSrc={place.imgSrc} 
+            category={place.category}
+            title={place.title}
+            location={place.location}
+            description={place.description}
+            rating={place.rating}
+            reviewCount={place.reviewCount}
+            priceText={place.priceText}
+            priceLabel={place.priceLabel}
+          />
         </div>
       ))}
     </div>
@@ -131,7 +109,18 @@ const filterTabs = [
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       {featuredPicks.map(pick => (
-        <CardPlaceFeatured {...pick} />
+        <CardPlaceFeatured 
+          href={pick.href}
+          imgSrc={pick.imgSrc}
+          category={pick.category}
+          title={pick.title}
+          location={pick.location}
+          description={pick.description}
+          rating={pick.rating}
+          reviewCount={pick.reviewCount}
+          priceText={pick.priceText}
+          priceLabel={pick.priceLabel}
+        />
       ))}
     </div>
   </div>
@@ -139,30 +128,55 @@ const filterTabs = [
 </BaseLayout>
 
 <script>
-  // This JavaScript is now correct and will filter as expected.
   const filterTabs = document.querySelectorAll('.filter-tab');
   const placeCards = document.querySelectorAll('.place-card');
+  const searchInput = document.getElementById('search-input');
+  const searchForm = document.getElementById('search-form');
   
+  function filterPlaces() {
+    const query = searchInput.value.toLowerCase();
+    
+    // ✅ FIXED: Look for 'bg-secondary' (Gold)
+    const activeTab = document.querySelector('.filter-tab.bg-button-secondary');
+    const categoryFilter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+    
+    placeCards.forEach(card => {
+      const title = card.getAttribute('data-title');
+      let cardCategory = card.getAttribute('data-category');
+      
+      // Normalize categories for filtering
+      if (cardCategory.includes('hotel')) cardCategory = 'hotel';
+      else if (cardCategory.includes('restaurant')) cardCategory = 'restaurant';
+      else if (cardCategory.includes('landmark')) cardCategory = 'landmark';
+      else if (cardCategory.includes('lounge')) cardCategory = 'bar-lounge';
+      // Add 'business' check if needed, though usually it matches exactly
+
+      const titleMatch = title.includes(query);
+      const categoryMatch = (categoryFilter === 'all' || categoryFilter === cardCategory);
+      
+      if (titleMatch && categoryMatch) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
   filterTabs.forEach(tab => {
     tab.addEventListener('click', () => {
-      const filter = tab.getAttribute('data-filter');
-      
       filterTabs.forEach(t => {
-        t.classList.remove('bg-button-secondary', 'border-primary', 'text-white');
-        t.classList.add('bg-white', 'border-divider', 'text-primary', 'hover:border-primary');
+        // ✅ FIXED: Remove 'bg-secondary'
+        t.classList.remove('bg-button-secondary', 'border-secondary', 'text-white');
+        t.classList.add('bg-white', 'border-border-divider', 'text-text-primary', 'hover:border-border-default');
       });
-      tab.classList.add('bg-button-secondary', 'border-primary', 'text-white');
-      tab.classList.remove('bg-white', 'border-divider', 'text-primary');
-
-      placeCards.forEach(card => {
-        const cardCategory = card.getAttribute('data-category');
-        
-        if (filter === 'all' || filter === cardCategory) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
+      // ✅ FIXED: Add 'bg-secondary'
+      tab.classList.add('bg-button-secondary', 'border-border-divider', 'text-white');
+      tab.classList.remove('bg-white', 'border-border-divider', 'text-text-primary');
+      
+      filterPlaces();
     });
   });
+
+  if (searchInput) searchInput.addEventListener('keyup', filterPlaces);
+  if (searchForm) searchForm.addEventListener('submit', (e) => e.preventDefault());
 </script>

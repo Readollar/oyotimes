@@ -1,43 +1,62 @@
 ---
 // src/components/CommunitySidebar.astro
-// This sidebar uses the 'CardTextWithBadge' component
-import CardTextWithBadge from './cards/CardTextWithBadge.astro';
+import { getCollection } from 'astro:content';
+import CardSidebarImage from './cards/CardSidebarImage.astro';
 
-const topStories = [
-  { href: "#", category: "Sports", title: "Oyo Youth Football League Kicks Off", date: "27 AUGUST, 2025" },
-  { href: "#", category: "Education", title: "New Classrooms Commissioned in Oyo Schools", date: "27 AUGUST, 2025" },
-  { href: "#", category: "Politics", title: "Community Leaders Call for Inclusive Governance", date: "27 AUGUST, 2025" },
-  { href: "#", category: "Tech", title: "Oyo Youths Explore AI for Business Growth", date: "27 AUGUST, 2025" },
-];
+// 1. Fetch all blog posts
+const allPosts = await getCollection('blog');
+
+// 2. Filter for "Insight" category AND "isTopStory" flag
+const topStories = allPosts
+  .filter(post => 
+    (post.data.category === "Insight" || post.data.category === "Community's Insight") && 
+    post.data.isTopStory === true
+  )
+  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+  .slice(0, 4); // Limit to 4 items
 ---
 <aside class="space-y-8">
-  <div class="relative">
-    <input 
-      type="search" 
-      placeholder="Search..."
-      class="w-full px-4 py-3 border border-divider rounded-md focus:ring-2 focus:ring-primary focus:outline-none"
-    />
-    <button class="absolute right-0 top-0 h-full px-4 text-muted hover:text-primary">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-    </button>
-  </div>
+  
+  <form action="/search" method="GET">
+    <label for="sidebar-search-community" class="sr-only">Search</label>
+    <div class="relative">
+      <input 
+        id="sidebar-search-community"
+        type="search" 
+        name="q"
+        placeholder="Search insights..."
+        class="w-full px-4 py-3 border border-divider rounded-md focus:ring-2 focus:ring-primary focus:outline-none"
+      />
+      <button type="submit" class="absolute right-0 top-0 h-full px-4 text-muted hover:text-primary" aria-label="Submit search">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </button>
+    </div>
+  </form>
 
   <div>
-    <h3 class="font-merri font-bold text-xl mb-4">Top Stories</h3>
-    <ul class="space-y-4">
-      {topStories.map(story => (
-        <li class="pt-4 border-t border-divider">
-          <CardTextWithBadge {...story} />
-        </li>
-      ))}
-    </ul>
+    <h3 class="font-merri font-bold text-xl mb-4 text-primary">Top Stories</h3>
+    
+    {topStories.length > 0 ? (
+      <ul class="space-y-6">
+        {topStories.map(story => (
+          <li class="pt-6 border-t border-divider first:pt-0 first:border-t-0 list-none">
+            <CardSidebarImage 
+              href={`/blog/${story.slug}/`}
+              imgSrc={story.data.heroImage}
+              category={story.data.category}
+              title={story.data.title}
+              date={story.data.date}
+            />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="text-sm text-muted italic">No top stories marked yet.</p>
+    )}
   </div>
 
   <div class="space-y-4">
-    <div class="bg-background-alt h-64 rounded-md flex items-center justify-center text-muted">
-      Advertising (360px * 250px)
-    </div>
-    <div class="bg-background-alt h-64 rounded-md flex items-center justify-center text-muted">
+    <div class="bg-background-alt h-64 rounded-md flex items-center justify-center text-muted font-bold">
       Advertising (360px * 250px)
     </div>
   </div>

@@ -123,14 +123,15 @@ a:focus-visible {
   body {
     font-size: var(--font-body-sm-size);
     line-height: var(--font-body-sm-line);
-    padding-inline: calc(var(--grid-gutter));
+    /* padding-inline: calc(var(--grid-gutter)); */
+    /* margin-inline: 0px 16px; */
+    gap: 16px;
   }
   .container {
-    margin-left: 24px;  /* On mobile, margin equals the gutter width */
-    margin-right: 24px;
+    padding-inline: 16px;
+    padding-block: 16px;
   }
 }
-
 
 /* Responsive adjustments */
 @media (min-width: 1200px) {

@@ -1,0 +1,73 @@
+---
+// src/pages/search.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Get the search query from the URL
+const query = Astro.url.searchParams.get('q');
+---
+<BaseLayout title={`Search Results for "${query}"`}>
+  <div class="container py-8 md:py-12">
+    <h1 class="font-merri font-bold text-4xl text-primary">
+      Search Results
+    </h1>
+    
+    <div id="search-results-container">
+      <p class="text-lg text-muted mt-4">
+        Loading results for: <span class="font-bold text-primary">{query}</span>
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script define:vars={{ query }}>
+  // Use the new card classes in the JS generation
+  async function performSearch() {
+    const resultsContainer = document.getElementById('search-results-container');
+    
+    const response = await fetch('/search-index.json');
+    const allArticles = await response.json();
+    
+    const lowerCaseQuery = query.toLowerCase();
+    const results = allArticles.filter(article => {
+      const titleMatch = article.title.toLowerCase().includes(lowerCaseQuery);
+      const excerptMatch = article.excerpt?.toLowerCase().includes(lowerCaseQuery);
+      return titleMatch || excerptMatch;
+    });
+
+    if (results.length > 0) {
+      resultsContainer.innerHTML = `
+        <p class="text-lg text-muted mt-4">
+          Found <span class="font-bold text-primary">${results.length}</span> results for: 
+          <span class="font-bold text-primary">"${query}"</span>
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+          ${results.map(article => `
+            <article class="group">
+              <a href="${article.slug}" class="block overflow-hidden rounded-lg mb-4 shadow-soft">
+                <img src="${article.heroImage}" alt="${article.title}" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300" />
+              </a>
+              <div class="space-y-2">
+                <span class="text-xs font-bold uppercase text-link">${article.category}</span>
+                <h3 class="font-merri font-bold text-lg leading-tight text-primary group-hover:text-link transition-colors">
+                  <a href="${article.slug}">${article.title}</a>
+                </h3>
+                <div class="flex items-center gap-4 text-sm text-muted">
+                   <span>${article.date.split('T')[0]}</span>
+                   <span>${article.readTime}</span>
+                </div>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      `;
+    } else {
+      resultsContainer.innerHTML = `
+        <p class="text-lg text-muted mt-4">
+          No results found for: <span class="font-bold text-primary">"${query}"</span>
+        </p>
+      `;
+    }
+  }
+
+  performSearch();
+</script>

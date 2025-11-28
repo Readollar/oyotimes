@@ -1,38 +1,25 @@
 ---
 // src/pages/monarch.astro
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Sidebar from '../components/Sidebar.astro';
 import CardVertical from '../components/cards/CardVertical.astro';
 
-// Placeholder data for the page
-const featuredInsight = {
-  href: "/blog/monarch-speech-on-unity",
-  imgSrc: "/img/monarch/monarch-featured.jpg",
-  category: "History",
-  title: "Alaafin's Address on Unity and Heritage",
-  date: "01 NOVEMBER, 2025",
-  readTime: "8 MIN READ",
-  excerpt: "In a recent address, His Imperial Majesty, the Alaafin of Oyo, spoke on the importance of cultural preservation and unity among the Yoruba people..."
-};
+// 1. Fetch all blog posts
+const allPosts = await getCollection('blog');
 
-const pastInsights = [
-  {
-    href: "/blog/history-of-oyo-empire",
-    imgSrc: "/img/monarch/past-1.jpg",
-    category: "History",
-    title: "The Founding of the Oyo Empire",
-    date: "28 OCTOBER, 2025",
-    readTime: "12 MIN READ",
-  },
-  {
-    href: "/blog/role-of-oyo-mesi",
-    imgSrc: "/img/monarch/past-2.jpg",
-    category: "Politics",
-    title: "Understanding the Role of the Oyo Mesi",
-    date: "25 OCTOBER, 2025",
-    readTime: "7 MIN READ",
-  },
-];
+// 2. Filter for "Monarch's Desk" category
+const monarchPosts = allPosts
+  .filter(post => post.data.category === "Monarch's Desk")
+  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+// 3. Split: Newest is "Featured", rest are "Past Insights"
+const featuredInsight = monarchPosts[0]; // The very latest one
+const pastInsights = monarchPosts.slice(1); // All others
+
+// Icons
+const calendarIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
+const clockIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
 ---
 
 <BaseLayout title="The Monarch's Desk" activeId="monarch">
@@ -40,10 +27,10 @@ const pastInsights = [
   <section class="monarch-hero relative h-72 w-full">
     <div class="absolute inset-0 bg-black/60"></div>
     <div class="container relative z-10 flex flex-col justify-center h-full text-white">
-      <h1 class="font-merri font-bold text-5xl md:text-6xl">
+      <h1 class="font-merri font-bold text-5xl md:text-6xl text-white">
         The Monarch's Desk
       </h1>
-      <p class="text-xl md:text-2xl text-gray-200 mt-2">
+      <p class="text-xl text-gray-200 mt-2">
         Official insights, history, and perspectives from the Alaafin's palace.
       </p>
     </div>
@@ -54,52 +41,66 @@ const pastInsights = [
       
       <main class="col-span-12 lg:col-span-9">
         
-        <section class="mb-10">
-          <h2 class="font-merri text-3xl font-bold text-text-primary mb-4">
-            Latest Insight
-          </h2>
-          <article class="group">
-            <a href={featuredInsight.href} class="block overflow-hidden rounded-lg mb-4 shadow-soft">
-              <img 
-                src={featuredInsight.imgSrc} 
-                alt={featuredInsight.title} 
-                class="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </a>
-            <div class="space-y-3">
-              <span class="text-sm font-bold uppercase text-link">{featuredInsight.category}</span>
-              <h3 class="font-merri font-bold text-3xl leading-tight text-text-primary group-hover:text-link transition-colors">
-                <a href={featuredInsight.href}>{featuredInsight.title}</a>
-              </h3>
-              <div class="flex items-center gap-4 text-sm text-text-muted">
-                <span>{featuredInsight.date}</span>
-                <span>&bull;</span>
-                <span>{featuredInsight.readTime}</span>
+        {featuredInsight ? (
+          <section class="mb-10">
+            <h2 class="font-merri text-3xl font-bold text-primary mb-4">
+              Latest Insight
+            </h2>
+            <article class="group">
+              <a href={`/blog/${featuredInsight.slug}/`} class="block overflow-hidden rounded-lg mb-4 shadow-soft">
+                <img 
+                  src={featuredInsight.data.heroImage} 
+                  alt={featuredInsight.data.title} 
+                  class="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </a>
+              <div class="space-y-3">
+                <span class="text-sm font-bold uppercase text-link">{featuredInsight.data.category}</span>
+                <h3 class="font-merri font-bold text-4xl leading-tight text-primary group-hover:text-link transition-colors">
+                  <a href={`/blog/${featuredInsight.slug}/`}>{featuredInsight.data.title}</a>
+                </h3>
+                <div class="flex items-center gap-4 text-sm text-muted">
+                  <span class="flex items-center gap-1.5">
+                    <Fragment set:html={calendarIcon} />
+                    {new Date(featuredInsight.data.date).toLocaleDateString()}
+                  </span>
+                  <span class="flex items-center gap-1.5">
+                    <Fragment set:html={clockIcon} />
+                    {featuredInsight.readingTime}
+                  </span>
+                </div>
+                <p class="text-lg text-muted">
+                  {featuredInsight.data.excerpt}
+                </p>
               </div>
-              <p class="text-lg text-text-muted">
-                {featuredInsight.excerpt}
-              </p>
-            </div>
-          </article>
-        </section>
-
-        <section>
-          <h2 class="font-merri text-3xl font-bold text-text-primary mb-6 pb-4 border-b border-border-divider">
-            Past Insights & History
-          </h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {pastInsights.map(article => (
-              <CardVertical
-                href={article.href}
-                imgSrc={article.imgSrc}
-                category={article.category}
-                title={article.title}
-                date={article.date}
-                readTime={article.readTime}
-              />
-            ))}
+            </article>
+          </section>
+        ) : (
+          <div class="py-12 text-center text-muted italic">
+            No insights from the Palace yet.
           </div>
-        </section>
+        )}
+
+        {pastInsights.length > 0 && (
+          <section>
+            <h2 class="font-merri text-3xl font-bold text-primary mb-6 pb-4 border-b border-divider">
+              Past Insights & History
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {pastInsights.map(article => (
+                <CardVertical
+                  href={`/blog/${article.slug}/`}
+                  imgSrc={article.data.heroImage}
+                  category={article.data.category}
+                  title={article.data.title}
+                  date={article.data.date}
+                  readTime={article.readingTime}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
       </main>
 
       <aside class="col-span-12 lg:col-span-3">
@@ -111,8 +112,8 @@ const pastInsights = [
 
 <style>
   .monarch-hero {
-    /* Replace with a high-quality, respectful image from your assets */
-    background-image: url('/img/alaafin.jpg');
+    /* Replace with your background image */
+    background-image: url('/img/monarch/alaafin.jpg');
     background-size: cover;
     background-position: center;
   }
