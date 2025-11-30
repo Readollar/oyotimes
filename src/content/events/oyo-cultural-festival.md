@@ -18,7 +18,7 @@ isFeatured: true       # Set to 'true' to show in the big "Don't Miss These" sec
 
 ---
 
-## About This Event
+### About This Event
 
 Write the full details of the event here. This section supports **Markdown**, so you can format it nicely.
 

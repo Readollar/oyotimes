@@ -1,17 +1,17 @@
 ---
 # --- REQUIRED FIELDS ---
-title: "Oyo Cultural Festival 2025"
-description: "A grand celebration of Oyo's rich heritage featuring traditional music, dance, and art displays."
+title: "OyoTimes Launch 2025"
+description: "Launching of Oyo's foremost digital platfrom, centralizing all news and happenings in Oyo Town."
 startDate: 2025-12-15  # Format: YYYY-MM-DD
 startTime: "10:00 AM"
-location: "Atiba Hall"
-imgSrc: "/img/events/cultural-festival.jpg" # Make sure this image exists in public/img/events/
+location: "Old Oyo"
+imgSrc: "/img/logos/logo-icon.svg" # Make sure this image exists in public/img/events/
 
 # --- OPTIONAL FIELDS ---
 endDate: 2025-12-17    # If it's a multi-day event
 endTime: "6:00 PM"
-address: "Palace Road, Oyo Town"
-organizer: "Ministry of Culture & Tourism"
+address: "Express Road, Oyo Town"
+organizer: "Readollar Studio"
 price: "Free"          # Or "₦2,000", "Ticketed", etc.
 isFeatured: true       # Set to 'true' to show in the big "Don't Miss These" section
 ---

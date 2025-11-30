@@ -2,7 +2,7 @@
 title: "Transport Struggles in Oyo"
 date: 2025-11-27T14:00:00
 author: "Habeeb Bakare"
-category: "Insight"
+category: "Community"
 heroImage: "/img/insights/transport.jpg"
 excerpt: "Every day, getting a cab in Oyo feels like a struggle. Can we have a better organized transport system?"
 isFeatured: false

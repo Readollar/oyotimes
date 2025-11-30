@@ -4,6 +4,7 @@ import BaseLayout from './BaseLayout.astro';
 import Sidebar from '../components/Sidebar.astro';
 import EditorsPicks from '../components/EditorsPicks.astro';
 import Comments from '../components/Comments.astro';
+import astroReadingTime from 'astro-reading-time';
 
 const { frontmatter } = Astro.props;
 const { 
@@ -13,7 +14,8 @@ const {
   category = "Blog", 
   heroImage, 
   excerpt, // Ensure you add 'excerpt' to your markdown frontmatter!
-  comments = 0
+  comments = 0,
+  readingTime
 } = frontmatter;
 
 const categoryId = category.toLowerCase();
@@ -51,7 +53,7 @@ const facebookLink = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
       <main class="col-span-12 lg:col-span-9">
         
                 <header class="mb-6 border-b border-divider pb-6">
-          <h1 class="font-merri font-bold text-4xl md:text-5xl text-primary mb-4">{title}</h1>
+          <h1 class="font-merri font-bold text-2xl md:text-4xl text-primary mb-4">{title}</h1>
           
           <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted mb-3">
             <span class="flex items-center gap-1.5">
@@ -60,10 +62,10 @@ const facebookLink = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
                 {date.split('T')[0]}
               </time>
             </span>
-            <span class="flex items-center gap-1.5">
+            <!-- <span class="flex items-center gap-1.5">
               <Fragment set:html={commentIcon} />
               COMMENTS: {comments}
-            </span>
+            </span> -->
             <span class="flex items-center gap-1.5">
               <Fragment set:html={categoryIcon} />
               CATEGORY: {category.toUpperCase()}
@@ -73,13 +75,13 @@ const facebookLink = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
           <div class="flex flex-wrap items-center justify-between gap-4">
             <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
               <span class="font-bold text-primary">By {author}</span>
-                            <span class="text-muted">30 MINS AGO</span> 
-              <span class="text-muted">2 MIN READ</span> 
-            </div>
+                           <!-- <span class="text-muted">30 MINS AGO</span> -->
+              <span class="text-muted">{readingTime}</span> 
+            </div> 
             <div class="flex items-center gap-2">
-              <button class="w-9 h-9 flex items-center justify-center rounded-full bg-background-alt text-muted hover:bg-gray-300 transition-colors" aria-label="Show comments">
+              <!-- <button class="w-9 h-9 flex items-center justify-center rounded-full bg-background-alt text-muted hover:bg-gray-300 transition-colors" aria-label="Show comments">
                 <Fragment set:html={commentIcon} />
-              </button>
+              </button>-->
               <a 
                 href={whatsappLink}
                 target="_blank"
@@ -117,7 +119,7 @@ const facebookLink = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
 
   	   </main>
 
-  	   <aside class="col-span-12 lg:col-span-3">
+  	   <aside class="col-span-12 lg:col-span-3 mt-12 pt-12 border-t border-divider lg:mt-0 lg:pt-0 lg:border-t-0">
   	 	 <Sidebar />
   	   </aside>
   	 </div>

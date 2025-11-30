@@ -13,8 +13,8 @@ export interface Props {
 const { href, imgSrc, author, date, title, excerpt } = Astro.props;
 ---
 
-<a href={href} class="group flex gap-4 items-start">
-  <div class="shrink-0 w-[196px] h-[145px] overflow-hidden rounded-md">
+<a href={href} class="group flex flex-col sm:flex-row gap-4 items-start">
+  <div class="shrink-0 w-full sm:w-[196px] h-48 sm:h-[145px] overflow-hidden rounded-md">
     <img 
       src={imgSrc} 
       alt={title} 

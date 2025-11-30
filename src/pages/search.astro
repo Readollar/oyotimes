@@ -1,73 +1,143 @@
 ---
 // src/pages/search.astro
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Get the search query from the URL
-const query = Astro.url.searchParams.get('q');
+// 1. Fetch ALL Data on the server side to build the index
+const allPosts = await getCollection('blog');
+const allEvents = await getCollection('events');
+const allPlaces = await getCollection('places');
+
+// 2. Normalize Data into a search-friendly format
+const searchIndex = [
+  ...allPosts.map(item => ({
+    type: 'article',
+    title: item.data.title,
+    desc: item.data.excerpt || "Read this article on OyoTimes.",
+    url: `/blog/${item.slug}/`,
+    image: item.data.heroImage,
+    category: item.data.category
+  })),
+  ...allEvents.map(item => ({
+    type: 'event',
+    title: item.data.title,
+    desc: `${item.data.startDate.toLocaleDateString()} @ ${item.data.location}`,
+    url: `/events/${item.slug}/`,
+    image: item.data.imgSrc,
+    category: "Event"
+  })),
+  ...allPlaces.map(item => ({
+    type: 'place',
+    title: item.data.title,
+    desc: `${item.data.category} in ${item.data.location}`,
+    url: `/places/${item.slug}/`,
+    image: item.data.imgSrc,
+    category: "Place"
+  }))
+];
 ---
-<BaseLayout title={`Search Results for "${query}"`}>
-  <div class="container py-8 md:py-12">
-    <h1 class="font-merri font-bold text-4xl text-primary">
-      Search Results
-    </h1>
+
+<BaseLayout title="Search OyoTimes" activeId="search">
+  <div class="container py-8 md:py-16 min-h-[60vh]">
     
-    <div id="search-results-container">
-      <p class="text-lg text-muted mt-4">
-        Loading results for: <span class="font-bold text-primary">{query}</span>
-      </p>
+    <div class="max-w-2xl mx-auto text-center mb-10">
+      <h1 class="font-merri font-bold text-2xl md:text-4xl text-primary mb-6">Search OyoTimes</h1>
+      
+      <div class="relative">
+        <input 
+          type="text" 
+          id="search-box" 
+          placeholder="Type to search articles, places, or events..." 
+          class="w-full p-4 pl-12 rounded-lg border border-border-divider text-lg shadow-sm focus:ring-2 focus:ring-primary outline-none"
+          autofocus
+        />
+        <svg class="w-6 h-6 text-muted absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-2 mt-6" id="filter-container">
+        <button class="filter-btn active px-4 py-1 rounded-full border text-sm font-bold bg-primary text-white border-primary" data-filter="all">All</button>
+        <button class="filter-btn px-4 py-1 rounded-full border text-sm font-bold bg-white text-muted border-divider hover:border-primary" data-filter="article">Articles</button>
+        <button class="filter-btn px-4 py-1 rounded-full border text-sm font-bold bg-white text-muted border-divider hover:border-primary" data-filter="place">Places</button>
+        <button class="filter-btn px-4 py-1 rounded-full border text-sm font-bold bg-white text-muted border-divider hover:border-primary" data-filter="event">Events</button>
+      </div>
     </div>
+
+    <div id="results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="col-span-full text-center text-muted py-10">
+        Start typing to find results...
+      </div>
+    </div>
+
   </div>
 </BaseLayout>
 
-<script define:vars={{ query }}>
-  // Use the new card classes in the JS generation
-  async function performSearch() {
-    const resultsContainer = document.getElementById('search-results-container');
-    
-    const response = await fetch('/search-index.json');
-    const allArticles = await response.json();
-    
-    const lowerCaseQuery = query.toLowerCase();
-    const results = allArticles.filter(article => {
-      const titleMatch = article.title.toLowerCase().includes(lowerCaseQuery);
-      const excerptMatch = article.excerpt?.toLowerCase().includes(lowerCaseQuery);
-      return titleMatch || excerptMatch;
+<script define:vars={{ searchIndex }}>
+  const searchBox = document.getElementById('search-box');
+  const resultsGrid = document.getElementById('results-grid');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  
+  let currentFilter = 'all';
+
+  function renderResults(query) {
+    const lowerQuery = query.toLowerCase();
+
+    // Filter Logic
+    const filtered = searchIndex.filter(item => {
+      const matchesSearch = item.title.toLowerCase().includes(lowerQuery) || item.desc.toLowerCase().includes(lowerQuery);
+      const matchesType = currentFilter === 'all' || item.type === currentFilter;
+      return matchesSearch && matchesType;
     });
 
-    if (results.length > 0) {
-      resultsContainer.innerHTML = `
-        <p class="text-lg text-muted mt-4">
-          Found <span class="font-bold text-primary">${results.length}</span> results for: 
-          <span class="font-bold text-primary">"${query}"</span>
-        </p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-          ${results.map(article => `
-            <article class="group">
-              <a href="${article.slug}" class="block overflow-hidden rounded-lg mb-4 shadow-soft">
-                <img src="${article.heroImage}" alt="${article.title}" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300" />
-              </a>
-              <div class="space-y-2">
-                <span class="text-xs font-bold uppercase text-link">${article.category}</span>
-                <h3 class="font-merri font-bold text-lg leading-tight text-primary group-hover:text-link transition-colors">
-                  <a href="${article.slug}">${article.title}</a>
-                </h3>
-                <div class="flex items-center gap-4 text-sm text-muted">
-                   <span>${article.date.split('T')[0]}</span>
-                   <span>${article.readTime}</span>
-                </div>
-              </div>
-            </article>
-          `).join('')}
-        </div>
-      `;
-    } else {
-      resultsContainer.innerHTML = `
-        <p class="text-lg text-muted mt-4">
-          No results found for: <span class="font-bold text-primary">"${query}"</span>
-        </p>
-      `;
+    // Render
+    if (query.length === 0) {
+        resultsGrid.innerHTML = `<div class="col-span-full text-center text-muted py-10">Start typing to find results...</div>`;
+        return;
     }
+
+    if (filtered.length === 0) {
+      resultsGrid.innerHTML = `<div class="col-span-full text-center text-muted py-10">No results found for "${query}".</div>`;
+      return;
+    }
+
+    resultsGrid.innerHTML = filtered.map(item => `
+      <a href="${item.url}" class="group flex gap-4 bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all border border-transparent hover:border-gray-200">
+        <div class="w-20 h-20 flex-shrink-0 rounded-md overflow-hidden bg-gray-100">
+          <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover" />
+        </div>
+        <div class="flex-1 min-w-0">
+          <span class="text-xs font-bold uppercase text-link mb-1 block">${item.category}</span>
+          <h3 class="font-merri font-bold text-lg leading-tight text-primary group-hover:text-link mb-1 truncate">${item.title}</h3>
+          <p class="text-sm text-muted line-clamp-2">${item.desc}</p>
+        </div>
+      </a>
+    `).join('');
   }
 
-  performSearch();
+  // Input Listener
+  searchBox.addEventListener('input', (e) => renderResults(e.target.value));
+
+  // Filter Click Listeners
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update Styles
+      filterBtns.forEach(b => {
+        b.classList.remove('bg-button-secondary', 'text-white', 'border-primary');
+        b.classList.add('bg-white', 'text-muted', 'border-divider');
+      });
+      btn.classList.remove('bg-button-secondary', 'text-muted', 'border-divider');
+      btn.classList.add('bg-primary', 'text-white', 'border-primary');
+
+      // Update Logic
+      currentFilter = btn.getAttribute('data-filter');
+      renderResults(searchBox.value);
+    });
+  });
+  
+  // Check URL for ?q= param on load
+  const urlParams = new URLSearchParams(window.location.search);
+  const q = urlParams.get('q');
+  if (q) {
+    searchBox.value = q;
+    renderResults(q);
+  }
 </script>

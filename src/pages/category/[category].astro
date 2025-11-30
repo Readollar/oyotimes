@@ -37,20 +37,20 @@ const showPagination = mainGridArticles.length > articlesPerPage;
 
 <BaseLayout title={categoryName} activeId={categoryName.toLowerCase()}>
   <div class="container py-8 md:py-12">
-    <div class="grid grid-cols-12 gap-6">
+    <div class="grid grid-cols-12 gap-y-32 md:gap-6">
       
       <main class="col-span-12 lg:col-span-9">
         
         <div class="mb-6 pb-4 border-b border-divider">
-          <h1 class="font-merri font-bold text-4xl mb-2">{categoryName}</h1>
-          <p class="text-lg text-muted">All posts, stories, and articles in the {categoryName} category.</p>
+          <h1 class="font-merri font-bold text-2xl md:text-4xl mb-2">{categoryName}</h1>
+          <p class="text-md text-muted">All posts, stories, and articles in the {categoryName} category.</p>
         </div>
 
         {featuredArticles.length > 0 && (
-          <section class="mb-10">
+          <section class="mb-10 pb-12 border-b border-border-divider">
             <div class="flex items-center gap-2 mb-4">
-              <span class="h-5 w-1 bg-primary"></span>
-              <h2 class="font-merri font-bold text-xl text-primary">Featured News</h2>
+              <span class="h-[18px] mb-3 w-1 bg-button-secondary"></span>
+              <h2 class="font-merri font-bold text-xl text-primary">Featured</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               {featuredArticles.map(article => (
@@ -70,6 +70,9 @@ const showPagination = mainGridArticles.length > articlesPerPage;
         )}
         
         <section>
+          <div class="flex items-center gap-2 mb-4">
+                 <h2 class="font-merri font-bold text-xl text-primary">{categoryName} Posts</h2>
+            </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             {mainGridPageOne.map(article => (
               <CardVertical

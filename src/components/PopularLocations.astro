@@ -1,56 +1,41 @@
 ---
 // src/components/PopularLocations.astro
+import { getCollection } from 'astro:content';
 import CardLocation from './cards/CardLocation.astro';
 
-const locations = [
-  {
-    href: "#",
-    imgSrc: "/img/places/lemasik.png", // Replace with your image
-    title: "Le'Masik",
-    subtitle: "85 seats"
-  },
-  {
-    href: "#",
-    imgSrc: "/img/places/oldoyo.jpg", // Replace with your image
-    title: "Old Oyo Park",
-    subtitle: "100 seats"
-  },
-  {
-    href: "#",
-    imgSrc: "/img/places/jfly.jpg", // Replace with yourG image
-    title: "J-FLY",
-    subtitle: "40 seats"
-  },
-];
+// 1. Fetch all places
+const allPlaces = await getCollection('places');
+
+// 2. Pick 3 places to show
+// (You could also filter by p.data.isEditorPick === true if you want specific ones)
+const locations = allPlaces.slice(0, 3);
 ---
 
 <section class="container py-8 md:py-12">
   
   <div class="text-center max-w-2xl mx-auto mb-10">
-    <h2 class="font-merri text-3xl md:text-4xl font-bold text-text-primary mb-4">
+    <h2 class="font-merri text-2xl md:text-4xl font-bold text-primary mb-4">
       Popular Locations & Businesses
     </h2>
-    <p class="text-lg text-text-muted">
+    <p class="text-md text-muted">
       Discover popular places and verified businesses in Oyo.
     </p>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {locations.map(location => (
+    {locations.map(place => (
       <CardLocation 
-        href={location.href}
-        imgSrc={location.imgSrc}
-        title={location.title}
-        subtitle={location.subtitle}
+        href={`/places/${place.slug}/`}
+        imgSrc={place.data.imgSrc}
+        title={place.data.title}
+        subtitle={place.data.location}
       />
     ))}
   </div>
 
-
-<div class="text-center mt-10">
-    <a href="/places" class="inline-block border-2 border-border-default text-text-primary font-bold py-2 px-6 rounded-full hover:bg-button-hover hover:text-white transition-colors">
+  <div class="text-center mt-10">
+    <a href="/places" class="inline-block border-2 border-primary text-text-primary font-bold py-2 px-6 rounded-full hover:bg-primary hover:text-white transition-colors">
       View All Places
     </a>
   </div>
-
 </section>

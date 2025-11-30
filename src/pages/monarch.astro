@@ -23,18 +23,37 @@ const clockIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBo
 ---
 
 <BaseLayout title="The Monarch's Desk" activeId="monarch">
-  
-  <section class="monarch-hero relative h-72 w-full">
+    <section class="relative w-full h-72 md:h-96 bg-primary flex items-center justify-center text-center px-4 overflow-hidden">
+    
+ 
+    <div class="absolute inset-0 bg-black/50">
+       <img 
+      src="/img/monarch/alaafin.jpg" 
+      alt="Events in Oyo" 
+      class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" 
+    />
+    </div>
+
+    <div class="relative z-10 max-w-3xl">
+      <h1 class="font-merri font-bold text-3xl md:text-6xl text-white mb-6 leading-tight">
+       The Monarch's Desk
+      </h1>
+      <p class="text-lg md:text-2xl text-gray-200">
+        Official insights, history, and perspectives from the Alaafin's palace.
+      </p>
+    </div>
+  </section>
+  <!--<section class="monarch-hero relative h-72 w-full">
     <div class="absolute inset-0 bg-black/60"></div>
     <div class="container relative z-10 flex flex-col justify-center h-full text-white">
-      <h1 class="font-merri font-bold text-5xl md:text-6xl text-white">
+      <h1 class="font-merri font-bold text-heading-md md:text-6xl text-white">
         The Monarch's Desk
       </h1>
       <p class="text-xl text-gray-200 mt-2">
         Official insights, history, and perspectives from the Alaafin's palace.
       </p>
     </div>
-  </section>
+  </section> -->
 
   <div class="container py-8 md:py-12">
     <div class="grid grid-cols-12 gap-6">
@@ -43,7 +62,7 @@ const clockIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBo
         
         {featuredInsight ? (
           <section class="mb-10">
-            <h2 class="font-merri text-3xl font-bold text-primary mb-4">
+            <h2 class="font-merri text-3xl font-bold text-primary mt-6 md:mt-0 mb-4">
               Latest Insight
             </h2>
             <article class="group">
@@ -56,7 +75,7 @@ const clockIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBo
               </a>
               <div class="space-y-3">
                 <span class="text-sm font-bold uppercase text-link">{featuredInsight.data.category}</span>
-                <h3 class="font-merri font-bold text-4xl leading-tight text-primary group-hover:text-link transition-colors">
+                <h3 class="font-merri font-bold text-2xl md:text-4xl leading-tight text-primary group-hover:text-link transition-colors">
                   <a href={`/blog/${featuredInsight.slug}/`}>{featuredInsight.data.title}</a>
                 </h3>
                 <div class="flex items-center gap-4 text-sm text-muted">
@@ -103,7 +122,7 @@ const clockIcon = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBo
 
       </main>
 
-      <aside class="col-span-12 lg:col-span-3">
+      <aside class="col-span-12 lg:col-span-3 mt-8 md:mt-0">
         <Sidebar />
       </aside>
     </div>

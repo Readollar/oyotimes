@@ -16,7 +16,7 @@ const recentStories = allPosts
 
 <aside class="space-y-8">
   
-  <div class="hidden md:block relative">
+ <!-- <div class="hidden md:block relative">
     <form action="/search" method="GET">
       <label for="sidebar-search-article" class="sr-only">Search</label>
       <div class="relative">
@@ -32,11 +32,11 @@ const recentStories = allPosts
         </button>
       </div>
     </form>
-  </div>
+  </div> -->
   
   <div>
-    <h3 class="font-merri font-bold text-xl text-primary mb-4">Recent Stories</h3>
-    <div class="space-y-6">
+    <h3 class="font-merri font-bold text-xl text-text-primary mb-6 pb-4 border-b border-border-divider">Recent Stories</h3>
+    <div class="space-y-8">
       {recentStories.map(story => (
         <CardVertical
           href={`/blog/${story.slug}/`}
@@ -50,12 +50,12 @@ const recentStories = allPosts
     </div>
   </div>
 
-  <div class="space-y-4">
-    <div class="bg-background-alt h-48 rounded-md flex items-center justify-center text-muted font-bold">
-      Advertising (360px * 180px)
+  <div class="space-y-6">
+    <div class="bg-background-alt h-64 rounded-md flex items-center justify-center text-muted font-bold">
+      Advert (288px * 256px)
     </div>
-    <div class="bg-background-alt h-48 rounded-md flex items-center justify-center text-muted font-bold">
-      Advertising (360px * 180px)
+    <div class="bg-background-alt h-64 rounded-md flex items-center justify-center text-muted font-bold">
+      Advert (288px * 256px)
     </div>
   </div>
 

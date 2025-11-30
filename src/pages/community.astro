@@ -12,7 +12,7 @@ const allPosts = await getCollection('blog');
 
 // 2. Filter for "Insight" category & Sort by Date
 const insightPosts = allPosts
-  .filter(post => post.data.category === "Insight" || post.data.category === "Community's Insight")
+  .filter(post => post.data.category === "Community" || post.data.category === "Community's Insight")
   .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 
 // 3. Separate "Featured" from "Main Grid"
@@ -86,13 +86,13 @@ const showPagination = mainGridInsights.length > itemsPerPage;
 
       </main>
 
-      <aside class="col-span-12 lg:col-span-3">
+      <aside class="col-span-12 lg:col-span-3 mt-20 md:mt-0">
         <CommunitySidebar />
       </aside>
     </div>
   </div>
 
-  <div>
+  <div class="mt-10 md:mt-0">
     <EditorsPicks />
   </div>
 

@@ -65,7 +65,7 @@ const facebookIcon = `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 2
       <main class="col-span-12 lg:col-span-9">
         
         <header class="mb-6">
-          <h1 class="font-merri font-bold text-4xl md:text-5xl text-primary">{place.title}</h1>
+          <h1 class="font-merri font-bold text-3xl md:text-5xl text-primary">{place.title}</h1>
           <div class="flex items-center gap-1.5 text-lg text-muted mt-2">
             <Fragment set:html={locationIcon} />
             {place.location}
@@ -73,7 +73,7 @@ const facebookIcon = `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 2
             
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 items-center">
             <div>
-              <span class="font-merri font-bold text-5xl text-primary">{place.rating.toFixed(2)}</span>
+              <span class="font-merri font-bold text-3xl text-primary">{place.rating.toFixed(2)}</span>
               <span class="text-lg text-muted ml-2">{place.reviewCount} Reviews</span>
               <div class="flex mt-2">
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -201,7 +201,7 @@ const facebookIcon = `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 2
 
       </main>
 
-      <aside class="col-span-12 lg:col-span-3">
+      <aside class="col-span-12 lg:col-span-3 mt-20 md:mt-0">
         <PlaceSidebar places={topPlaces} />
       </aside>
     </div>

@@ -8,7 +8,7 @@ const allPosts = await getCollection('blog');
 
 // 2. Filter for "Insight" category
 const insightPosts = allPosts
-  .filter(post => post.data.category === "Insight" || post.data.category === "Community's Insight")
+  .filter(post => post.data.category === "Community" || post.data.category === "Community's Insight")
   .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
   .slice(0, 6); // Show the latest 6
 ---

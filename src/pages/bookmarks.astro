@@ -1,14 +1,13 @@
 ---
 // src/pages/bookmarks.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
-// We'll reuse this card to display the results
-import CardVertical from '../components/cards/CardVertical.astro';
 ---
+
 <BaseLayout title="My Bookmarks" activeId="bookmarks">
   <div class="container py-8 md:py-12">
     
     <div class="mb-8 pb-4 border-b border-divider">
-      <h1 class="font-merri font-bold text-4xl text-primary">
+      <h1 class="font-merri font-bold text-2xl md:text-4xl text-primary">
         My Bookmarks
       </h1>
       <p class="text-lg text-muted mt-2">
@@ -26,82 +25,96 @@ import CardVertical from '../components/cards/CardVertical.astro';
 <script>
   import { format, formatDistanceToNow, parseISO, differenceInDays } from 'date-fns';
 
-  // This is the key we used in ArticleLayout.astro
   const STORAGE_KEY = 'OYOTIMES_BOOKMARKS';
 
   async function loadBookmarks() {
     const grid = document.getElementById('bookmarks-grid');
     if (!grid) return;
 
-    // 1. Get the list of saved slugs from the browser
+    // 1. Get saved slugs from localStorage
+    // Example: ["/blog/my-post/", "/blog/another-post/"]
     const savedSlugs = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 
+    console.log("Saved Bookmarks:", savedSlugs); // Debugging
+
     if (savedSlugs.length === 0) {
-      grid.innerHTML = '<p class="text-muted col-span-full">You haven\'t bookmarked any articles yet.</p>';
+      grid.innerHTML = '<p class="text-muted col-span-full italic">You haven\'t bookmarked any articles yet.</p>';
       return;
     }
 
-    // 2. Fetch our 'database' of all articles
-    const response = await fetch('/search-index.json');
-    const allArticles = await response.json();
+    try {
+      // 2. Fetch our article database
+      const response = await fetch('/search-index.json');
+      if (!response.ok) throw new Error("Failed to load search index");
+      
+      const allArticles = await response.json();
+      console.log("All Articles:", allArticles); // Debugging
 
-    // 3. Filter the database to find only the saved articles
-    const bookmarkedArticles = allArticles.filter(article => 
-      savedSlugs.includes(article.slug)
-    );
+      // 3. Filter: Find articles where the slug matches
+      const bookmarkedArticles = allArticles.filter(article => {
+        // Normalize slugs to ensure they match (remove trailing slashes)
+        const cleanArticleSlug = article.slug.replace(/\/$/, "");
+        return savedSlugs.some(saved => saved.replace(/\/$/, "") === cleanArticleSlug);
+      });
 
-    // 4. Clear the grid and render the articles
-    grid.innerHTML = ''; // Clear "Loading..."
+      if (bookmarkedArticles.length === 0) {
+         grid.innerHTML = '<p class="text-muted col-span-full italic">Could not find your saved articles. They might have been moved.</p>';
+         return;
+      }
 
-    bookmarkedArticles.forEach(article => {
-      // --- Date Logic ---
-      let formattedDate = article.date.split('T')[0]; // Fallback
-      try {
-        const date = parseISO(article.date);
-        const daysDifference = differenceInDays(new Date(), date);
-        if (daysDifference <= 7) {
-          formattedDate = formatDistanceToNow(date, { addSuffix: true });
-        } else {
-          formattedDate = format(date, 'MMMM d, yyyy');
-        }
-      } catch (e) { /* use fallback */ }
+      // 4. Render
+      grid.innerHTML = ''; // Clear loading message
 
-      // --- Create the Card HTML ---
-      // We can't use <CardVertical /> here, so we re-create its HTML.
-      const cardHTML = `
-        <article class="group">
-          <a href="${article.slug}" class="block overflow-hidden rounded-lg mb-4 shadow-soft">
-            <img 
-              src="${article.heroImage}" 
-              alt="${article.title}" 
-              class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-          </a>
-          <div class="space-y-2">
-            <span class="text-xs font-bold uppercase text-link">
-              ${article.category}
-            </span>
-            <h3 class="font-merri font-bold text-lg leading-tight text-primary group-hover:text-link transition-colors">
-              <a href="${article.slug}">${article.title}</a>
-            </h3>
-            <div class="flex items-center gap-4 text-sm text-muted">
-              <span class="flex items-center gap-1.5">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <time datetime="${article.date}">${formattedDate}</time>
+      bookmarkedArticles.forEach(article => {
+        // Date Logic
+        let formattedDate = article.date.split('T')[0];
+        try {
+          const date = parseISO(article.date);
+          const daysDifference = differenceInDays(new Date(), date);
+          if (daysDifference <= 7) {
+            formattedDate = formatDistanceToNow(date, { addSuffix: true });
+          } else {
+            formattedDate = format(date, 'MMMM d, yyyy');
+          }
+        } catch (e) {}
+
+        // Render Card HTML (using correct Tailwind classes)
+        const cardHTML = `
+          <article class="group">
+            <a href="${article.slug}" class="block overflow-hidden rounded-lg mb-4 shadow-soft">
+              <img 
+                src="${article.heroImage}" 
+                alt="${article.title}" 
+                class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </a>
+            <div class="space-y-2">
+              <span class="text-xs font-bold uppercase text-link">
+                ${article.category}
               </span>
-              <span class="flex items-center gap-1.5 whitespace-nowrap">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                ${article.readTime}
-              </span>
+              <h3 class="font-merri font-bold text-lg leading-tight text-primary group-hover:text-link transition-colors">
+                <a href="${article.slug}">${article.title}</a>
+              </h3>
+              <div class="flex items-center gap-4 text-sm text-muted">
+                <span class="flex items-center gap-1.5">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  <time datetime="${article.date}">${formattedDate}</time>
+                </span>
+                <span class="flex items-center gap-1.5 whitespace-nowrap">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  ${article.readTime}
+                </span>
+              </div>
             </div>
-          </div>
-        </article>
-      `;
-      // Add the new card to the grid
-      grid.innerHTML += cardHTML;
-    });
+          </article>
+        `;
+        grid.innerHTML += cardHTML;
+      });
+    } catch (error) {
+      console.error(error);
+      grid.innerHTML = '<p class="text-red-500">Error loading bookmarks. Please try again.</p>';
+    }
   }
 
-  // Run the function as soon as the page loads
   loadBookmarks();
 </script>
