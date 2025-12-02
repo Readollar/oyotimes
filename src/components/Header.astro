@@ -59,7 +59,7 @@ const isDropdownActive = dropdownItems.some(item => item.id === activeId);
         <ul class="nav-list flex justify-center gap-6 text-sm uppercase tracking-wider m-0 list-none">
           {navItems.map(item => (
             <li class={`nav-item ${item.id === activeId ? 'active' : ''}`}>
-              <a href={item.href} class={`text-text-primary block py-3 no-underline transition-colors ${item.id === activeId ? 'text-text-link font-bold' : 'text-primary hover:text-text-link'}`}>
+              <a href={item.href} class={`text-text-primary block py-3 no-underline transition-colors ${item.id === activeId ? 'text-text-link font-bold' : ' hover:text-text-link'}`}>
                 {item.name}
               </a>
             </li>
