@@ -7,17 +7,16 @@ import CardLocation from './cards/CardLocation.astro';
 const allPlaces = await getCollection('places');
 
 // 2. Pick 3 places to show
-// (You could also filter by p.data.isEditorPick === true if you want specific ones)
 const locations = allPlaces.slice(0, 3);
 ---
 
 <section class="container py-8 md:py-12">
   
   <div class="text-center max-w-2xl mx-auto mb-10">
-    <h2 class="font-merri text-2xl md:text-4xl font-bold text-primary mb-4">
+    <h2 class="font-merri text-3xl md:text-4xl font-bold text-primary mb-4">
       Popular Locations & Businesses
     </h2>
-    <p class="text-md text-muted">
+    <p class="text-lg text-muted">
       Discover popular places and verified businesses in Oyo.
     </p>
   </div>
@@ -34,8 +33,16 @@ const locations = allPlaces.slice(0, 3);
   </div>
 
   <div class="text-center mt-10">
-    <a href="/places" class="inline-block border-2 border-primary text-text-primary font-bold py-2 px-6 rounded-full hover:bg-primary hover:text-white transition-colors">
+    <a href="/places" class="inline-block border-2 border-primary text-primary font-bold py-2 px-6 rounded-full hover:bg-primary hover:text-white transition-colors">
       View All Places
     </a>
+    
+    <p class="mt-4 text-sm text-muted">
+      Do you own a business in Oyo? 
+      <a href="/submit-place" class="text-primary font-bold hover:underline decoration-2 underline-offset-2">
+        List it here for free &rarr;
+      </a>
+    </p>
   </div>
+
 </section>
