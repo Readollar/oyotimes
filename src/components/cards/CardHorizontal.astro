@@ -39,18 +39,36 @@ const { href, imgSrc, author, date, title, excerpt } = Astro.props;
 
 <script>
   import { formatDistanceToNow, parseISO, differenceInDays } from 'date-fns';
-  const now = new Date();
+
   const timeElements = document.querySelectorAll('.time-ago');
+
   timeElements.forEach(timeEl => {
-    const isoDate = timeEl.getAttribute('datetime');
-    if (isoDate) {
-      try {
-        const date = parseISO(isoDate);
-        const daysDifference = differenceInDays(now, date);
-        if (daysDifference <= 7) {
-          timeEl.textContent = formatDistanceToNow(date, { addSuffix: true });
-        }
-      } catch (e) {}
+    const rawDate = timeEl.getAttribute('datetime');
+    if (!rawDate) return;
+
+    try {
+      // Try to create a Date object
+      let date = new Date(rawDate);
+      
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+         throw new Error("Invalid Date");
+      }
+
+      const now = new Date();
+      const daysDifference = differenceInDays(now, date);
+
+      if (daysDifference <= 7) {
+        timeEl.textContent = formatDistanceToNow(date, { addSuffix: true });
+      } else {
+        // Format as "August 8, 2025"
+        timeEl.textContent = date.toLocaleDateString('en-US', {
+           year: 'numeric', month: 'long', day: 'numeric'
+        });
+      }
+    } catch (e) {
+      console.error("Date error:", e);
+      // It will just keep the fallback text which is fine
     }
   });
 </script>
