@@ -12,6 +12,7 @@ collections:
   - name: "blog"
     label: "News Articles"
     folder: "src/content/blog"
+    nested: { depth: 100 }
     create: true
     slug: "{{slug}}"
     fields:
